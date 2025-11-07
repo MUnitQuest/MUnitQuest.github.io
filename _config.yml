@@ -36,10 +36,16 @@ paginate_path: blog/page:num
 navigation_header:
 - title: Home
   url: /
+- title: Timeline
+  url: /timeline/
+- title: Data 
+  url: /data/
+- title: Rules
+  url: /rules/
 - title: About
   url: /about/
-- title: Blog
-  url: /blog/
+- title: FAQ
+  url: /faq/
 
 # Footer nav
 navigation_footer:
