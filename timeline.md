@@ -1,5 +1,8 @@
 ---
-title: Website under construction! About MUnitQuest
+title: Website under construction! Preliminary timeline. 
 ---
 
-About MUnitQuest text etc. 
+- Data submission
+- Qualification
+- Finals
+- Workshop/Symposium 
