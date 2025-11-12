@@ -50,7 +50,7 @@ navigation_header:
 # Footer nav
 navigation_footer:
 - title: Back to top
-  url: "#top"
+  url: "#top" # always leads to "home" tab, even when clicked while in other tab 
 
 # Collections
 collections:
