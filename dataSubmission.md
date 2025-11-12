@@ -1,8 +1,11 @@
-# Website under construction. For educational purposes only. All information is fictitious. 
+---
+title: MUnitQuest Data Submission
+feature_image: "https://picsum.photos/1300/400?image=989"
+feature_text: |
+  ## This website is under construction. For educational purposes only. All information is fictitious. 
+---
 
 
-
-# Welcome 
 Thanks you for submitting a dataset to the MUnitQuest and welcome to the MUnitQuest Data Submission Guide (for metadata only?). 
 
 As data in the MUnitQuest competition will be in BIDS format we require certain metadata for processing. 
