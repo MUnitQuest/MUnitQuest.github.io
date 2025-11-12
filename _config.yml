@@ -38,8 +38,8 @@ navigation_header:
   url: /
 - title: Timeline
   url: /timeline/
-- title: Data 
-  url: /data/
+- title: Data Submission
+  url: /dataSubmission/
 - title: Rules
   url: /rules/
 - title: About
