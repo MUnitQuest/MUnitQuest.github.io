@@ -12,20 +12,27 @@ As data in the MUnitQuest competition will be in BIDS format we require certain 
 
 Here we provide instructions for creating the files we require. 
 Our explanation covers the most common types of datasets. We also provide examples for each, you can base your files on. 
-**If your dataset does not fit into this scheme:** you can and should still submit it! Simply contact us and we will provide assistance. 
+**If your dataset does not fit into this scheme you can and should still submit it!** Simply contact us and we will provide assistance. 
 
 contact email: TODO 
 
-Types of dataset this explanation covers: 
+Types of dataset that this explanation covers: 
 - HDsEMG grid(s) only 
 - HDsEMG grid(s) + invasive EMG (fine wire(s), concentric needle(s) or thin filament(s))
-- simulated
+- Simulated
 
 
 # Short Intro into BIDS standard? 
-https://bids.neuroimaging.io/ 
+Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. BIDS support for EMG data is not yet official, but is in the works. 
 
-EMG is not yet officially supported, but it's in the works. 
+The main body of the dataset will be in EDF, EDF+, BDF, or BDF+ format. (TODO which one?). Conversion to this format will be handled by us. We accept the following formats: TODO. 
+
+The metadata of the dataset will be in several different .json and .tsv files. Some of these we require you to create when you submit your dataset. We will explain what we need and provide examples you can base your files on. 
+
+
+[BIDS extension proposal](https://bids.neuroimaging.io/extensions/beps/bep_042.html) link here? or under "further info" section at bottom? or too much information? 
+<!-- https://bids-specification--1998.org.readthedocs.build/en/1998/modality-specific-files/electromyography.html link this somewhere too?  -->
+
 
 # Overview of whats required 
 For initial submission of your dataset we require the following files: 
@@ -76,12 +83,10 @@ could be just one photo that shows both
 
 - **Taskname:** name of the task done by participant
 - **TaskDescription:** desc. 
-<!-- these two as nested objects? to describe multiple tasks?  -->
 
-<!-- - EMGElectrodeGroups: follow examples.  -->
 
 # Channels.tsv 
-the channels.tsv file describes which channels in the data are derived from which electrodes, what their sampling frequency is, which channels belong to which HDsEMG grid, the frequency of low pass and high pass filters used. 
+The channels.tsv file describes which channels in the data are derived from which electrodes, what their sampling frequency is, which channels belong to which HDsEMG grid, the frequency of low pass and high pass filters used. 
 
 example .tsv file contains: 
 
