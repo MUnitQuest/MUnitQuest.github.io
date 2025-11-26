@@ -22,7 +22,7 @@ Types of dataset that this explanation covers:
 - Simulated
 
 
-The idea is to follow CEDE guidelines ("Consensus for experimental design in electromyography (CEDE) project: Single motor unit matrix", see https://pubmed.ncbi.nlm.nih.gov/36571885/ )
+The idea is to follow CEDE guidelines ("Consensus for experimental design in electromyography (CEDE) project: Single motor unit matrix", see [https://pubmed.ncbi.nlm.nih.gov/36571885/](https://pubmed.ncbi.nlm.nih.gov/36571885/) )
 
 
 # Short Intro into BIDS standard? 
@@ -50,12 +50,12 @@ Each will be explained further down accompanied by example files.
 We may require additional information and files once your dataset has been accepted. 
 
 ## We expect homogeneity of dataset
-should be largely same setup for each participant
-if not split into two datasets
+Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata. 
+But if your dataset contains major deviations between participants it should be split into smaller homogenous datasets. 
 
-if you used multiple amplifiers in your dataset contact us. 
+If you used multiple amplifiers in your dataset contact us. 
 
-if simulation pretend as if not simulated. Use "n/a" for datafields that no longer make sense in a simulated context, such as manufacturer name of amplifier. 
+If your dataset is the result of a simulation, pretend as if it were measured while submitting the dataset. Use "n/a" for datafields that no longer make sense in a simulated context, such as manufacturer name of amplifier. 
 
 
 <!-- # Recommended software tools to edit files
