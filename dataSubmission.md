@@ -88,14 +88,13 @@ A .json file that specifies some general information about the experimental setu
 Contains information about the electrodes used. Such as geometry of grid(s), electrode surface area, material, manufacturer, type, etc. 
 
 
-<!-- # Coordsystem.json 
-only ask for in follow up, initially covered by photo -->
+
 
 - **name:** Name of a single electrode. Can be any string containing letters and numbers. Every electrode needs a unique name. 
-- **x:** X-coordinate of the electrode in its parent coordinate system. More on coordinate systems below. 
-- **y:** Y-coordinate of the electrode in its parent coordinate system.
-- **z:** Z-coordinate of the electrode in its parent coordinate system. Usually this is left empty. 
-- **coordinate_system:** Name of the parent coordinate System. 
+- **x:** X-coordinate of the electrode in its child coordinate system. More on coordinate systems below. 
+- **y:** Y-coordinate of the electrode in its child coordinate system.
+- **z:** Z-coordinate of the electrode in its child coordinate system. Usually this is left empty. 
+- **coordinate_system:** Name of the child coordinate System. 
 - **Group:** Name of the group this electrode belongs to. 
 - **ElectrodeMaterial:** Material the electrode surface is made from. 
 - **InterelectrodeDistance:** Distance between electrodes. In a grid this means distance between neighboring electrodes. In a fine wire it means distance between the wire tips. 
@@ -103,33 +102,36 @@ only ask for in follow up, initially covered by photo -->
 - **FineWireDiameter:** Diameter of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
 - **FineWireRecordingTipLength:** Unisolated length of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
 - **ConcentricNeedleDiameter:** Concentric needle size/gauge. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
-- **ConcentricNeedleLength:** TODO. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
+- **ConcentricNeedleLength:** Length of concentric needle. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
 - **ElectrodeManufacturer:** Name of electrode manufacturer. 
 - **ElectrodeManufacturersModelName:** Model name of Electrode. 
 - **ElectrodeType:** Type of electrode. Must be one of the following: "HDsEMG", "thin-film HDiEMG", "fine wire", "concentric needle" or "ring". 
 
 ### On Coordinate Systems
+BIDS requires that electrodes position on the body be specified. For this, coordinate systems defined by anatomical landmarks are specified in several .json files. For grids of electrodes, positions can be specified in device specific coordinates. These device specific coordinates are then located within parent coordinate systems in additional .json files. **We do not require _coordsystem.json files for initial submission.** If your dataset is accepted we will require these files at a later stage. 
 
 
 ## Channels.tsv 
-The channels.tsv file describes channel specific information. For example measurement unit, which channels in the data are derived from which signal and reference electrodes, the frequency of low pass and high pass filters used, etc. 
+The channels.tsv file describes channel specific information. For example which channels in the data are derived from which signal and reference electrodes, measurement unit, the frequency of low pass and high pass filters used, etc. 
 
-- **name:** 
-- **type:** 
-- **unit:** 
-- **description:** 
-- **signal_electrode:** 
-- **reference_electrode:** 
+- **name:** Name of a single channel. Can be any string containing letters and numbers. Every channel needs a unique name. 
+- **type:** Type of channel. Must be "EMG" or "Misc". 
+- **unit:** Unit of measurement of the channel. 
+- **description:** Description of the channel. 
+- **signal_electrode:** Name of the signal electrode. Must match an electrode name specified in electrodes.tsv. 
+- **reference_electrode:** Name of the reference electrode. Must match an electrode name specified in electrodes.tsv. 
 - **group:** 
-- **status:** 
-- **low_cutoff:** 
-- **high_cutoff:** 
+- **status:** Status of the channel. Optional. Can be used to tag channels which should be ignored in data analysis. 
+- **low_cutoff:** High-pass filter frequency (in Hz). 
+- **high_cutoff:** Low-pass filter frequency (in Hz). 
 
 
-## Minor deviations between participants
+## Minor experimental setup deviations between participants
+BIDS metadata follows an inheritance principle. In practice this means the following: 
 
+If all your participants have exactly the same experimental setup, you only need to specify each metadata file once, since it is the same for each participant. It will be placed in the top-most directory, on the same level where the folders for each participant are. 
 
-
+If you have minor deviations from the intended experimental setup in some participants, you still place metadata files in the top-most directory. But additionally you place metadata files inside the folder of the participant that deviates. The metadata files in the lower directory will override the files in the higher directories. 
 
 ## Python checking script
 
