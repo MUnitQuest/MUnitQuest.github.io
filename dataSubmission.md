@@ -8,24 +8,18 @@ feature_text: |
 
 Thanks you for submitting a dataset to the MUnitQuest and welcome to the MUnitQuest Data Submission Guide (for metadata only?). 
 
-As data in the MUnitQuest competition will be in BIDS format we require certain metadata for processing. 
+As data in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/) we require certain metadata for processing. 
 
-Here we provide instructions for creating the files we require. 
-Our explanation covers the most common types of datasets. We also provide examples for each, you can base your files on. 
-**If your dataset does not fit into this scheme you can and should still submit it!** Simply contact us and we will provide assistance. 
+On this page we provide instructions for creating the files we require. 
+Our explanation covers the most common types of datasets we expect people to submit. These are: 
+- Datasets containing only **HDsEMG grid(s)** 
+- Datasets containing **HDsEMG grid(s) and concurrent invasive EMG** (fine wire(s), concentric needle(s) or thin filament(s))
+- Datasets based on **Simulation**
+We also provide examples you can base your files on. **If your dataset does not fit into this scheme you can and should still submit it!** Simply contact us and we will provide assistance. 
 
 contact email: TODO 
 
-Types of dataset that this explanation covers: 
-- HDsEMG grid(s) only 
-- HDsEMG grid(s) + invasive EMG (fine wire(s), concentric needle(s) or thin filament(s))
-- Simulated
-
-
-The idea is to follow CEDE guidelines ("Consensus for experimental design in electromyography (CEDE) project: Single motor unit matrix", see [https://pubmed.ncbi.nlm.nih.gov/36571885/](https://pubmed.ncbi.nlm.nih.gov/36571885/) )
-
-
-# Short Intro into BIDS standard? 
+## Short Intro into BIDS standard? 
 Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. BIDS support for EMG data is not yet official, but is in the works. 
 
 The main body of the dataset will be in EDF, EDF+, BDF, or BDF+ format. (TODO which one?). Conversion to this format will be handled by us. We accept the following formats: TODO. 
@@ -36,8 +30,15 @@ The metadata of the dataset will be in several different .json and .tsv files. S
 [BIDS extension proposal](https://bids.neuroimaging.io/extensions/beps/bep_042.html) link here? or under "further info" section at bottom? or too much information? 
 <!-- https://bids-specification--1998.org.readthedocs.build/en/1998/modality-specific-files/electromyography.html link this somewhere too?  -->
 
+## We expect homogenous data
+Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata. 
+But if your dataset contains major deviations between participants it should be split into smaller homogenous datasets. 
 
-# Overview of whats required 
+If your data was collected with more than one amplifier contact us. 
+## Simulated datasets 
+If your dataset is the result of a simulation, simply pretend as if it were measured experimentally while submitting the dataset. Use "n/a" for datafields that no longer make sense in a simulated context, such as manufacturer name of amplifier or PowerLineFrequency. 
+
+# Overview of required files 
 For initial submission of your dataset we require the following files: 
 - dataset_description.json
 - emg.json
@@ -46,32 +47,20 @@ For initial submission of your dataset we require the following files:
 - Photo of experimental setup and electrode wiring 
 - the actual dataset itself??? 
 
-Each will be explained further down accompanied by example files. 
+We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit). Further, each file is explained below. 
+
+This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
+
 We may require additional information and files once your dataset has been accepted. 
-
-## We expect homogeneity of dataset
-Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata. 
-But if your dataset contains major deviations between participants it should be split into smaller homogenous datasets. 
-
-If you used multiple amplifiers in your dataset contact us. 
-
-If your dataset is the result of a simulation, pretend as if it were measured while submitting the dataset. Use "n/a" for datafields that no longer make sense in a simulated context, such as manufacturer name of amplifier. 
-
-
 <!-- # Recommended software tools to edit files
-
 vscode for json? 
 excel for tsv?  -->
-
-
-
-# Required files 
-We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit). This hopefully covers the most common types of experimental setups. As mentioned before if your dataset differs, simply contact us for help. 
-
 ## Photo of experimental setup
-- Photo that shows placement of electrodes on the body
-- photo that shows electrode names (could be drawn path)
+- Photo that shows placement of electrodes on the body. Include at least one adjacent joint for context. 
+- Photo or drawing that shows electrode names (could be drawn path)
 could be just one photo that shows both 
+
+TODO example electrode name picture 
 
 ## dataset_description.json
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
@@ -80,19 +69,18 @@ A short .json file where you specify authors of the dataset and its related publ
 A .json file that specifies some general information about the experimental setup. 
 
 <!-- EMGPlacementScheme: don't ask, will sort this in follow up if dataset accepted -->
-- **EMGPlacementSchemeDescription:** Describe how electrodes are placed. Include anatomical landmarks used to position. how measured. placement of reference electrode. placement of ground electrode. incl if dry linear array was used or not. incl if innervation zone was measured and how positioned relative to it. For different types of electrodes (surface grid, invasive grid, fine wire, etc) use i), ii), iii), etc to separate placement description (similar to the example). 
-- **EMGReference:** leave it as "channelspecific".  
-- **SamplingFrequency:** the main sampling frequency of your data. If some channels of your data have a different sampling frequency contact us. 
-- **PowerLineFrequency:** Frequency of the power grid where the data was recorded. 
-- **SoftwareFilters:** "n/a" if no filters used. otherwise json object similar to examples. 
+- **EMGPlacementSchemeDescription:** Describe how electrodes are placed. Include anatomical landmarks used to position. Include the measurement method for placement. Include placement of reference electrode(s). Include placement of ground electrode. Include if a dry linear array for fiber alignment was used or not. Include if innervation zone was measured and how electrodes are positioned relative to it. For different types of electrodes (surface grid, invasive grid, fine wire, etc) use i), ii), iii), ... to separate placement description (similar to the example). 
+- **EMGReference:** Leave it as "channelspecific".  
+- **EMGGround:** The name of the ground electrode (specified in electrodes.tsv)
+- **SamplingFrequency:** The main sampling frequency (in Hz) of your data. If some channels of your data have a different sampling frequency contact us. 
+- **PowerLineFrequency:** Frequency (in Hz) of the power grid where the data was recorded. 
+- **SoftwareFilters:** A json object containing filter parameters (see example emg.json file). Use "n/a" if no filter was used.
 - **Taskname:** Name of the task done by participant. If multiple tasks split by using "i), ii), iii)". 
 - **TaskDescription:** Description for each task. 
-
-
-## Channels.tsv 
-The channels.tsv file describes channel specific information. For example measurement unit, which channels in the data are derived from which signal and reference electrodes, the frequency of low pass and high pass filters used, etc. 
-
-example .tsv file contains: 
+- **Preamplification:** Amplification built into an EMG bipolar sensor, electrode grid, or other device.
+- **Gain:** Signal gain from an in-line amplifier, applied between the EMG sensor/device and the data acquisition computer. 
+- **Manufacturer:** Manufacturer of the amplifier used to collect the data. 
+- **ManufacturerModelName:** Model name of the amplifier. 
 
 ## Electrodes.tsv
 Contains information about the electrodes used. Such as geometry of grid(s), electrode surface area, material, manufacturer, type, etc. 
@@ -100,6 +88,42 @@ Contains information about the electrodes used. Such as geometry of grid(s), ele
 
 <!-- # Coordsystem.json 
 only ask for in follow up, initially covered by photo -->
+
+- **name:** Name of a single electrode. Can be any string containing letters and numbers. 
+- **x:** X-coordinate of the electrode in its parent coordinate system. 
+- **y:** 
+- **z:** 
+- **coordinate_system:** 
+- **Group:**
+- **ElectrodeMaterial:**
+- **InterelectrodeDistance:** 
+- **ElectrodeSurfaceArea:** 
+- **FineWireDiameter:** 
+- **FineWireREcordingTipLength:** 
+- **ConcentricNeedleDiameter:** 
+- **ConcentricNeedleLength:** 
+- **ElectrodeManufacturer:** 
+- **ElectrodeManufacturerModelName:** 
+- **ElectrodeType:**
+
+
+## Channels.tsv 
+The channels.tsv file describes channel specific information. For example measurement unit, which channels in the data are derived from which signal and reference electrodes, the frequency of low pass and high pass filters used, etc. 
+
+- **name:** 
+- **type:** 
+- **unit:** 
+- **description:** 
+- **signal_electrode:** 
+- **reference_electrode:** 
+- **group:** 
+- **status:** 
+- **low_cutoff:** 
+- **high_cutoff:** 
+
+
+
+
 
 
 ## Python checking script
