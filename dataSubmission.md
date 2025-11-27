@@ -15,6 +15,7 @@ Our explanation covers the most common types of datasets we expect people to sub
 - Datasets containing only **HDsEMG grid(s)** 
 - Datasets containing **HDsEMG grid(s) and concurrent invasive EMG** (fine wire(s), concentric needle(s) or thin filament(s))
 - Datasets based on **Simulation**
+
 We also provide examples you can base your files on. **If your dataset does not fit into this scheme you can and should still submit it!** Simply contact us and we will provide assistance. 
 
 contact email: TODO 
@@ -57,10 +58,11 @@ vscode for json?
 excel for tsv?  -->
 ## Photo of experimental setup
 - Photo that shows placement of electrodes on the body. Include at least one adjacent joint for context. 
-- Photo or drawing that shows electrode names (could be drawn path)
-could be just one photo that shows both 
+- Photo or drawing that shows electrode names
 
-TODO example electrode name picture 
+It's also possible to combine both these photos into one.
+
+TODO example electrode name picture with drawn path
 
 ## dataset_description.json
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
@@ -89,22 +91,24 @@ Contains information about the electrodes used. Such as geometry of grid(s), ele
 <!-- # Coordsystem.json 
 only ask for in follow up, initially covered by photo -->
 
-- **name:** Name of a single electrode. Can be any string containing letters and numbers. 
-- **x:** X-coordinate of the electrode in its parent coordinate system. 
-- **y:** 
-- **z:** 
-- **coordinate_system:** 
-- **Group:**
-- **ElectrodeMaterial:**
-- **InterelectrodeDistance:** 
-- **ElectrodeSurfaceArea:** 
-- **FineWireDiameter:** 
-- **FineWireREcordingTipLength:** 
-- **ConcentricNeedleDiameter:** 
-- **ConcentricNeedleLength:** 
-- **ElectrodeManufacturer:** 
-- **ElectrodeManufacturerModelName:** 
-- **ElectrodeType:**
+- **name:** Name of a single electrode. Can be any string containing letters and numbers. Every electrode needs a unique name. 
+- **x:** X-coordinate of the electrode in its parent coordinate system. More on coordinate systems below. 
+- **y:** Y-coordinate of the electrode in its parent coordinate system.
+- **z:** Z-coordinate of the electrode in its parent coordinate system. Usually this is left empty. 
+- **coordinate_system:** Name of the parent coordinate System. 
+- **Group:** Name of the group this electrode belongs to. 
+- **ElectrodeMaterial:** Material the electrode surface is made from. 
+- **InterelectrodeDistance:** Distance between electrodes. In a grid this means distance between neighboring electrodes. In a fine wire it means distance between the wire tips. 
+- **ElectrodeSurfaceArea:** Surface area of the electrode. For fine wire this will be "n/a" because FineWireDiameter and FineWireRecordingTipLength already specify surface area. 
+- **FineWireDiameter:** Diameter of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
+- **FineWireRecordingTipLength:** Unisolated length of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
+- **ConcentricNeedleDiameter:** Concentric needle size/gauge. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
+- **ConcentricNeedleLength:** TODO. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
+- **ElectrodeManufacturer:** Name of electrode manufacturer. 
+- **ElectrodeManufacturersModelName:** Model name of Electrode. 
+- **ElectrodeType:** Type of electrode. Must be one of the following: "HDsEMG", "thin-film HDiEMG", "fine wire", "concentric needle" or "ring". 
+
+### On Coordinate Systems
 
 
 ## Channels.tsv 
@@ -122,6 +126,7 @@ The channels.tsv file describes channel specific information. For example measur
 - **high_cutoff:** 
 
 
+## Minor deviations between participants
 
 
 
