@@ -6,9 +6,9 @@ feature_text: |
 ---
 
 
-Thanks you for submitting a dataset to the MUnitQuest and welcome to the MUnitQuest Data Submission Guide (for metadata only?). 
+Thanks you for submitting a dataset to the MUnitQuest and welcome to the MUnitQuest Dataset Submission Guide (for metadata only?). 
 
-As data in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/) we require certain metadata for processing. 
+Datasets in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). Datasets in BIDS format consist of .bdf or .edf files for the raw data and accompanying .json and .tsv files that store the metadata. To submit a dataset we therefore require certain metadata files from you. 
 
 On this page we provide instructions for creating the files we require. 
 Our explanation covers the most common types of datasets we expect people to submit. These are: 
@@ -32,7 +32,7 @@ The metadata of the dataset will be in several different .json and .tsv files. S
 <!-- https://bids-specification--1998.org.readthedocs.build/en/1998/modality-specific-files/electromyography.html link this somewhere too?  -->
 
 ## We expect homogenous data
-Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata. 
+Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata (more on this later). 
 But if your dataset contains major deviations between participants it should be split into smaller homogenous datasets. 
 
 If your data was collected with more than one amplifier contact us. 
@@ -45,7 +45,7 @@ For initial submission of your dataset we require the following files:
 - emg.json
 - channels.tsv 
 - electrodes.tsv 
-- Photo of experimental setup and electrode wiring 
+- Photo(s) of experimental setup and electrode wiring 
 - the actual dataset itself??? 
 
 We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit). Further, each file is explained below. 
@@ -73,11 +73,11 @@ A .json file that specifies some general information about the experimental setu
 <!-- EMGPlacementScheme: don't ask, will sort this in follow up if dataset accepted -->
 - **EMGPlacementSchemeDescription:** Describe how electrodes are placed. Include anatomical landmarks used to position. Include the measurement method for placement. Include placement of reference electrode(s). Include placement of ground electrode. Include if a dry linear array for fiber alignment was used or not. Include if innervation zone was measured and how electrodes are positioned relative to it. For different types of electrodes (surface grid, invasive grid, fine wire, etc) use i), ii), iii), ... to separate placement description (similar to the example). 
 - **EMGReference:** Leave it as "channelspecific".  
-- **EMGGround:** The name of the ground electrode (specified in electrodes.tsv)
+- **EMGGround:** The name of the ground electrode (specified in electrodes.tsv). 
 - **SamplingFrequency:** The main sampling frequency (in Hz) of your data. If some channels of your data have a different sampling frequency contact us. 
 - **PowerLineFrequency:** Frequency (in Hz) of the power grid where the data was recorded. 
 - **SoftwareFilters:** A json object containing filter parameters (see example emg.json file). Use "n/a" if no filter was used.
-- **Taskname:** Name of the task done by participant. If multiple tasks split by using "i), ii), iii)". 
+- **Taskname:** Name of the task done by participant. If multiple tasks were performed, list them by using "i), ii), iii)". 
 - **TaskDescription:** Description for each task. 
 - **Preamplification:** Amplification built into an EMG bipolar sensor, electrode grid, or other device.
 - **Gain:** Signal gain from an in-line amplifier, applied between the EMG sensor/device and the data acquisition computer. 
