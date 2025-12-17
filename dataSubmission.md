@@ -6,11 +6,12 @@ feature_text: |
 ---
 
 
-Thanks you for submitting a dataset to the MUnitQuest and welcome to the MUnitQuest Dataset Submission Guide (for metadata only?). 
+Thanks you for choosing to submit a dataset to the MUnitQuest and welcome to the MUnitQuest Dataset Submission Guide (for metadata only?). 
 
-Datasets in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). Datasets in BIDS format consist of .bdf or .edf files for the raw data and accompanying .json and .tsv files that store the metadata. To submit a dataset we therefore require certain metadata files from you. 
+Datasets in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). Datasets in BIDS format consist of .bdf or .edf files for the raw data and accompanying .json and .tsv files that store metadata. To submit a dataset we therefore require certain metadata files from you. 
 
 On this page we provide instructions for creating the files we require. 
+
 Our explanation covers the most common types of datasets we expect people to submit. These are: 
 - Datasets containing only **HDsEMG grid(s)** 
 - Datasets containing **HDsEMG grid(s) and concurrent invasive EMG** (fine wire(s), concentric needle(s) or thin filament(s))
@@ -20,16 +21,12 @@ We also provide examples you can base your files on. **If your dataset does not 
 
 contact email: TODO 
 
-## Short Intro into BIDS standard? 
-Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. BIDS support for EMG data is not yet official, but is in the works. 
+## Short Intro into BIDS standard
+Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. **We do not require a complete and exhaustive conversion of your dataset to BIDS. We only require a comparatively small subset of essential information.** This guide is intended to make it as easy as possible to convert your dataset. Here is the [BIDS EMG Documentation](https://bids-specification.readthedocs.io/en/latest/modality-specific-files/electromyography.html).
 
 The main body of the dataset will be in EDF, EDF+, BDF, or BDF+ format. (TODO which one?). Conversion to this format will be handled by us. We accept the following formats: TODO. 
 
 The metadata of the dataset will be in several different .json and .tsv files. Some of these we require you to create when you submit your dataset. We will explain what we need and provide examples you can base your files on. 
-
-
-[BIDS extension proposal](https://bids.neuroimaging.io/extensions/beps/bep_042.html) link here? or under "further info" section at bottom? or too much information? 
-<!-- https://bids-specification--1998.org.readthedocs.build/en/1998/modality-specific-files/electromyography.html link this somewhere too?  -->
 
 ## We expect homogenous data
 Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata (more on this later). 
@@ -52,7 +49,7 @@ We provide example files in [this Github repository](https://github.com/MUnitQue
 
 This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
 
-We may require additional information and files once your dataset has been accepted. 
+**We do not require _coordsystem.json for initial submission.** But we will require it once your dataset has been accepted. 
 <!-- # Recommended software tools to edit files
 vscode for json? 
 excel for tsv?  -->
@@ -103,8 +100,8 @@ Contains information about the electrodes used. Such as geometry of grid(s), ele
 - **FineWireRecordingTipLength:** Unisolated length of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
 - **ConcentricNeedleDiameter:** Concentric needle size/gauge. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
 - **ConcentricNeedleLength:** Length of concentric needle. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
-- **ElectrodeManufacturer:** Name of electrode manufacturer. 
-- **ElectrodeManufacturersModelName:** Model name of Electrode. 
+- **ElectrodeManufacturer:** Name of electrode manufacturer. This is optional. 
+- **ElectrodeManufacturersModelName:** Model name of Electrode. This is optional. 
 - **ElectrodeType:** Type of electrode. Must be one of the following: "HDsEMG", "thin-film HDiEMG", "fine wire", "concentric needle" or "ring". 
 
 ### On Coordinate Systems
@@ -115,13 +112,13 @@ BIDS requires that electrodes position on the body be specified. For this, coord
 The channels.tsv file describes channel specific information. For example which channels in the data are derived from which signal and reference electrodes, measurement unit, the frequency of low pass and high pass filters used, etc. 
 
 - **name:** Name of a single channel. Can be any string containing letters and numbers. Every channel needs a unique name. 
-- **type:** Type of channel. Must be "EMG" or "Misc". 
+- **type:** Type of channel. Must be "EMG" or "MISC" or "TRIG". 
 - **unit:** Unit of measurement of the channel. 
 - **description:** Description of the channel. 
 - **signal_electrode:** Name of the signal electrode. Must match an electrode name specified in electrodes.tsv. 
 - **reference_electrode:** Name of the reference electrode. Must match an electrode name specified in electrodes.tsv. 
 - **group:** 
-- **status:** Status of the channel. Optional. Can be used to tag channels which should be ignored in data analysis. 
+- **status:** Status of the channel. Optional. Can be used to tag channels which should be ignored in data analysis. Must be "good", "bad" or empty. 
 - **low_cutoff:** High-pass filter frequency (in Hz). 
 - **high_cutoff:** Low-pass filter frequency (in Hz). 
 
@@ -131,7 +128,7 @@ BIDS metadata follows an inheritance principle. In practice this means the follo
 
 If all your participants have exactly the same experimental setup, you only need to specify each metadata file once, since it is the same for each participant. It will be placed in the top-most directory, on the same level where the folders for each participant are. 
 
-If you have minor deviations from the intended experimental setup in some participants, you still place metadata files in the top-most directory. But additionally you place metadata files inside the folder of the participant that deviates. The metadata files in the lower directory will override the files in the higher directories. 
+If you have minor deviations from the intended experimental setup in some participants, you still place metadata files in the top-most directory. But additionally you place metadata files inside the folder of the participant that deviates. The metadata files in the lower directory will override the files in the higher directories. Details can be found [here](https://bids-specification.readthedocs.io/en/latest/common-principles.html#the-inheritance-principle). 
 
 ## Python checking script
 
