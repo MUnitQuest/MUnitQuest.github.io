@@ -10,3 +10,6 @@ feature_text: |
 - Qualification
 - Finals
 - Workshop/Symposium 
+
+![Timeline Image](Images/timeline.jpg)
+
