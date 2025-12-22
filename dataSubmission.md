@@ -8,6 +8,8 @@ feature_text: |
 
 Thanks you for choosing to submit a dataset to the MUnitQuest and welcome to the MUnitQuest Dataset Submission Guide (for metadata only?). 
 
+![Submission Requirements](Images/submissionRequirements.jpg)
+
 Datasets in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). Datasets in BIDS format consist of .bdf or .edf files for the raw data and accompanying .json and .tsv files that store metadata. To submit a dataset we therefore require certain metadata files from you. 
 
 On this page we provide instructions for creating the files we require. 
