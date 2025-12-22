@@ -6,10 +6,12 @@ feature_text: |
 ---
 
 
+
+![Timeline Image](Images/timeline.jpg)
+
+
 - Data submission
 - Qualification
 - Finals
 - Workshop/Symposium 
-
-![Timeline Image](Images/timeline.jpg)
 
