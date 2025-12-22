@@ -6,39 +6,52 @@ feature_text: |
 ---
 
 
-Thanks you for choosing to submit a dataset to the MUnitQuest and welcome to the MUnitQuest Dataset Submission Guide (for metadata only?). 
+Thanks you for choosing to submit a dataset to the MUnitQuest and welcome to the MUnitQuest Dataset Submission Guide. 
+
+Depending on the type of dataset a submission consists of the following parts: 
 
 ![Submission Requirements](Images/submissionRequirements.jpg)
 
-Datasets in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). Datasets in BIDS format consist of .bdf or .edf files for the raw data and accompanying .json and .tsv files that store metadata. To submit a dataset we therefore require certain metadata files from you. 
+# 2-page pdf 
+2-page description of labelling approach (for experimental data). 
+2-page description of model (for synthetic data). 
+
+# Labeled Spike Trains
+A *.tab* file containing the labeled Spike Trains. 
+
+# Raw EMG, iEMG, force & kinematics data and Metadata 
+
+The raw EMG, iEMG, force & kinematics data and metadata in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). 
+
+Datasets in BIDS format consist of .bdf or .edf files for the raw data (EMG, iEMG, force, kinematics) and several accompanying .json and .tsv files that store metadata. To submit a dataset we therefore require certain files from you. 
 
 On this page we provide instructions for creating the files we require. 
 
 Our explanation covers the most common types of datasets we expect people to submit. These are: 
 - Datasets containing only **HDsEMG grid(s)** 
 - Datasets containing **HDsEMG grid(s) and concurrent invasive EMG** (fine wire(s), concentric needle(s) or thin filament(s))
-- Datasets based on **Simulation**
+- **Synthetic** Datasets based on Simulation
 
 We also provide examples you can base your files on. **If your dataset does not fit into this scheme you can and should still submit it!** Simply contact us and we will provide assistance. 
 
 contact email: TODO 
 
-## Short Intro into BIDS standard
+### Short Intro into BIDS standard
 Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. **We do not require a complete and exhaustive conversion of your dataset to BIDS. We only require a comparatively small subset of essential information.** This guide is intended to make it as easy as possible to convert your dataset. Here is the [BIDS EMG Documentation](https://bids-specification.readthedocs.io/en/latest/modality-specific-files/electromyography.html).
 
 The main body of the dataset will be in EDF, EDF+, BDF, or BDF+ format. (TODO which one?). Conversion to this format will be handled by us. We accept the following formats: TODO. 
 
 The metadata of the dataset will be in several different .json and .tsv files. Some of these we require you to create when you submit your dataset. We will explain what we need and provide examples you can base your files on. 
 
-## We expect homogenous data
+### We expect homogenous data
 Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata (more on this later). 
 But if your dataset contains major deviations between participants it should be split into smaller homogenous datasets. 
 
 If your data was collected with more than one amplifier contact us. 
-## Simulated datasets 
+### Synthetic datasets 
 If your dataset is the result of a simulation, simply pretend as if it were measured experimentally while submitting the dataset. Use "n/a" for datafields that no longer make sense in a simulated context, such as manufacturer name of amplifier or PowerLineFrequency. 
 
-# Overview of required files 
+## Overview of required files 
 For initial submission of your dataset we require the following files: 
 - dataset_description.json
 - emg.json
@@ -55,7 +68,7 @@ This hopefully covers the most common types of experimental setups. As mentioned
 <!-- # Recommended software tools to edit files
 vscode for json? 
 excel for tsv?  -->
-## Photo of experimental setup
+### Photo of experimental setup
 - Photo that shows placement of electrodes on the body. Include at least one adjacent joint for context. 
 - Photo or drawing that shows electrode names
 
@@ -63,10 +76,10 @@ It's also possible to combine both these photos into one.
 
 TODO example electrode name picture with drawn path
 
-## dataset_description.json
+### dataset_description.json
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
 
-## emg.json
+### emg.json
 A .json file that specifies some general information about the experimental setup. 
 
 <!-- EMGPlacementScheme: don't ask, will sort this in follow up if dataset accepted -->
@@ -83,7 +96,7 @@ A .json file that specifies some general information about the experimental setu
 - **Manufacturer:** Manufacturer of the amplifier used to collect the data. 
 - **ManufacturerModelName:** Model name of the amplifier. 
 
-## Electrodes.tsv
+### Electrodes.tsv
 Contains information about the electrodes used. Such as geometry of grid(s), electrode surface area, material, manufacturer, type, etc. 
 
 
@@ -106,11 +119,11 @@ Contains information about the electrodes used. Such as geometry of grid(s), ele
 - **ElectrodeManufacturersModelName:** Model name of Electrode. This is optional. 
 - **ElectrodeType:** Type of electrode. Must be one of the following: "HDsEMG", "thin-film HDiEMG", "fine wire", "concentric needle" or "ring". 
 
-### On Coordinate Systems
+#### On Coordinate Systems
 BIDS requires that electrodes position on the body be specified. For this, coordinate systems defined by anatomical landmarks are specified in several .json files. For grids of electrodes, positions can be specified in device specific coordinates. These device specific coordinates are then located within parent coordinate systems in additional .json files. **We do not require _coordsystem.json files for initial submission.** If your dataset is accepted we will require these files at a later stage. 
 
 
-## Channels.tsv 
+### Channels.tsv 
 The channels.tsv file describes channel specific information. For example which channels in the data are derived from which signal and reference electrodes, measurement unit, the frequency of low pass and high pass filters used, etc. 
 
 - **name:** Name of a single channel. Can be any string containing letters and numbers. Every channel needs a unique name. 
@@ -125,14 +138,14 @@ The channels.tsv file describes channel specific information. For example which 
 - **high_cutoff:** Low-pass filter frequency (in Hz). 
 
 
-## Minor experimental setup deviations between participants
+### Minor experimental setup deviations between participants
 BIDS metadata follows an inheritance principle. In practice this means the following: 
 
 If all your participants have exactly the same experimental setup, you only need to specify each metadata file once, since it is the same for each participant. It will be placed in the top-most directory, on the same level where the folders for each participant are. 
 
 If you have minor deviations from the intended experimental setup in some participants, you still place metadata files in the top-most directory. But additionally you place metadata files inside the folder of the participant that deviates. The metadata files in the lower directory will override the files in the higher directories. Details can be found [here](https://bids-specification.readthedocs.io/en/latest/common-principles.html#the-inheritance-principle). 
 
-## Python checking script
+### Python checking script
 
 <!-- we provide python script to check your json file for 
 - correct json syntax
