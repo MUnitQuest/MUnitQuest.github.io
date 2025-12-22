@@ -46,6 +46,8 @@ navigation_header:
   url: /about/
 - title: FAQ
   url: /faq/
+- title: Legal Notice
+  url: /legalNotice/
 
 # Footer nav
 navigation_footer:
