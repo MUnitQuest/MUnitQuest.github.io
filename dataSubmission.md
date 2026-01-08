@@ -12,14 +12,15 @@ Depending on the type of dataset a submission consists of the following parts:
 
 ![Submission Requirements](Images/submissionRequirements.jpg)
 
-# 2-page pdf 
-2-page description of labelling approach (for experimental data). 
-2-page description of model (for synthetic data). 
+# Part 1: 2-page pdf 
+We require either a: 
+2-page description of the labelling approach (for experimental data), or a 2-page description of the model (for synthetic data). 
 
-# Labeled Spike Trains
-A *.tab* file containing the labeled Spike Trains. 
+# Part 2: Labeled Spike Trains
+We require a *.tab* file containing the labeled Spike Trains. 
 
-# Raw EMG, iEMG, force & kinematics data and Metadata 
+# Part 3: Raw EMG, iEMG, force & kinematics data and Metadata 
+Finally we require a set of files containing the raw data and accompaninying metadata: 
 
 The raw EMG, iEMG, force & kinematics data and metadata in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). 
 
@@ -60,21 +61,18 @@ For initial submission of your dataset we require the following files:
 - Photo(s) of experimental setup and electrode wiring 
 - the actual dataset itself??? 
 
-We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit). Further, each file is explained below. 
-
-This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
-
 **We do not require _coordsystem.json for initial submission.** But we will require it once your dataset has been accepted. 
-<!-- # Recommended software tools to edit files
-vscode for json? 
-excel for tsv?  -->
+
+### Our example files 
+We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit). This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
+
+Further, each required file is explained below. 
+
 ### Photo of experimental setup
 - Photo that shows placement of electrodes on the body. Include at least one adjacent joint for context. 
 - Photo or drawing that shows electrode names
 
 It's also possible to combine both these photos into one.
-
-TODO example electrode name picture with drawn path
 
 ### dataset_description.json
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
@@ -83,7 +81,7 @@ A short .json file where you specify authors of the dataset and its related publ
 A .json file that specifies some general information about the experimental setup. 
 
 <!-- EMGPlacementScheme: don't ask, will sort this in follow up if dataset accepted -->
-- **EMGPlacementSchemeDescription:** Describe how electrodes are placed. Include anatomical landmarks used to position. Include the measurement method for placement. Include placement of reference electrode(s). Include placement of ground electrode. Include if a dry linear array for fiber alignment was used or not. Include if innervation zone was measured and how electrodes are positioned relative to it. For different types of electrodes (surface grid, invasive grid, fine wire, etc) use i), ii), iii), ... to separate placement description (similar to the example). 
+- **EMGPlacementSchemeDescription:** Describe how electrodes are placed. Include anatomical landmarks used to position. Include the measurement method for placement. Include placement of reference electrode(s). Include placement of ground electrode. Include if a dry linear array for fiber alignment was used or not. Include if innervation zone was measured and how electrodes are positioned relative to it. For different types of electrodes (surface grid, invasive grid, fine wire, etc) use i), ii), iii), ... to separate placement description (similar to our provided example). 
 - **EMGReference:** Leave it as "channelspecific".  
 - **EMGGround:** The name of the ground electrode (specified in electrodes.tsv). 
 - **SamplingFrequency:** The main sampling frequency (in Hz) of your data. If some channels of your data have a different sampling frequency contact us. 
