@@ -1,6 +1,6 @@
 ---
 title: MUnitQuest Data Submission
-feature_image: "Images/headerImage.jpg"
+feature_image: Images/headerImage.jpg
 feature_text: |
   ## This website is under construction. For educational purposes only. All information is fictitious. 
 ---
