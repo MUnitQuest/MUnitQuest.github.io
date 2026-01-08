@@ -26,7 +26,7 @@ baseurl: ''
 title: 'MUnitQuest'
 description: 'MUnitQuest Dataset Submission'
 permalink: pretty
-logo: "https://www.gravatar.com/avatar/6c0377abcf4da91cdd35dea4554b2a4c?s=52" # logo in top left 
+logo: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/logo.jpg" # logo in top left 
 
 # Pagination
 paginate: 5 # number of blog posts shown at once 
