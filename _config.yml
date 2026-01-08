@@ -62,7 +62,7 @@ collections:
     description: "Frequently asked questions"
     feature_text: |
       Welcome to FAQ
-    feature_image: "https://picsum.photos/2560/600?image=866"
+    feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/headerImage.jpg"
 
 # Collection settings
 defaults:
