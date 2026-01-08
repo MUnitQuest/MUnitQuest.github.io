@@ -24,7 +24,7 @@ Finally we require a set of files containing the raw data and accompaninying met
 
 The raw EMG, iEMG, force & kinematics data and metadata in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). 
 
-Datasets in BIDS format consist of .bdf or .edf files for the raw data (EMG, iEMG, force, kinematics) and several accompanying .json and .tsv files that store metadata. To submit a dataset we therefore require certain files from you. 
+Datasets in BIDS format consist of .bdf or .edf files for the raw data (EMG, iEMG, force, kinematics) and several accompanying .json and .tsv files that store metadata. 
 
 On this page we provide instructions for creating the files we require. 
 
@@ -38,7 +38,7 @@ We also provide examples you can base your files on. **If your dataset does not 
 contact email: TODO 
 
 ### Short Intro into BIDS standard
-Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. **We do not require a complete and exhaustive conversion of your dataset to BIDS. We only require a comparatively small subset of essential information.** This guide is intended to make it as easy as possible to convert your dataset. Here is the [BIDS EMG Documentation](https://bids-specification.readthedocs.io/en/latest/modality-specific-files/electromyography.html).
+Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. **We do not require a complete and exhaustive conversion of your dataset to BIDS. We only require a comparatively small subset of essential information.** This guide is intended to make it as easy as possible to convert your dataset. Here is the full [BIDS EMG Documentation](https://bids-specification.readthedocs.io/en/latest/modality-specific-files/electromyography.html).
 
 The main body of the dataset will be in EDF, EDF+, BDF, or BDF+ format. (TODO which one?). Conversion to this format will be handled by us. We accept the following formats: TODO. 
 
@@ -59,12 +59,12 @@ For initial submission of your dataset we require the following files:
 - channels.tsv 
 - electrodes.tsv 
 - Photo(s) of experimental setup and electrode wiring 
-- the actual dataset itself??? 
+- the actual dataset itself TODO??? 
 
 **We do not require _coordsystem.json for initial submission.** But we will require it once your dataset has been accepted. 
 
 ### Our example files 
-We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit). This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
+We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit), you can base your files on. This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
 
 Further, each required file is explained below. 
 
@@ -96,9 +96,6 @@ A .json file that specifies some general information about the experimental setu
 
 ### Electrodes.tsv
 Contains information about the electrodes used. Such as geometry of grid(s), electrode surface area, material, manufacturer, type, etc. 
-
-
-
 
 - **name:** Name of a single electrode. Can be any string containing letters and numbers. Every electrode needs a unique name. 
 - **x:** X-coordinate of the electrode in its child coordinate system. More on coordinate systems below. 
@@ -144,6 +141,7 @@ If all your participants have exactly the same experimental setup, you only need
 If you have minor deviations from the intended experimental setup in some participants, you still place metadata files in the top-most directory. But additionally you place metadata files inside the folder of the participant that deviates. The metadata files in the lower directory will override the files in the higher directories. Details can be found [here](https://bids-specification.readthedocs.io/en/latest/common-principles.html#the-inheritance-principle). 
 
 ### Python checking script
+TODO 
 
 <!-- we provide python script to check your json file for 
 - correct json syntax
