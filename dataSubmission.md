@@ -19,12 +19,12 @@ We require either a:
 # Part 2: Labeled Spike Trains
 We require a *.tab* file containing the labeled Spike Trains. 
 
-# Part 3: Raw EMG, iEMG, force & kinematics data and Metadata 
+# Part 3: Raw data (EMG, iEMG, force & kinematics) and Metadata 
 Finally we require a set of files containing the raw data and accompaninying metadata: 
 
 The raw EMG, iEMG, force & kinematics data and metadata in the MUnitQuest competition will be in [BIDS](https://bids.neuroimaging.io/) format while also following [CEDE guidelines](https://pubmed.ncbi.nlm.nih.gov/36571885/). 
 
-Datasets in BIDS format consist of .bdf or .edf files for the raw data (EMG, iEMG, force, kinematics) and several accompanying .json and .tsv files that store metadata. 
+Datasets in BIDS format consist of *.edf* or *.bdf* files for the raw data (EMG, iEMG, force, kinematics) and several accompanying .json and .tsv files that store metadata. 
 
 On this page we provide instructions for creating the files we require. 
 
@@ -40,31 +40,35 @@ contact email: TODO
 ### Short Intro into BIDS standard
 Data in this competition will be in [BIDS](https://bids.neuroimaging.io/) format. **We do not require a complete and exhaustive conversion of your dataset to BIDS. We only require a comparatively small subset of essential information.** This guide is intended to make it as easy as possible to convert your dataset. Here is the full [BIDS EMG Documentation](https://bids-specification.readthedocs.io/en/latest/modality-specific-files/electromyography.html).
 
-The main body of the dataset will be in EDF, EDF+, BDF, or BDF+ format. (TODO which one?). Conversion to this format will be handled by us. We accept the following formats: TODO. 
+The main body in a BIDS dataset is in *.edf*, *.edf+*, *.bdf* or *.bdf+* format. You do not need to submit your data in this format. You can submit *.mat* (matlab) files or *.npy* (numpy) files and we handle conversion to BIDS formats. 
 
-The metadata of the dataset will be in several different .json and .tsv files. Some of these we require you to create when you submit your dataset. We will explain what we need and provide examples you can base your files on. 
+The metadata of the dataset will be in several different *.json* and *.tsv* files. Some of these we require you to create when you submit your dataset. We will explain what we need and provide examples you can base your files on. 
 
 ### We expect homogenous data
 Datasets should have the same setup (electrodes and electrode placement) for each participant. Minor deviations like a missing electrode are okay, and can be specified accordingly in the metadata (more on this later). 
 But if your dataset contains major deviations between participants it should be split into smaller homogenous datasets. 
 
 If your data was collected with more than one amplifier contact us. 
+
 ### Synthetic datasets 
 If your dataset is the result of a simulation, simply pretend as if it were measured experimentally while submitting the dataset. Use "n/a" for datafields that no longer make sense in a simulated context, such as manufacturer name of amplifier or PowerLineFrequency. 
 
 ## Overview of required files 
 For initial submission of your dataset we require the following files: 
-- dataset_description.json
-- emg.json
-- channels.tsv 
-- electrodes.tsv 
 - Photo(s) of experimental setup and electrode wiring 
-- the actual dataset itself TODO??? 
+- dataset_description.json
+- participants.json
+- participants.tab
+- emg.json
+- electrodes.tsv 
+- channels.tsv 
+- additionalInformation.json
+- the raw data in the form of *.mat* or *.npy* or *.edf* or *.bdf* files 
 
 **We do not require _coordsystem.json for initial submission.** But we will require it once your dataset has been accepted. 
 
 ### Our example files 
-We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit), you can base your files on. This hopefully covers the most common types of experimental setups. As mentioned before, if your dataset differs, simply contact us for help. 
+We provide example files in [this Github repository](https://github.com/MUnitQuest/startkit), you can base your files on. This hopefully covers the most common types of experimental setups. As mentioned before, don't hesitate to contact us for help. 
 
 Further, each required file is explained below. 
 
@@ -76,6 +80,14 @@ It's also possible to combine both these photos into one.
 
 ### dataset_description.json
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
+
+### Participants.json
+A file defining which columns exist in the participants.tab file. 
+- **name:** Unique subject identifier. Every name must start with "sub-". For example: sub-01, sub-02, etc. 
+All other entries (age, sex, handedness, weight, height, group) are optional. You can add new entries as needed. 
+
+### Participants.tab 
+A file containing participant information. Columns are defined in participants.json. 
 
 ### emg.json
 A .json file that specifies some general information about the experimental setup. 
@@ -132,6 +144,9 @@ The channels.tsv file describes channel specific information. For example which 
 - **low_cutoff:** High-pass filter frequency (in Hz). 
 - **high_cutoff:** Low-pass filter frequency (in Hz). 
 
+### additionalInformation.json
+A small file that collects information we need, that is not part of BIDS. 
+- **bitrate:** Bitrate your data was collected at. We need this to decide whether to convert your *.mat* or *.npy* files to *.edf* (16 bit) or *.bdf* (24  bits). 
 
 ### Minor experimental setup deviations between participants
 BIDS metadata follows an inheritance principle. In practice this means the following: 
@@ -140,8 +155,19 @@ If all your participants have exactly the same experimental setup, you only need
 
 If you have minor deviations from the intended experimental setup in some participants, you still place metadata files in the top-most directory. But additionally you place metadata files inside the folder of the participant that deviates. The metadata files in the lower directory will override the files in the higher directories. Details can be found [here](https://bids-specification.readthedocs.io/en/latest/common-principles.html#the-inheritance-principle). 
 
-### Python checking script
+# Submitting Data 
+This section explains what to do once you have converted your dataset to a format admissible for submission. 
+
+## Python checking script
 TODO 
+
+detects inconsistencies
+
+## Uploading your dataset 
+TODO 
+
+bwsyncand share 
+
 
 <!-- we provide python script to check your json file for 
 - correct json syntax
