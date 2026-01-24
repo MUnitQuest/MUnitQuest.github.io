@@ -58,7 +58,7 @@ For initial submission of your dataset we require the following files:
 - Photo(s) of experimental setup and electrode wiring 
 - dataset_description.json
 - participants.json
-- participants.tab
+- participants.tsv
 - emg.json
 - electrodes.tsv 
 - channels.tsv 
@@ -82,11 +82,11 @@ It's also possible to combine both these photos into one.
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
 
 ### Participants.json
-A file defining which columns exist in the participants.tab file. 
+A file defining which columns exist in the participants.tsv file. 
 - **name:** Unique subject identifier. Every name must start with "sub-". For example: sub-01, sub-02, etc. 
 All other entries (age, sex, handedness, weight, height, group) are optional. You can add new entries as needed. 
 
-### Participants.tab 
+### Participants.tsv 
 A file containing participant information. Columns are defined in participants.json. 
 
 ### emg.json
