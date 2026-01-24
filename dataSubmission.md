@@ -114,17 +114,17 @@ Contains information about the electrodes used. Such as geometry of grid(s), ele
 - **y:** Y-coordinate of the electrode in its child coordinate system.
 - **z:** Z-coordinate of the electrode in its child coordinate system. Usually this is left empty. 
 - **coordinate_system:** Name of the child coordinate System. 
-- **Group:** Name of the group this electrode belongs to. 
-- **ElectrodeMaterial:** Material the electrode surface is made from. 
-- **InterelectrodeDistance:** Distance between electrodes. In a grid this means distance between neighboring electrodes. In a fine wire it means distance between the wire tips. 
-- **ElectrodeSurfaceArea:** Surface area of the electrode. For fine wire this will be "n/a" because FineWireDiameter and FineWireRecordingTipLength already specify surface area. 
-- **FineWireDiameter:** Diameter of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
-- **FineWireRecordingTipLength:** Unisolated length of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
-- **ConcentricNeedleDiameter:** Concentric needle size/gauge. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
-- **ConcentricNeedleLength:** Length of concentric needle. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
-- **ElectrodeManufacturer:** Name of electrode manufacturer. This is optional. 
-- **ElectrodeManufacturersModelName:** Model name of Electrode. This is optional. 
-- **ElectrodeType:** Type of electrode. Must be one of the following: "HDsEMG", "thin-film HDiEMG", "fine wire", "concentric needle" or "ring". 
+- **group:** Name of the group this electrode belongs to. 
+- **electrodeMaterial:** Material the electrode surface is made from. 
+- **interelectrodeDistance:** Distance between electrodes. In a grid this means distance between neighboring electrodes. In a fine wire it means distance between the wire tips. 
+- **electrodeSurfaceArea:** Surface area of the electrode. For fine wire this will be "n/a" because FineWireDiameter and FineWireRecordingTipLength already specify surface area. 
+- **fineWireDiameter:** Diameter of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
+- **fineWireRecordingTipLength:** Unisolated length of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
+- **concentricNeedleDiameter:** Concentric needle size/gauge. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
+- **concentricNeedleLength:** Length of concentric needle. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
+- **electrodeManufacturer:** Name of electrode manufacturer. This is optional. 
+- **electrodeManufacturersModelName:** Model name of Electrode. This is optional. 
+- **electrodeType:** Type of electrode. For example: "HDsEMG", "thin-film HDiEMG", "fine wire", "concentric needle" or "ring". 
 
 #### On Coordinate Systems
 BIDS requires that electrodes position on the body be specified. For this, coordinate systems defined by anatomical landmarks are specified in several .json files. For grids of electrodes, positions can be specified in device specific coordinates. These device specific coordinates are then located within parent coordinate systems in additional .json files. **We do not require _coordsystem.json files for initial submission.** If your dataset is accepted we will require these files at a later stage. 
@@ -138,11 +138,11 @@ The channels.tsv file describes channel specific information. For example which 
 - **unit:** Unit of measurement of the channel. 
 - **description:** Description of the channel. 
 - **signal_electrode:** Name of the signal electrode. Must match an electrode name specified in electrodes.tsv. 
-- **reference_electrode:** Name of the reference electrode. Must match an electrode name specified in electrodes.tsv. 
-- **group:** 
+- **reference_electrode:** Name of the reference electrode. Must match an electrode name specified in electrodes.tsv, except for bipolar electrodes such as fine-wire, use "bipolar" in this case. For data channels that do not come from electrodes (such as force data) can be "n/a". 
+- **group:** Name of the group this channel belongs to. 
 - **status:** Status of the channel. Optional. Can be used to tag channels which should be ignored in data analysis. Must be "good", "bad" or empty. 
-- **low_cutoff:** High-pass filter frequency (in Hz). 
-- **high_cutoff:** Low-pass filter frequency (in Hz). 
+- **low_cutoff:** High-pass filter frequency (in Hz) or "n/a". 
+- **high_cutoff:** Low-pass filter frequency (in Hz) or "n/a". 
 
 ### additionalInformation.json
 A small file that collects information we need, that is not part of BIDS. 
