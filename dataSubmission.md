@@ -138,9 +138,9 @@ The channels.tsv file describes channel specific information. For example which 
 - **unit:** Unit of measurement of the channel. 
 - **description:** Description of the channel. 
 - **signal_electrode:** Name of the signal electrode. Must match an electrode name specified in electrodes.tsv. 
-- **reference_electrode:** Name of the reference electrode. Must match an electrode name specified in electrodes.tsv, except for bipolar electrodes such as fine-wire, use "bipolar" in this case. For data channels that do not come from electrodes (such as force data) can be "n/a". 
+- **reference_electrode:** Name of the reference electrode. Must match an electrode name specified in electrodes.tsv, except for bipolar electrodes (such as fine-wire), use "bipolar" in this case. For data channels that do not come from electrodes (such as force data) use "n/a". 
 - **group:** Name of the group this channel belongs to. 
-- **status:** Status of the channel. Optional. Can be used to tag channels which should be ignored in data analysis. Must be "good", "bad" or empty. 
+- **status:** Status of the channel. Can be used to tag channels which should be ignored in data analysis. Must be "good", "bad" or left empty. 
 - **low_cutoff:** High-pass filter frequency (in Hz) or "n/a". 
 - **high_cutoff:** Low-pass filter frequency (in Hz) or "n/a". 
 
