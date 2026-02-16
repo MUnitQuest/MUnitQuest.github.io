@@ -80,6 +80,11 @@ It's also possible to combine both these photos into one.
 
 ### dataset_description.json
 A short .json file where you specify authors of the dataset and its related publication as well as a license and the ethics approval. 
+- **Name:** Name of the dataset.
+- **License:** License this dataset will be available under. Must be "CC BY 4.0". 
+- **Authors:** List of individuals who contributed to the creation/curation of the dataset.
+- **ReferencesAndLinks:** Citation of the related publication, as text and as DOI. 
+- **EthicsApprovals:** List of ethics committee approvals of the research protocols and/or protocol identifiers.
 
 ### Participants.json
 A file defining which columns exist in the participants.tsv file. 
@@ -120,7 +125,7 @@ Contains information about the electrodes used. Such as geometry of grid(s), ele
 - **electrodeSurfaceArea:** Surface area of the electrode. For fine wire this will be "n/a" because FineWireDiameter and FineWireRecordingTipLength already specify surface area. 
 - **fineWireDiameter:** Diameter of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
 - **fineWireRecordingTipLength:** Unisolated length of the fine wire tip. "n/a" for every electrode that is not a fine wire. Column can be deleted if no fine wire present. 
-- **concentricNeedleDiameter:** Concentric needle size/gauge. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
+- **concentricNeedleDiameter:** Concentric needle diameter in mm. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
 - **concentricNeedleLength:** Length of concentric needle. "n/a" for every electrode that is not a concentric needle. Column can be deleted if no concentric needle present. 
 - **electrodeManufacturer:** Name of electrode manufacturer. This is optional. 
 - **electrodeManufacturersModelName:** Model name of Electrode. This is optional. 
