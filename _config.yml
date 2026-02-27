@@ -7,6 +7,9 @@ exclude:
 - Gemfile
 - Gemfile.lock
 
+sass:
+  style: compressed
+
 # Set plugins
 plugins:
 - jekyll-sitemap
