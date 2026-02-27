@@ -7,9 +7,52 @@ feature_text: |
 
 
 
-purpose of competition
+### Summary, aims, and scope 
 
-see timeline under [Timeline](https://munitquest.github.io/timeline/). 
+**MUnitQuest** aims to advance methods for reconstructing motor unit spike trains from high-density surface EMG (HDsEMG) through a community-driven competition by
 
-If you want to submit your own dataset follow the instructions under [Data Submission](https://munitquest.github.io/dataSubmission/)
+  1. Building a diverse, high-quality, openly shared HDsEMG database with labelled spike train
+  2. Rigorously evaluate algorithms on this benchmark in a transparent, reproducible way
+
+The competition will address two distinct algorithmic challenges:
+   - **Challenge 1: Isometric contractions.** Well-studied, stationary conditions for which multiple decomposition methods currently exist.
+   - **Challenge 2: Dynamic contractions.** Less studied, non-stationary conditions in which algorithmic performance remains limited, motivating the development of novel approaches and interactive exchange of ideas.
+
+### How does it work
+
+The competition is organised into three phases: 
+    - **Phase 0: Archive.** Community members contribute datasets (i.e., experimental or simulated HDsEMG data together with labelled spike trains), which are automatically standardised to the BIDS-EMG format and assessed via a double-blind review process. Quality assessment uses metrics and visualisations developed during Phase 0 to determine whether datasets enter the *Main track* (eligible for algorithm benchmarking) or the *Discovery track* (publicly available for testing and comparing algorithms, but not part of the competition). Finally, the *Main track* datasets are divided into training, validation, and test splits. 
+    - **Phase 1: Forge.** Algorithm developers are provided with the *Main track* training and validation sets. The training set includes anonymised labels; the validation set is label-free, enabling submissions of predictions for leaderboard feedback. This phase supports iterative development and refinement of methods while maintaining the integrity of the final evaluation.
+    - **Phase 2: Showdown.** The top 10 algorithms from Phase 1 are invited to compete on a previously hidden test data set. Prize-eligible entries are required to submit code upon the end of the competition; submissions based on proprietary code are not eligible for awards. The final leaderboard is computed from test set performance and publicly released.
+
+### Awards
+
+Teams receive recognition on a permanent leaderboard (online), and the top 5 teams per challenge, as well as the top 5 dataset contributions, will be invited to share their solutions in a *special issue of the Journal of Electromyography and Kinesiology*.
+
+### Motivation and background
+
+Since the development of the concentric needle by Adrian and Bronk nearly 100 years ago, the indirect identification of spinal motor neuron activity from motor unit activity has shaped our understanding of neuromuscular physiology.  
+In the last 20 years, the development of blind source separation (BSS) algorithms applied to high-density surface electromyography (HDsEMG) recordings has facilitated the study of motor unit activity in living humans, enhanced the population of detectable motor units, and underscored the technique's potential in applications such as human-machine interfaces \cite{Holobar2021}.  
+Despite these achievements, several limitations persist:
+  1. Most motor unit identification algorithms are still limited to isometric conditions
+  2. Due to the lack of community-accepted benchmarks, tracking methodological progress is difficult
+  3. In-house codes or proprietary packages prevent the exchange and comparison of solutions
+  4. The lack of publicly available datasets and standards for sharing EMG data hinders large-scale performance evaluation through automated pipelines
+
+### Organizing institutions
+
+- University of Stuttgart
+- Imperial College London
+
+### Partners and supporters
+
+- Become a partner 
+
+### Core coordinators
+
+- Pranav Mamidanna
+- Thomas Klotz
+- Robin Rohlen
+- Oliver Röhrle
+- Dario Farina
 
