@@ -4,6 +4,8 @@ remote_theme: daviddarnes/alembic
 # File excludes
 exclude:
 - README.md
+- legalNotice.md
+- about.md
 - Gemfile
 - Gemfile.lock
 
@@ -29,7 +31,7 @@ baseurl: ''
 title: 'MUnitQuest'
 description: 'MUnitQuest Dataset Submission'
 permalink: pretty
-#logo: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/logo.jpg" # logo in top left 
+logo: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/logo_empty.jpeg" # logo in top left 
 
 # Pagination
 paginate: 5 # number of blog posts shown at once 
@@ -45,39 +47,16 @@ navigation_header:
   url: /dataSubmission/
 - title: Rules
   url: /rules/
-- title: About
-  url: /about/
-- title: FAQ
-  url: /faq/
-- title: Legal Notice
-  url: /legalNotice/
+#- title: About
+#  url: /about/
+#- title: FAQ
+#  url: /faq/
+#- title: Legal Notice
+#  url: /legalNotice/
 
 # Footer nav
 navigation_footer:
 - title: Back to top
   url: "#top" # always leads to "home" tab, even when clicked while in other tab 
 
-# Collections
-collections:
-  posts:
-    title: FAQ
-    output: true
-    description: "Frequently asked questions"
-    feature_text: |
-      Welcome to FAQ
-    feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/headerImage.jpg"
 
-# Collection settings
-defaults:
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: post # Set the default layout for posts
-  -
-    scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: page # Set the default layout for pages
