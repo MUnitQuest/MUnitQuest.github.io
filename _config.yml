@@ -29,7 +29,7 @@ baseurl: ''
 title: 'MUnitQuest'
 description: 'MUnitQuest Dataset Submission'
 permalink: pretty
-logo: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/logo.jpg" # logo in top left 
+#logo: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/logo.jpg" # logo in top left 
 
 # Pagination
 paginate: 5 # number of blog posts shown at once 
