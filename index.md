@@ -1,6 +1,6 @@
 ---
 title: About MUnitQuest
-feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/header_emg_spikes.jpg"
+feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/header2.jepg"
 feature_text: |
   ### MUnitQuest: Advancing motor unit idendification 
 ---
