@@ -4,7 +4,7 @@ feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.i
 feature_text: 
 ---
 
-
+Here we summarize key dates and the competition timeline.
 
 - June 1, 2026: Data submission opens
 - June 15, 2026: Familiarization phase starts (organizers provide test data)

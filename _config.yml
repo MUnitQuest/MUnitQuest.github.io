@@ -6,6 +6,7 @@ exclude:
 - README.md
 - legalNotice.md
 - about.md
+- bids_example.md
 - Gemfile
 - Gemfile.lock
 
