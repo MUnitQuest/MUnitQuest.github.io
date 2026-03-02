@@ -28,13 +28,15 @@ Teams receive recognition on a permanent leaderboard (online), and the top 5 tea
 
 ### Motivation and background
 
-Since the development of the concentric needle by Adrian and Bronk nearly 100 years ago, the indirect identification of spinal motor neuron activity from motor unit activity has shaped our understanding of neuromuscular physiology.  In the last 20 years, the development of blind source separation (BSS) algorithms applied to high-density surface electromyography (HDsEMG) recordings has facilitated the study of motor unit activity in living humans, enhanced the population of detectable motor units, and underscored the technique's potential in applications such as human-machine interfaces. Despite these achievements, several limitations persist:
-  1. Most motor unit identification algorithms are still limited to isometric conditions
-  2. Due to the lack of community-accepted benchmarks, tracking methodological progress is difficult
-  3. In-house codes or proprietary packages prevent the exchange and comparison of solutions
-  4. The lack of publicly available datasets and standards for sharing EMG data hinders large-scale performance evaluation through automated pipelines
+Since the development of the concentric needle by Adrian and Bronk nearly 100 years ago, the indirect identification of spinal motor neuron activity from motor unit activity has shaped our understanding of neuromuscular physiology.  Over the last 20 years, the development of blind source separation (BSS) algorithms applied to high-density surface electromyography (HDsEMG) recordings has facilitated the study of motor unit activity in living humans, enhanced the population of detectable motor units, and underscored the technique's potential in applications such as human-machine interfaces. Despite these achievements, several limitations persist:
+-  Most motor unit identification algorithms are still limited to isometric conditions
+-  Due to the lack of community-accepted benchmarks, tracking methodological progress is difficult
+-  In-house codes or proprietary packages prevent the exchange and comparison of solutions
+-  The lack of publicly available datasets and standards for sharing EMG data hinders large-scale performance evaluation through automated pipelines
 
 ### Organizing institutions
+
+![ImperialCollegeLondon](Images/inperial_logo.png) ![UniversityOfStuttgart](Images/UniStuttgartLogo.png)
 
 - University of Stuttgart
 - Imperial College London
