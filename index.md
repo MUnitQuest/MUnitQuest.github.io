@@ -36,7 +36,12 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 
 ### Organizing institutions
 
-![ImperialCollegeLondon](Images/inperial_logo.png) ![UniversityOfStuttgart](Images/UniStuttgartLogo.png)
+
+<p float="left">
+  <img src="Images/inperial_logo.png" width="120">
+  <img src="Images/UniStuttgartLogo.png" width="120">
+</p>  
+
 
 - University of Stuttgart
 - Imperial College London
