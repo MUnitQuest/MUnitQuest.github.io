@@ -43,8 +43,8 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
   <img src="/Images/UniStuttgartLogo.png" width="200" />
 </p>
 
-- University of Stuttgart
-- Imperial College London
+- Institute for Modelling and Simulation of Biomechanical Systems, University of Stuttgart
+- Department of Bioengineering, Imperial College London
 
 ### Partners and supporters
 
@@ -52,9 +52,9 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 
 ### Core coordinators
 
-- Pranav Mamidanna ([p.mamidanna22@imperial.ac.uk](mailto:p.mamidanna22@imperial.ac.uk), [GitHub](https://github.com/pranavm19))
-- Thomas Klotz
-- Robin Rohlen
-- Oliver Röhrle
-- Dario Farina ([d.farina@imperial.ac.uk](mailto:d.farina@imperial.ac.uk))
+- Pranav Mamidanna ([📧](mailto:p.mamidanna22@imperial.ac.uk), [GitHub](https://github.com/pranavm19))
+- Thomas Klotz ([📧](mailto:thomas.klotz@imsb.uni-stuttgart.de), [GitHub](https://github.com/klotz-t))
+- Robin Rohlen ([📧](mailto:r.rohlen@imperial.ac.uk))
+- Oliver Röhrle ([📧](mailto:roehrle@simtech.uni-stuttgart.de))
+- Dario Farina ([📧](mailto:d.farina@imperial.ac.uk))
 
