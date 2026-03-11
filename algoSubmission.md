@@ -9,6 +9,10 @@ feature_text:
 Coming soon.
 
 
+### Leaderboard
+
+Once the competition is runing the current leaderboard will be updated once every day. 
+
 
 
  
