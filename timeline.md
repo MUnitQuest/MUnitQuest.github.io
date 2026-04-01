@@ -1,4 +1,5 @@
 ---
+layout: page
 title: Timeline
 feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/header2.jpeg"
 feature_text: 

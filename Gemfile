@@ -10,4 +10,7 @@ gem "jekyll-feed", "~> 0.15"
 gem "jekyll-commonmark", "~> 1.3.1"
 gem "jekyll-include-cache", "~> 0.2"
 gem "jemoji", "~> 0.12"
-gem "jekyll-remote-theme", "~> 0.3"
+group :jekyll_plugins do
+  gem "jekyll-remote-theme"
+end
+
