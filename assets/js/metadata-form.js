@@ -132,13 +132,31 @@ function addListItem(containerId, schema, className, title = null) {
     html += `<div class="mf-fields">`;
 
     schema.forEach(field => {
-        html += `
-            <div class="mf-field-row">
-                <input type="${field.type}"
-                       name="${field.name}[]"
-                       placeholder="${field.placeholder || ""}">
-            </div>
-        `;
+
+        const dependsAttr = field.dependsOn
+            ? `data-depends-field="${field.dependsOn.field}"
+            data-depends-value='${JSON.stringify(field.dependsOn.values || field.dependsOn.value)}'`
+            : "";
+
+        if (field.type === "select") {
+            html += `
+                <div class="mf-field-row" data-field="${field.name}" ${dependsAttr}>
+                    <select name="${field.name}[]">
+                        ${field.options.map(opt => `
+                            <option value="${opt}">${opt}</option>
+                        `).join("")}
+                    </select>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="mf-field-row" data-field="${field.name}" ${dependsAttr}>
+                    <input type="${field.type}"
+                        name="${field.name}[]"
+                        placeholder="${field.placeholder || ""}">
+                </div>
+            `;
+        }
     });
 
     html += `
@@ -149,6 +167,53 @@ function addListItem(containerId, schema, className, title = null) {
 
     entry.innerHTML = html;
     container.appendChild(entry);
+    setupConditionalFields(entry);
+}
+
+// Conditional fields
+function setupConditionalFields(entry) {
+
+    const allFields = entry.querySelectorAll("[data-field]");
+
+    function update() {
+        allFields.forEach(fieldRow => {
+
+            const dependsField = fieldRow.dataset.dependsField;
+            const dependsValue = fieldRow.dataset.dependsValue;
+
+            if (!dependsField) return;
+
+            const controller = entry.querySelector(`[name="${dependsField}[]"]`);
+            if (!controller) return;
+
+            // 🔥 NEW: support multiple values
+            let isVisible = false;
+
+            try {
+                const allowed = JSON.parse(dependsValue);
+
+                if (Array.isArray(allowed)) {
+                    isVisible = allowed.includes(controller.value);
+                } else {
+                    isVisible = controller.value === dependsValue;
+                }
+            } catch {
+                // fallback for single value
+                isVisible = controller.value === dependsValue;
+            }
+
+            fieldRow.style.display = isVisible ? "flex" : "none";
+
+            const input = fieldRow.querySelector("input, select");
+            if (input) input.disabled = !isVisible;
+        });
+    }
+
+    entry.querySelectorAll("select, input").forEach(el => {
+        el.addEventListener("change", update);
+    });
+
+    update();
 }
 
 // Authors management
@@ -199,10 +264,27 @@ function addSubject() {
     addListItem("subjectsList", subjectSchema, "mf-subject-entry", "Subject");
 }
 
+// Coordinate systems
+const coordSchema = [
+    { name: "type", type: "select", options: ["anatomical", "grid"], placeholder: "Coordinate system type"},
+    { name: "name", type: "text", placeholder: "Coordinate system name, e.g., lowerLeg or grid1" },
+    { name: "description", type: "text" , placeholder: "Describes origin and positive axis directions relative to anatomical landmarks."},
+    { name: "units", type: "select", options: ["m", "cm", "mm", "percent", "n/a"], placeholder: "Unit"},
+
+    { name: "parent", type: "text", dependsOn: { field: "type", value: ["grid"] }, placeholder: "The name of the parent (anatomical) coordinate system"},
+    { name: "anchor_coords", type: "text", dependsOn: { field: "type", value: ["grid"] }, placeholder: "Coordinates of the AnchorElectrode" },
+    { name: "anchor_electrode", type: "text", dependsOn: { field: "type", value: ["grid"] }, placeholder: "Name of the AnchorElectrode" }
+];
+
+function addCoord() {
+    addListItem("coordList", coordSchema, "mf-misc-entry", "coord_systems");
+}
+
 // MISC channels
 const miscSchema = [
-    { name: "description", type: "text", placeholder: "e.g., torque signal or requested task profile" },
-    { name: "units", type: "text", placeholder: "Unit of the measurement, e.g., V or % MVC"}
+    { name: "name", type: "text", placeholder: "None EMG channels, e.g., torque or requested task profile" },
+    { name: "units", type: "select", options: ["V", "mV", "uV", "percent MVC", "percent MVC / s", "N", "Nm", "m", "m/s", "m/s^2", "other", "n/a"], placeholder: "Unit of the measurement, e.g., V or % MVC"},
+    { name: "myunits", type: "text", dependsOn: {field: "units", value: ["other"]}, placeholder: "Add your unit"}
 ];
 
 function addMISC() {
@@ -211,15 +293,19 @@ function addMISC() {
 
 // HDsEMG arrays
 const HDsEMGSchema = [
+    { name: "name", type: "text", placeholder: "Unique electrode name, e.g. grid1"},
+    { name: "type", type: "select", "options": ["surface", "invasive", "reference", "ground"]},
+    { name: "montage", type: "select", dependsOn: { field: "type", value: ["surface", "invasive"] }, options: ["monopolar", "bipolar"]},
+    { name: "density", type: "select", dependsOn: { field: "type", value: ["surface", "invasive"]}, options: ["high-density", "single channel"]},
     { name: "manufacturer", type: "text", placeholder: "Electrode manufacturer, e.g., OTBioelettronica" },
     { name: "manufacturersModelName", type: "text", placeholder: "Manufacturer's model name, e.g., GR04MM1305"},
     { name: "interelectrode_distance", type: "number", min: 0, step:0.1, placeholder: "Interelectrode distance in mm"},
-    { name: "numChannels", type: "number", min:1, step:1, placeholder: "Number of channels in that grid"},
+    { name: "numChannels", type: "number", dependsOn: { field: "density", value: ["high-density"]}, min:1, step:1, placeholder: "Number of channels in that grid"},
     { name: "material", type: "text", placeholder: "Electrode material, e.g., gold or Ag/AgCl"},
-    { name: "targetMuscle", type: "text", placeholder: "Muscle (or muscle group) the electrode records from, e.g., right tibialis anterior"},
-    { name: "lowCutOff", type: "number", placeholder: "Cut-off frequency in Hz"},
-    { name: "highCutOff", type: "number", placeholder: "Cut-off frequency in Hz"},
-    { name: "reference", type: "text", placeholder: "Name of the electrode used for referencing"},
+    { name: "targetMuscle", type: "text", dependsOn: { field: "type", value: ["surface", "invasive"]}, placeholder: "Muscle (or muscle group) the electrode records from, e.g., right tibialis anterior"},
+    { name: "lowCutOff", type: "number", placeholder: "Cut-off frequency of the low pass filter in Hz"},
+    { name: "highCutOff", type: "number", placeholder: "Cut-off frequency of the high pass filter in Hz"},
+    { name: "reference", type: "text", dependsOn: { field: "montage", value: ["monopolar"]}, placeholder: "Name of the electrode used for referencing"},
 ];
 
 function addHDsEMG() {
@@ -359,7 +445,8 @@ function generateReview() {
     reviewSummary.innerHTML = html;
     getBIDS_datasetJson(data);
     getBIDS_subjectsTSV(data);
-    getBIDS_emgJson(data)
+    getBIDS_emgJson(data);
+    generateChannelsTSV(data);
 }
 
 function getBIDS_datasetJson(data) {
@@ -438,6 +525,7 @@ function getBIDS_subjectsTSV(data) {
     document.getElementById('bidsSubjectsPreview').textContent = tsv;
 }
 
+// Collect all form data from an array field
 function getArrayField(fieldName, { emptyValue = "n/a" } = {}) {
     return Array.from(document.querySelectorAll(`[name="${fieldName}[]"]`))
         .map(el => {

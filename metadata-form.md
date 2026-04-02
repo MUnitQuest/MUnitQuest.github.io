@@ -260,6 +260,17 @@ layout: page
             <input type="text" id="placementSchemeDescription" name="placementSchemeDescription" placeholder="Free text describing the method used to position your grids.">
         </div>
 
+        <h3>Coordinate systems</h3>
+
+        <div class="mf-form-group">
+            <label>Coordinates</label>
+            <div id="coordList"></div>
+
+            <button type="button" class="mf-btn-secondary" onclick="addCoord('coordList')">
+                + Add Coordinate System
+            </button>
+        </div>
+
         <h3>Electrode Configuration</h3>
 
         <div class="mf-form-group">
@@ -676,6 +687,7 @@ layout: page
             <pre id="bidsDatasetPreview" class="mf-json-preview">{}</pre>
             <pre id="bidsSubjectsPreview" class="mf-json-preview">{}</pre>
             <pre id="bidsEMGPreview" class="mf-json-preview">{}</pre>
+            <pre id="bidsChannelsPreview" class="mf-json-preview">{}</pre>
         </div>
 
         <div class="mf-form-group">
