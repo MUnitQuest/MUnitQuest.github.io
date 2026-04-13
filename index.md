@@ -54,6 +54,12 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 
 ### Partners and supporters
 
+<p float="left">
+  <img src="/Images/isek_logo.png" width="200"/>
+  <img src="/Images/logo_empty.jpeg" width="30" />
+  <img src="/Images/motor_neuron_society_logo.png" width="200"/>
+</p>
+
 - Become a partner! Get in touch ([📧](mailto:MUnitQuest@outlook.com)) if you want to contribute to our efforts 🙏
 
 ### Core coordinators
