@@ -373,168 +373,18 @@ layout: page
 
     <!-- Section 6: Task & Protocol Information -->
     <section class="form-section" data-section="6">
+ 
         <h2>Task &amp; Protocol Information</h2>
 
         <div class="mf-form-group">
-            <label for="taskName">Task Name *</label>
-            <input type="text" id="taskName" name="taskName" placeholder="e.g., isometric-ankle-dorsiflexion" required>
-        </div>
+            <label>Task</label>
+            <div id="taskList"></div>
 
-        <div class="mf-form-group">
-            <label for="taskDescription">Task Description *</label>
-            <textarea id="taskDescription" name="taskDescription" rows="4" maxlength="500" required></textarea>
-            <small class="char-count">0 / 500 characters</small>
-        </div>
+            <button type="button" class="mf-btn-secondary" onclick="addTask('taskList')">
+                + Add Task
+            </button>
+        </div> 
 
-        <div class="mf-form-group">
-            <label for="instructions">Instructions to Participants</label>
-            <textarea id="instructions" name="instructions" rows="3"></textarea>
-        </div>
-
-        <div class="mf-form-group">
-            <label>Contraction Type * (check all that apply)</label>
-            <div class="mf-checkbox-group">
-                <label>
-                    <input type="checkbox" name="contractionIsometric" id="contractionIsometric">
-                    Isometric
-                </label>
-                <label>
-                    <input type="checkbox" name="contractionConcentric" id="contractionConcentric">
-                    Dynamic (concentric)
-                </label>
-                <label>
-                    <input type="checkbox" name="contractionEccentric" id="contractionEccentric">
-                    Dynamic (eccentric)
-                </label>
-                <label>
-                    <input type="checkbox" name="contractionMixed" id="contractionMixed">
-                    Dynamic (mixed)
-                </label>
-            </div>
-        </div>
-
-        <!-- Isometric-specific fields -->
-        <div id="isometricFields" style="display:none;">
-            <h3>Isometric Contraction Details</h3>
-            <div class="mf-form-group">
-                <label for="targetForceLevels">Target Force Levels</label>
-                <input type="text" id="targetForceLevels" name="targetForceLevels" placeholder="e.g., 10%, 30%, 50% MVC">
-            </div>
-            <div class="mf-form-group">
-                <label for="contractionDuration">Contraction Duration (seconds)</label>
-                <input type="number" id="contractionDuration" name="contractionDuration" step="0.1">
-            </div>
-            <div class="mf-form-group">
-                <label for="restDuration">Rest Duration (seconds)</label>
-                <input type="number" id="restDuration" name="restDuration" step="0.1">
-            </div>
-        </div>
-
-        <!-- Dynamic-specific fields -->
-        <div id="dynamicFields" style="display:none;">
-            <h3>Dynamic Contraction Details</h3>
-            <div class="mf-form-group">
-                <label for="jointROM">Joint Range of Motion</label>
-                <input type="text" id="jointROM" name="jointROM" placeholder="e.g., ankle: 0-30° dorsiflexion">
-            </div>
-            <div class="mf-form-group">
-                <label for="movementSpeed">Movement Speed</label>
-                <input type="text" id="movementSpeed" name="movementSpeed" placeholder="e.g., 60°/s">
-            </div>
-            <div class="mf-form-group">
-                <label for="loadType">Load Type</label>
-                <select id="loadType" name="loadType">
-                    <option value="">Select</option>
-                    <option value="bodyweight">Bodyweight</option>
-                    <option value="external">External load</option>
-                    <option value="isokinetic">Isokinetic</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="numTrials">Number of Trials/Runs *</label>
-            <input type="number" id="numTrials" name="numTrials" min="1" required>
-        </div>
-
-        <h3>Auxiliary Data</h3>
-
-        <div class="mf-form-group">
-            <label>Force Data Included? *</label>
-            <div class="mf-radio-group">
-                <label>
-                    <input type="radio" name="forceDataIncluded" value="yes" required>
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" name="forceDataIncluded" value="no">
-                    No
-                </label>
-            </div>
-        </div>
-
-        <div id="forceDataFields" style="display:none;">
-            <div class="mf-form-group">
-                <label for="forceSensorType">Force Sensor Type</label>
-                <input type="text" id="forceSensorType" name="forceSensorType">
-            </div>
-            <div class="mf-form-group">
-                <label for="forceSamplingFrequency">Force Sampling Frequency (Hz)</label>
-                <input type="number" id="forceSamplingFrequency" name="forceSamplingFrequency">
-            </div>
-            <div class="mf-form-group">
-                <label for="forceUnits">Force Units</label>
-                <select id="forceUnits" name="forceUnits">
-                    <option value="">Select</option>
-                    <option value="N">Newtons (N)</option>
-                    <option value="Nm">Newton-meters (Nm)</option>
-                    <option value="%MVC">Percent MVC (%MVC)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="mf-form-group">
-            <label>Kinematics Data Included? *</label>
-            <div class="mf-radio-group">
-                <label>
-                    <input type="radio" name="kinematicsDataIncluded" value="yes" required>
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" name="kinematicsDataIncluded" value="no">
-                    No
-                </label>
-            </div>
-        </div>
-
-        <div id="kinematicsDataFields" style="display:none;">
-            <div class="mf-form-group">
-                <label for="motionCaptureSystem">Motion Capture System</label>
-                <input type="text" id="motionCaptureSystem" name="motionCaptureSystem">
-            </div>
-            <div class="mf-form-group">
-                <label for="kinematicsSamplingFrequency">Kinematics Sampling Frequency (Hz)</label>
-                <input type="number" id="kinematicsSamplingFrequency" name="kinematicsSamplingFrequency">
-            </div>
-            <div class="mf-form-group">
-                <label for="trackedJoints">Tracked Joints/Markers</label>
-                <textarea id="trackedJoints" name="trackedJoints" rows="3"></textarea>
-            </div>
-        </div>
-
-        <div class="mf-form-group">
-            <label>Video Recording Included?</label>
-            <div class="mf-radio-group">
-                <label>
-                    <input type="radio" name="videoIncluded" value="yes">
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" name="videoIncluded" value="no">
-                    No
-                </label>
-            </div>
-        </div>
     </section>
 
     <!-- Section 7: Motor Unit Labeling -->

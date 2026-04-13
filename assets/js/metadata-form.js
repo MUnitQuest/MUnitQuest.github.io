@@ -335,6 +335,18 @@ function addSurfaceEMG() {
     addListItem("surfaceEMGList", surfaceEMGSchema, "mf-misc-entry", "surfaceEMG");
 }
 
+// Tasks
+const taskSchema = [
+    { name: "taskName", type: "text", placeholder: "Unique task label, e.g., isometricContraction." },
+    { name: "taskDescription", type: "text", placeholder: "Longer free-text description of the task."},
+    { name: "taskInstructions", type: "text", placeholder: "Instructions given to participants before the recording."},
+    { name: "taskRuns", type: "number", placeholder: "Number of repetitions.", min: 1, step: 1}
+];
+
+function addTask() {
+    addListItem("taskList", taskSchema, "mf-task-entry", "task");
+}
+
 
 // Get the list of visible section numbers (data-section attributes) for navigation
 function getVisibleSections() {
@@ -429,15 +441,15 @@ function validateSection(sectionNumber) {
         }
     }
 
-    if (sectionNumber === 6) {
-        const contractionChecked = document.querySelector(
-            '#contractionIsometric:checked, #contractionConcentric:checked, #contractionEccentric:checked, #contractionMixed:checked'
-        );
-        if (!contractionChecked) {
-            alert('Please select at least one contraction type');
-            return false;
-        }
-    }
+    //if (sectionNumber === 6) {
+    //    const contractionChecked = document.querySelector(
+    //        '#contractionIsometric:checked, #contractionConcentric:checked, #contractionEccentric:checked, #contractionMixed:checked'
+    //    );
+    //    if (!contractionChecked) {
+    //        alert('Please select at least one contraction type');
+    //        return false;
+    //    }
+    //}
 
     return isValid;
 }
@@ -470,7 +482,7 @@ function generateReview() {
     getBIDS_datasetJson(data);
     getBIDS_subjectsTSV(data);
     getBIDS_emgJson(data);
-    generateChannelsTSV(data);
+    getBIDS_channelsTSV(data);
 }
 
 function getBIDS_datasetJson(data) {
@@ -499,8 +511,8 @@ function getBIDS_datasetJson(data) {
 
 function getBIDS_emgJson(data) {
     const bids = {
-        "TaskName": data.taskName || "n/a",
-        "TaskDescription": data.taskDescription || "n/a",
+        "TaskName": data.taskName[0] || "n/a", // TODO
+        "TaskDescription": data.taskDescription[0] || "n/a", // TODO
         "Manufacturer": data.manufacturer || "n/a",
         "ManufacturersModelName": data.manufacturerModel || "n/a",
         "SamplingFrequency": parseFloat(data.samplingFrequency) || "n/a",
@@ -530,7 +542,6 @@ function getBIDS_subjectsTSV(data) {
     for (let i = 0; i < length; i++) {
         subjects.push({
             participant_id: `sub-${participant_id[i]}` || "",
-            //participant_id: `sub-${String(i + 1).padStart(2, "0")}`,
             age: ages[i] || "n/a",
             height: heights[i] || "n/a",
             weight: weights[i] || "n/a"
@@ -549,6 +560,32 @@ function getBIDS_subjectsTSV(data) {
     });
 
     document.getElementById('bidsSubjectsPreview').textContent = tsv;
+}
+
+function getBIDS_channelsTSV(data) {
+
+    const channels = [];
+
+    // TODO fill with meaningfull content
+    for (let i = 0; i < length; i++) {
+        channels.push({
+            name: "Ch000",
+            type: "EMG",
+            units: "mV",
+        });
+    }
+
+    let tsv = "name\ttype\tunits\n";
+
+    channels.forEach((c, index) => {
+        tsv += [
+            c.name,
+            c.type,
+            c.units,
+        ].join("\t") + "\n";
+    });
+
+    document.getElementById('bidsChannelsPreview').textContent = tsv;
 }
 
 // Collect all form data from an array field
