@@ -40,6 +40,14 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 -  Due to the lack of community-accepted benchmarks, tracking methodological progress is difficult
 -  The lack of publicly available datasets and standards for sharing EMG data hinders large-scale performance evaluation through automated pipelines
 
+### Partners 
+
+<p float="left">
+  <img src="/Images/isek_logo.png" width="200"/>
+</p>
+
+With support from the International Society of Electrophysiology and Kinesiology (ISEK).
+
 ### Organizing institutions
 
 
@@ -51,14 +59,9 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 - Institute for Modelling and Simulation of Biomechanical Systems, University of Stuttgart
 - Department of Bioengineering, Imperial College London
 
-### Partners and supporters
+### Supporters
 
-<p float="left">
-  <img src="/Images/isek_logo.png" width="140"/>
-  <img src="/Images/motor_neuron_society_logo.png" width="200" style="margin-left: 20px;" />
-</p>
-
-- Become a partner! Get in touch ([📧](mailto:MUnitQuest@outlook.com)) if you want to contribute to our efforts 🙏
+- Become a supporter! Get in touch ([📧](mailto:MUnitQuest@outlook.com)) if you want to contribute to our efforts 🙏
 
 ### Core coordinators
 

@@ -566,10 +566,12 @@ function getBIDS_channelsTSV(data) {
 
     const channels = [];
 
+    const length = 2
+
     // TODO fill with meaningfull content
     for (let i = 0; i < length; i++) {
         channels.push({
-            name: "Ch000",
+            name: `Ch${String(i + 1).padStart(3, "0")}`, 
             type: "EMG",
             units: "mV",
         });
