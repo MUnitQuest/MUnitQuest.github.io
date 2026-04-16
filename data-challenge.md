@@ -7,7 +7,7 @@ feature_text:
 
 ### What is it
 
-The **Data Challenge** is a community-driven effort to build a diverse, high-quality collection of experimental and simulated HDsEMG datasets with reliably labeled motor unit spike trains. These datasets form the foundation of the **Algorithm Challenge**: they are used as training data during the Familiarization Phase and as the hidden-label test set during the Showdown Phase.
+The **Data Challenge** is a community-driven effort to build a diverse, high-quality collection of experimental and simulated HDsEMG datasets with reliably labeled motor unit spike trains. These datasets form the foundation of the Showdown Phase of the **Algorithm Challenge**.
 
 ### Who is it for
 
@@ -15,9 +15,9 @@ The Data Challenge is targeted at **experimental researchers** who use HDsEMG an
 
 ### How does it work
 
-Community members contribute datasets consisting of experimental or simulated HDsEMG data together with labeled motor unit spike trains. Submissions are automatically standardised to the [EMG-BIDS format](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) and assessed via a double-blind review process by an expert panel (10–12 persons). All datasets entering the *MUnitQuest data collection* will be released on an open data repository (for datasets not entering the collection, this remains optional).
+Community members contribute datasets consisting of experimental or simulated HDsEMG data together with labeled motor unit spike trains. Submissions need to be prepared in the standardized [EMG-BIDS format](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) and are assessed via a double-blind review process by an expert panel. All datasets entering the *MUnitQuest data collection* will be released on an open data repository (for datasets not entering the collection, this remains optional).
 
-See the [Submission and Registration](/registration_and_submission/) page for details on how to submit a dataset.
+See the [Submission and Registration](/registration_and_submission/) page for details on how to prepare and submit a dataset. To make getting started with EMG-BIDS as easy as possible, we provide tutorials (coming soon) and assisted generation of BIDS metadata files through a web interface (coming soon).
 
 ### Evaluation criteria
 

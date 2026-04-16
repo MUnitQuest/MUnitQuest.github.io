@@ -7,7 +7,7 @@ feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.i
 
 ### Aims and scope 
 
-**MUnitQuest** aims to advance methods for reconstructing motor unit spike trains from high-density surface EMG (HDsEMG) through a **community-driven competition**. The competition is organised into two challenges (also see the [competition timeline](/timeline/))
+**MUnitQuest** aims to advance methods for reconstructing motor unit spike trains from high-density surface EMG (HDsEMG) through a **community-driven competition**. The competition is organized into two challenges (also see the [competition timeline](/timeline/))
 
 ### How does it work
 
@@ -17,8 +17,8 @@ feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.i
 
 ### Who is it for
 
-  - The **Algorithm Challenge** is intended for **algorithm developers** working on computational methods that can reconstruct the activity of single neurons from complex mixtures.
-  - The **Data Challenge** is targeted at **experimental researchers** who use HDsEMG and **simulation scientists** developing electrophysiological models that want to apply their methods in a highly relevant field of applied neuromuscular research.
+  - The Algorithm Challenge is intended for **algorithm developers** working on computational methods that can reconstruct the activity of single neurons from complex mixtures.
+  - The Data Challenge is targeted at **experimental researchers** who use HDsEMG and **simulation scientists** developing electrophysiological models that want to apply their methods in a highly relevant field of applied neuromuscular research.
 
 
 
@@ -28,7 +28,7 @@ All teams participating in the **Algorithm Challenge** receive recognition on a 
 
 ### Motivation and background
 
-Since the development of the concentric needle by Adrian and Bronk nearly 100 years ago, the indirect identification of spinal motor neuron activity from motor unit activity has shaped our understanding of neuromuscular physiology.  Over the last 20 years, the development of blind source separation (BSS) algorithms applied to high-density surface electromyography (HDsEMG) recordings has facilitated the study of motor unit activity in living humans, enhanced the population of detectable motor units, and underscored the technique's potential in applications such as human-machine interfaces. Despite these achievements, several limitations persist:
+Since the development of the concentric needle by Adrian and Bronk nearly 100 years ago, the indirect identification of spinal motor neuron activity from electromyographic signals has shaped our understanding of neuromuscular physiology.  Over the last 20 years, the development of blind source separation (BSS) algorithms applied to high-density surface electromyography (HDsEMG) recordings has facilitated the study of motor unit activity in living humans, enhanced the population of detectable motor units, and underscored the technique's potential in applications such as human-machine interfaces. Despite these achievements, several limitations persist:
 -  Most motor unit identification algorithms are still limited to isometric conditions
 -  Due to the lack of community-accepted benchmarks, tracking methodological progress is difficult
 -  The lack of publicly available datasets and standards for sharing EMG data hinders large-scale performance evaluation through automated pipelines

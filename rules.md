@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Rules
+title: Terms
 feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.io/refs/heads/main/Images/header2.jpeg"
 feature_text: 
 ---
@@ -8,30 +8,24 @@ feature_text:
 
 ### Rules of participation 
 
-The competition is open to teams worldwide, with no restriction on team size. Each team must nominate a leader responsible for coordination and submission. Teams may compete in both challenges (**Data Challenge** and **Algorithm Challenge**), or in a single challenge. Within the Algorithm Challenge, teams may enter both tasks (**Isometric** and **Dynamic**) or only one. Each person may only belong to one team per challenge. Each registered team may submit one contribution (a dataset or an algorithmic prediction) per challenge.
+Collaboration in teams (no restriction on team size) is allowed and should be declared transparently on the Codabench platform (by creating an Organization for submission). Each person may only belong to one team (per challenge). We score the last submission from each team. Each participant must use only one account on Codabench. Multiple account usage leading to multiple submissions will result in disqualification.
 
-### Data challenge: Evaluation
+### Code of conduct 
 
-To ensure the quality of the datasets used for the algorithmic challenges **Isometric** and **Dynamic** contractions, and to obtain the scoring of the **Data challenge**, we plan to conduct a double-blind review process by recruiting an expert panel (10-12 persons) that rates the datasets based on a set of pre-defined criteria:
+Participants agree to compete fairly and ethically, avoid exploiting system vulnerabilities, and refrain from harassment or misconduct. Violations may result in disqualification and a ban from future competitions.
 
-- **Metadata and provenance** (10 percent) – verifies that submissions satisfy [CEDE](https://cede.isek.org/) reporting matrices, thereby guaranteeing reproducibility and downstream re-use.
-- **Raw-signal quality** (30 percent) – gauges whether the HDsEMG signals are “decomposition-ready”. Key metrics include the baseline noise of each channel, residual power-line interference at 50/60 Hz, and the fraction of bad channels.
-- **Label quality** (40 percent) – evaluates the quality and trustworthiness of the labeled motor unit spike trains. This includes the labeling approach (e.g., simultaneous invasive EMG) as well as established trustworthiness measures such as the silhouette score and interspike-interval variability. 
-- **Diversity** (20 percent) – rewards datasets that expand anatomical, functional, and demographic coverage. Experienced reviewers rate the novelty of submissions in terms of recorded muscles, tasks, and recording configurations, including pathological as well as healthy cohorts, and balancing biological sex and age.
+### Leaderboards
 
-**Additional considerations for synthetic data:**
-For simulations, the data quality can be precisely controlled, and spike train labels represent an unequivocal ground truth. Hence, during the data review phase, the review panel will evaluate the realism of the simulated spike trains and the underlying muscle model (80 percent of the dataset score). 
+The leaderboard in Codabench contains only preliminary results, serving as feedback for competitors. The final results will be published on the official website after each challenge is completed. Note that for awarded teams, user identities can be made publicly visible. 
 
-**Scoring:** During the double-blind review phase, reviewers will assign a score of 1-6 (1: strong reject, 2: reject, 3: borderline reject, 4: borderline accept, 5: accept, 6: strong accept) for each category.
+### Awards 
 
+The top 5 teams per task in the algorithm challenge (Isometric and Dynamic), as well as the top 5 dataset contributions (Data challenge), will be invited to share their solutions in a special issue of the Journal of Electromyography and Kinesiology.
 
-## Algorithm Challenge
+### Remark on algorithm evaluations
 
-### Isometric task: Leaderboard
-The scoring system will be announced soon.
+As MUnitQuest is a scientific competition, the objective is to show progress in motor unit identification methods. Thus, to be eligible for awards, teams need to openly share their code. The organizing team will review all winning submissions to verify compliance with the competition rules. Any attempt to exploit the evaluation process or label information will result in the disqualification of the team. 
 
-### Dynamic task: Leaderboard
-The scoring system will be announced soon.
+### Remark on data submissions
 
-
-
+To ensure FAIR (findable, accessible, interoperable, and reusable) data handling beyond the completion of MUnitQuest, all datasets entering the showdown phase of the algorithm challenge will be released on an open data repository (for datasets not entering the competition’s data collection, this remains optional). For transparency, the peer review of each dataset will be made publicly available upon the completion of the competition. 
