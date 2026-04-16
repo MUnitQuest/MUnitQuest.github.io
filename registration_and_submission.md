@@ -5,9 +5,8 @@ feature_image: "https://raw.githubusercontent.com/MUnitQuest/MUnitQuest.github.i
 feature_text: 
 ---
 
-### Registration
 
-The registration platform will be launched soon.
+Both the **Data Challenge** and the **Algorithm Challenge** are hosted on [Codabench](https://www.codabench.org/). To participate in the competition, you need to create an account and follow the provided instructions.  
 
 
 ## Data Challenge
@@ -33,7 +32,7 @@ To obtain a diverse data collection for MUnitQuest that balances realism and lab
     <tr>
       <td style="border-bottom: 1px solid #ccc;">Experimental HDsEMG</td>
       <td rowspan="3">
-        1. Raw EMG signals (unit: volts)<br>
+        1. Raw EMG signals<br>
         2. Labelled motor unit spike trains<br>
         3. Force and/or kinematics data<br>
         4. Metadata and provenance
@@ -51,9 +50,9 @@ To obtain a diverse data collection for MUnitQuest that balances realism and lab
   </tbody>
 </table>
 
-**EMG data and metadata:** We will provide the EMG data entering the competition in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. To make getting started with EMG-BIDS as easy as possible, we support two options for your data submission:
-- Upload of EMG-BIDS-formatted data, which we facilitate by providing tutorials (coming soon) that you can adopt according to your specific recording setup
-- Assisted generation of EMG-BIDS compatible metadata files through a web interface (coming soon)
+**EMG data and metadata:** Data needs to be submitted in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. To make getting started with EMG-BIDS as easy as possible, we provide
+- tutorials (coming soon) that you can adopt according to your specific recording setup
+- a web interface for the assisted generation of BIDS datasets (coming soon)
 
 **Labeled motor unit spike trains:** A key requirement for a competition on motor unit identification methods is the availability of labeled ground truth spikes. Thus, we additionally require submitting:
 - for each recording, a *.tsv* file (BIDS-events file, see example below) containing the labeled motor unit spike trains 
