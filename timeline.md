@@ -11,42 +11,44 @@ Here we summarize key dates and the competition timeline.
 
 | **Date**       | **Event** |
 | -------------- | ----------- |
-| 01/06/2026     | **Phase 0:** The data submission opens |
-| 15/06/2026     | **Phase 1:** The submission portal for the familarization phase opens |
+| 01/06/2026     | **Data Challenge:** The data submission portal opens |
+| 15/06/2026     | **Algorithm Challenge – Familiarization:** The prediction submission portal opens |
 | 25/06/2026     | **MUnitQuest Symposium at ISEK2026** (12:30 - 14:00, CET) |
-| 15/09/2026     | **Phase 0:** The data submission system (**Data challenge**) closes (23:59, CET) |
-| 30/09/2026     | **Phase 1:** The submission portal for the familarization phase closes |
-| 15/10/2026     | **Data evaluation completed** |
-| 01/11/2026     | **Phase 2:** The showdown phase starts by releasing the *MUnitQuest data colletion* |
-| 31/12/2026     | **Phase 2:** The algorithm submission portal (**Isometric** and **Dynamic challenge**) closes (23:59, CET) |
+| 15/09/2026     | **Data Challenge:** The data submission closes (23:59, CET) |
+| 30/09/2026     | **Algorithm Challenge – Familiarization:** The prediction submission portal closes |
+| 15/10/2026     | **Double-blind data evaluation completed** |
+| 01/11/2026     | **Algorithm Challenge – Showdown:** Starts by releasing the *MUnitQuest data collection*, prediction submission opens |
+| 31/12/2026     | **Algorithm Challenge – Showdown:** The prediction submission portal (**Isometric** and **Dynamic** tasks) closes (23:59, CET) |
 | 15/01/2027     | **The awards are announced and final leaderboards are published** 🏆 |
 
 </div>
 
-### Details about Phase 0 (Archive)
+### Data Challenge
 
 - Community members collect experimental and simulated HDsEMG data together with motor unit spike train labels
-- Datasets need to be submitted through the data submission portal (see [Data submission](https://munitquest.github.io/registration_and_submission/))
-- As part of the **Data challenge**, an expert reviewer panel evaluates each dataset contribution
+- Datasets need to be submitted through the data submission portal (see [Submission and Registration](/registration_and_submission/))
+- An expert reviewer panel evaluates each dataset contribution (see [Data Challenge](/data-challenge/) for evaluation criteria)
 - Outstanding data contributions (**top 5**, rated by an expert reviewer panel) are invited to contribute to a *special issue* in the [Journal of Electromyography and Kinesiology](https://www.sciencedirect.com/journal/journal-of-electromyography-and-kinesiology)
-- After the competition is completed, data is released on an open data repository (mandatory for datasets used in **Phase 2**, optional otherwise)
+- After the competition is completed, data is released on an open data repository (mandatory for datasets entering the *MUnitQuest data collection*, optional otherwise)
 
-### Details about Phase 1 (Familiarization)
+### Algorithm Challenge 
 
-- Runs parallel to **Phase 0**
+#### Familiarization Phase
+
+- Runs parallel to the **Data Challenge**
 - Competitors are provided with training data from the [MUniverse benchmark collection](https://openreview.net/pdf?id=Slrp3l7aYo) (including motor unit spike train labels)
-- Competitors develop and optimize their algorithms 
-- Participants can compete in both challenges (**Isometric** and **Dynamic challenge**) or in only one challenge
-- To qualify for **Phase 2**, competitors need to upload their predictions (motor unit spike trains) through the algorithm submission portal (coming soon)
+- Competitors develop and optimize their algorithms
+- Participants can compete in both tasks (**Isometric** and **Dynamic**) or in only one task
+- To qualify for the Showdown Phase, competitors need to upload their predictions (motor unit spike trains) through the algorithm submission portal (coming soon)
 - Results from baseline algorithms (together with tutorials -- coming soon) are provided for reference
 - An anonymous preliminary leaderboard is provided as feedback
 
 
-### Details about Phase 2 (Showdown)
+#### Showdown Phase
 
-- Finals to determine the leaderboards of the **Isometric challenge** and the **Dynamic challenge**
-- Competitors are provided with the *MUnitQuest data collection* (hidden labels) consisting of anonymized recordings collected in **Phase 0** 
-- Note that the organizers may make small alterations to the test data (e.g., injected noise, cropping signals, etc.) to limit the advantage of teams also participating in the **Data challenge**
+- Finals to determine the leaderboards of the **Isometric** and **Dynamic** tasks
+- Competitors are provided with the *MUnitQuest data collection* (hidden labels) consisting of anonymized recordings collected during the **Data Challenge**
+- Note that the organizers may make small alterations to the test data (e.g., injected noise, cropping signals, etc.) to limit the advantage of teams also participating in the **Data Challenge**
 - Submission of predicted motor unit spike trains
 - To be eligible for awards, competitors need to share their code (e.g., using GitHub) openly
 

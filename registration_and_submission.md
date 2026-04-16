@@ -10,25 +10,62 @@ feature_text:
 The registration platform will be launched soon.
 
 
+## Data Challenge
+
 ### Dataset submissions
 
 To obtain a diverse data collection for MUnitQuest that balances realism and label quality, we invite submissions of both experimental and simulated data. In short, depending on the type of data you want to contribute, a submission consists of the following parts: 
 
-![Submission Requirements](/Images/submissionRequirements.jpg)
+<table class="submission-req">
+  <colgroup>
+    <col style="width: 30%">
+    <col style="width: 40%">
+    <col style="width: 30%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Data type</th>
+      <th>Submission requirements</th>
+      <th>Additional considerations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom: 1px solid #ccc;">Experimental HDsEMG</td>
+      <td rowspan="3">
+        1. Raw EMG signals (unit: volts)<br>
+        2. Labelled motor unit spike trains<br>
+        3. Force and/or kinematics data<br>
+        4. Metadata and provenance
+      </td>
+      <td style="border-bottom: 1px solid #ccc;">Labelling approach (2-page PDF)</td>
+    </tr>
+    <tr>
+      <td style="border-bottom: 1px solid #ccc;">Experimental HDsEMG + concurrent iEMG</td>
+      <td style="border-bottom: 1px solid #ccc;">Raw iEMG signals must be provided; Labelling approach (2-page PDF)</td>
+    </tr>
+    <tr>
+      <td>Synthetic (end-to-end, or hybrid)</td>
+      <td>Model summary (2-page PDF)</td>
+    </tr>
+  </tbody>
+</table>
 
-- **EMG data and metadata:** We will provide the EMG data entering the competition in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. To make getting started with EMG-BIDS as easy as possible, we support two options for your data submission:
-    - Upload of EMG-BIDS-formatted data, which we facilitate by providing tutorials (coming soon) that you can adopt according to your specific recording setup
-    - Assisted generation of EMG-BIDS compatible metadata files through a web interface (coming soon)
+**EMG data and metadata:** We will provide the EMG data entering the competition in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. To make getting started with EMG-BIDS as easy as possible, we support two options for your data submission:
+- Upload of EMG-BIDS-formatted data, which we facilitate by providing tutorials (coming soon) that you can adopt according to your specific recording setup
+- Assisted generation of EMG-BIDS compatible metadata files through a web interface (coming soon)
 
-- **Labeled motor unit spike trains:** A key requirement for a competition on motor unit identification methods is the availability of labeled ground truth spikes. Thus, we additionally require submitting:
-    - for each recording, a *.tsv* file (BIDS-events file, see example below) containing the labeled motor unit spike trains 
-    - a short description (2-page PDF) of the utilized labelling approach (for experimental EMG data) or the utilized simulation model (for synthetic EMG data)
+**Labeled motor unit spike trains:** A key requirement for a competition on motor unit identification methods is the availability of labeled ground truth spikes. Thus, we additionally require submitting:
+- for each recording, a *.tsv* file (BIDS-events file, see example below) containing the labeled motor unit spike trains 
+- a short description (2-page PDF) of the utilized labelling approach (for experimental EMG data) or the utilized simulation model (for synthetic EMG data)
 
 Further details are coming soon.    
 
-### Algorithm submission   
+## Algorithm Challenge
 
-This is a prediction submission competition. During both **Phase 1** and **Phase 2**, you will be asked to upload, for each recording, a tabular file (*recordingName_events.tsv*) containing your predicted motor unit spikes (BIDS-events file) together with a log file (*recordingName_log.json*) describing essential process metadata (further details to be announced). To be eligible for awards, you need to share your code openly (e.g., on GitHub). 
+### Algorithm submission
+
+This is a prediction submission competition. During both the **Familiarization Phase** and the **Showdown Phase**, you will be asked to upload, for each recording, a tabular file (`recordingName_events.tsv`) containing your predicted motor unit spikes (BIDS-events file) together with a log file (`recordingName_log.json`) describing essential process metadata (further details to be announced). Submissions apply to both tasks (**Isometric** and **Dynamic**) independently. To be eligible for awards, you need to share your code openly (e.g., on GitHub) upon the completion of the competition.
 
 
 ### Example: how to report motor unit spike trains

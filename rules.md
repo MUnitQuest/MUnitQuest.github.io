@@ -8,7 +8,7 @@ feature_text:
 
 ### Rules of participation 
 
-The competition is open to teams worldwide, with no restriction on team size. Each team must nominate a leader responsible for coordination and submission. Teams may compete in all three challenges (**Isometric**, **Dynamic**, and **Data**), or in a single challenge. Each person may only belong to one team per challenge. Each registered team may submit one contribution (a dataset or an algorithmic prediction) per challenge.
+The competition is open to teams worldwide, with no restriction on team size. Each team must nominate a leader responsible for coordination and submission. Teams may compete in both challenges (**Data Challenge** and **Algorithm Challenge**), or in a single challenge. Within the Algorithm Challenge, teams may enter both tasks (**Isometric** and **Dynamic**) or only one. Each person may only belong to one team per challenge. Each registered team may submit one contribution (a dataset or an algorithmic prediction) per challenge.
 
 ### Data challenge: Evaluation
 
@@ -25,11 +25,12 @@ For simulations, the data quality can be precisely controlled, and spike train l
 **Scoring:** During the double-blind review phase, reviewers will assign a score of 1-6 (1: strong reject, 2: reject, 3: borderline reject, 4: borderline accept, 5: accept, 6: strong accept) for each category.
 
 
-### Isometric challenge: Leaderboard
+## Algorithm Challenge
+
+### Isometric task: Leaderboard
 The scoring system will be announced soon.
 
-
-### Dynamic challenge: Leaderboard
+### Dynamic task: Leaderboard
 The scoring system will be announced soon.
 
 

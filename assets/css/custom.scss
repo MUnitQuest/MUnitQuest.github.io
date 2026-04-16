@@ -11,16 +11,45 @@
 }
 
 /* -------------------------
-   LOGO SIZE
+   LOGO SIZE & TITLE
 ------------------------- */
+a.logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+}
+
 a.logo img {
+  order: 1;
   height: 3.5rem;
   width: auto;
+}
+
+a.logo::before {
+  content: "MUnit";
+  order: 2;
+  margin-left: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-cherry-rose);
+}
+
+a.logo::after {
+  content: "Quest";
+  order: 3;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #000;
 }
 
 /* -------------------------
    NAV MENU
 ------------------------- */
+.button--nav {
+  color: var(--color-cherry-rose) !important;
+}
+
 .item--nav a {
   color: var(--color-slate-blue) !important;
 }
@@ -56,12 +85,20 @@ Control header/feature image height
 }
 
 /* -------------------------
+   H4 SPACING
+------------------------- */
+.typeset h4 {
+  margin-top: 1.2rem;
+  margin-bottom: 0.6rem;
+}
+
+/* -------------------------
    BODY FONT & LAYOUT
 ------------------------- */
 body {
   font-size: 16px;      /* Adjust font size */
   line-height: normal;  /* default browser spacing */
-  text-align: justify;   /* Block format */
+  text-align: left;
 }
 
 /* -------------------------
@@ -93,6 +130,12 @@ p {
   margin-bottom: 1.0em;
 }
 
+.typeset p + h2,
+.typeset p + h3,
+.typeset p + h4 {
+  margin-top: 0.5rem;
+}
+
 .typeset p + ol,
 .typeset p + ul {
   margin-top: -0.7rem;
@@ -104,6 +147,14 @@ p {
 
 .typeset table {
   margin-bottom: 1.5rem;
+}
+
+/* -------------------------
+   TABLE HEADER FONT SIZE
+--------------------------*/
+.typeset table th {
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 /* -------------------------
@@ -144,6 +195,19 @@ p {
 
 .typeset ul li {
   list-style-type: disc;
+}
+
+/* -------------------------
+   MOBILE SPACING
+------------------------- */
+@media (max-width: 640px) {
+  .typeset ul {
+    padding-left: 0.5rem;
+  }
+
+  .typeset ul ul {
+    padding-left: 0.5rem;
+  }
 }
 
 
