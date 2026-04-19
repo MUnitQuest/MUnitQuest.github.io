@@ -41,7 +41,7 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 
 With support from the International Society of Electrophysiology and Kinesiology (ISEK).
 
-### Organizing institutions
+### Organizing Institutions
 
 
 <p float="left">
@@ -52,20 +52,68 @@ With support from the International Society of Electrophysiology and Kinesiology
 - Institute for Modelling and Simulation of Biomechanical Systems, University of Stuttgart
 - Department of Bioengineering, Imperial College London
 
-### Supporters
+### Core Team
 
-- Become a supporter! Get in touch ([📧](mailto:MUnitQuest@outlook.com)) if you want to contribute to our efforts 🙏
+<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; text-align: center; margin-top: 1rem;">
 
-### Core coordinators
+  <div>
+    <a href="https://github.com/klotz-t" target="_blank">
+      <div class="team-photo"><img src="/Images/contributors/thomas_klotz.webp"></div>
+    </a>
+    <div class="team-name">Thomas Klotz</div>
+    <div class="team-institute">University of Stuttgart</div>
+  </div>
 
-- Thomas Klotz ([📧](mailto:thomas.klotz@imsb.uni-stuttgart.de), [GitHub](https://github.com/klotz-t))
-- Pranav Mamidanna ([📧](mailto:p.mamidanna22@imperial.ac.uk), [GitHub](https://github.com/pranavm19))
-- Robin Rohlen ([📧](mailto:r.rohlen@imperial.ac.uk))
-- Oliver Röhrle ([📧](mailto:roehrle@simtech.uni-stuttgart.de))
-- Dario Farina ([📧](mailto:d.farina@imperial.ac.uk))
+  <div>
+    <a href="https://github.com/pranavm19" target="_blank">
+      <div class="team-photo"><img src="/Images/contributors/pranav_mamidanna.jpg" style="transform: scale(1.2);"></div>
+    </a>
+    <div class="team-name">Pranav Mamidanna</div>
+    <div class="team-institute">Imperial College London</div>
+  </div>
+ 
+  <div>
+    <div class="team-photo"><img src="/Images/contributors/empty.webp"></div>
+    <div class="team-name">Niklas Enslin</div>
+    <div class="team-institute">University of Stuttgart</div>
+  </div>
+
+  <div>
+    <div class="team-photo"><img src="/Images/contributors/paul_brandenburg.jpeg"></div>
+    <div class="team-name">Paul Brandenburg</div>
+    <div class="team-institute">University of Stuttgart</div>
+  </div>
+ 
+  <div>
+    <div class="team-photo"><img src="/Images/contributors/will_raftery.jpg"></div>
+    <div class="team-name">William Raftery</div>
+    <div class="team-institute">Imperial College London</div>
+  </div>
+
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; text-align: center; max-width: 60%; margin: 1.5rem auto 0;">
+
+  <div>
+    <div class="team-photo"><img src="/Images/contributors/robin_rohlen.jpg"></div>
+    <div class="team-name">Robin Rohlen</div>
+    <div class="team-institute">Imperial College London</div>
+  </div>
+
+  <div>
+    <div class="team-photo"><img src="/Images/contributors/oliver_rohrle.png"></div>
+    <div class="team-name">Oliver Röhrle</div>
+    <div class="team-institute">University of Stuttgart</div>
+  </div>
+
+  <div>
+    <div class="team-photo"><img src="/Images/contributors/dario_farina.png"></div>
+    <div class="team-name">Dario Farina</div>
+    <div class="team-institute">Imperial College London</div>
+  </div>
+
+</div>
 
 ### Contributors
-- Niklas Enslin
-- William Raftery
-- Paul Brandenburg
 
+- Become a supporter! Get in touch ([📧](mailto:MUnitQuest@outlook.com)) if you want to contribute to our efforts 🙏
