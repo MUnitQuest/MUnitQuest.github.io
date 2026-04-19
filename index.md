@@ -54,7 +54,13 @@ With support from the International Society of Electrophysiology and Kinesiology
 
 ### Core Team
 
-<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; text-align: center; margin-top: 1rem;">
+<div style="
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+">
 
   <div>
     <a href="https://github.com/klotz-t" target="_blank">
@@ -89,10 +95,6 @@ With support from the International Society of Electrophysiology and Kinesiology
     <div class="team-name">William Raftery</div>
     <div class="team-institute">Imperial College London</div>
   </div>
-
-</div>
-
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; text-align: center; max-width: 60%; margin: 1.5rem auto 0;">
 
   <div>
     <div class="team-photo"><img src="/Images/contributors/robin_rohlen.jpg"></div>
