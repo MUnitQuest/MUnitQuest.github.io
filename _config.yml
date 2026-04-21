@@ -34,6 +34,7 @@ title: 'MUnitQuest'
 description: 'Competition on motor unit identification'
 permalink: pretty
 logo: "/Images/logo_lowres.png" # logo in top left
+social_image: "/Images/logo_title_highres.png" # og:image for link previews
 
 # Pagination
 paginate: 5 # number of blog posts shown at once 
