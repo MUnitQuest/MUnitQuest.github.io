@@ -39,7 +39,7 @@ Since the development of the concentric needle by Adrian and Bronk nearly 100 ye
 ### Partners 
 
 <p float="left">
-  <img src="/Images/isek_logo.png" width="150"/>
+  <a href="https://isek.org/" target="_blank"><img src="/Images/isek_logo.png" width="150"/></a>
 </p>
 
 With support from the International Society of Electrophysiology and Kinesiology (ISEK).
