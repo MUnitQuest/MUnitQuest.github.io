@@ -2,9 +2,7 @@
 
 // Global variables
 let currentSection = 1;
-const totalSections = 9; // sections 1-8 + review (was 10, removed upload section 9)
-let sectionMap = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // logical section -> data-section attribute
-// section 8 (synthetic) is conditional; section 9 in HTML = review
+const totalSections = 8; // sections 1-7 + review (section 8); synthetic details are inline in section 2
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -46,29 +44,30 @@ function setupEventListeners() {
     // Health status - show pathological conditions
     document.querySelectorAll('input[name="healthStatus"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('pathologicalConditionsGroup').style.display =
+            const group = document.getElementById('pathologicalConditionsGroup');
+            if (group) group.style.display =
                 (this.value === 'pathological' || this.value === 'mixed') ? 'block' : 'none';
         });
     });
 
     // Contraction type - show/hide specific fields
     ['contractionIsometric', 'contractionConcentric', 'contractionEccentric', 'contractionMixed'].forEach(id => {
-        document.getElementById(id).addEventListener('change', toggleContractionFields);
+        document.getElementById(id)?.addEventListener('change', toggleContractionFields);
     });
 
     // Force data - show/hide fields
     document.querySelectorAll('input[name="forceDataIncluded"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('forceDataFields').style.display =
-                this.value === 'yes' ? 'block' : 'none';
+            const el = document.getElementById('forceDataFields');
+            if (el) el.style.display = this.value === 'yes' ? 'block' : 'none';
         });
     });
 
     // Kinematics data - show/hide fields
     document.querySelectorAll('input[name="kinematicsDataIncluded"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('kinematicsDataFields').style.display =
-                this.value === 'yes' ? 'block' : 'none';
+            const el = document.getElementById('kinematicsDataFields');
+            if (el) el.style.display = this.value === 'yes' ? 'block' : 'none';
         });
     });
 
@@ -99,7 +98,7 @@ function updateCharCount() {
     }
 }
 
-// Handle data type change - show/hide synthetic section in progress bar + navigation
+// Handle data type change - show/hide synthetic sub-section within section 2
 function handleDataTypeChange() {
     const selectedType = document.querySelector('input[name="dataType"]:checked').value;
     const syntheticSection = document.getElementById('syntheticDataSection');
@@ -350,14 +349,8 @@ function addTask() {
 
 // Get the list of visible section numbers (data-section attributes) for navigation
 function getVisibleSections() {
-    const syntheticSelected = document.querySelector('input[name="dataType"]:checked');
-    const isSynthetic = syntheticSelected && syntheticSelected.value.startsWith('synthetic');
-    // data-section values in the HTML: 1,2,3,4,5,6,7,8(synthetic),9(review)
-    // Section 8 (synthetic) is only shown if synthetic data type selected
-    const sections = [1, 2, 3, 4, 5, 6, 7];
-    if (isSynthetic) sections.push(8);
-    sections.push(9); // review is always last
-    return sections;
+    // Synthetic details are now an inline sub-section within section 2, not a nav step.
+    return [1, 2, 3, 4, 5, 6, 7, 8]; // section 8 = Review
 }
 
 // Form navigation
@@ -385,7 +378,7 @@ function showSection(sectionNumber) {
         updateNavigation();
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        if (sectionNumber === 9) {
+        if (sectionNumber === 8) {
             generateReview();
         }
     }
@@ -511,8 +504,8 @@ function getBIDS_datasetJson(data) {
 
 function getBIDS_emgJson(data) {
     const bids = {
-        "TaskName": data.taskName[0] || "n/a", // TODO
-        "TaskDescription": data.taskDescription[0] || "n/a", // TODO
+        "TaskName": (data.taskName || [])[0] || "n/a",
+        "TaskDescription": (data.taskDescription || [])[0] || "n/a",
         "Manufacturer": data.manufacturer || "n/a",
         "ManufacturersModelName": data.manufacturerModel || "n/a",
         "SamplingFrequency": parseFloat(data.samplingFrequency) || "n/a",
@@ -632,7 +625,7 @@ function buildMetadata() {
             description: data.datasetDescription || "",
             dataType: data.dataType || "",
             license: data.license === 'other' ? (data.otherLicense || "") : (data.license || ""),
-            authors: getAuthors(),
+            authors: getArrayField("author", { emptyValue: "" }),
             fundingSources: data.fundingSources || "",
             ethicsApprovalNumber: data.ethicsApprovalNumber || "",
             ethicsCommittee: data.ethicsCommittee || "",
@@ -726,7 +719,7 @@ function buildMetadata() {
             BIDSVersion: "1.10.1",
             DatasetType: "raw",
             License: data.license === 'other' ? (data.otherLicense || "") : (data.license || ""),
-            Authors: getAuthors(),
+            Authors: getArrayField("author", { emptyValue: "" }),
             Funding: data.fundingSources ? [data.fundingSources] : [],
             EthicsApprovals: [data.ethicsApprovalNumber || ""],
             InstitutionName: data.institutionName || "",
@@ -754,7 +747,7 @@ function downloadMetadata(metadata) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
+    setTimeout(() => URL.revokeObjectURL(a.href), 100);
 }
 
 function handleDownload(e) {

@@ -255,8 +255,8 @@ p {
    ========================================================= */
 
 .metadata-form {
-  --mf-primary:       #0b3d91;
-  --mf-primary-hover: #082d6e;
+  --mf-primary:       #6667AA;
+  --mf-primary-hover: #5556a0;
   --mf-success:       #10b981;
   --mf-error:         #ef4444;
   --mf-border:        #d1d5db;
@@ -403,7 +403,7 @@ p {
       &:focus {
         outline: none;
         border-color: var(--mf-primary);
-        box-shadow: 0 0 0 3px rgba(11, 61, 145, 0.1);
+        box-shadow: 0 0 0 3px rgba(102, 103, 170, 0.1);
       }
     }
 
@@ -433,12 +433,12 @@ p {
 
     &:hover {
       border-color: var(--mf-primary);
-      background: rgba(11, 61, 145, 0.03);
+      background: rgba(102, 103, 170, 0.03);
     }
 
     &:has(input:checked) {
       border-color: var(--mf-primary);
-      background: rgba(11, 61, 145, 0.05);
+      background: rgba(102, 103, 170, 0.05);
     }
 
     input[type="radio"] {

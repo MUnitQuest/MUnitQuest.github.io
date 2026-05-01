@@ -118,6 +118,76 @@ layout: page
                 </label>
             </div>
         </div>
+
+        <!-- Synthetic details — shown inline when a synthetic type is selected -->
+        <div id="syntheticDataSection" style="display:none;">
+            <h3>Synthetic Data Details</h3>
+
+            <div class="mf-form-group">
+                <label for="simulationSoftware">Simulation Software *</label>
+                <input type="text" id="simulationSoftware" name="simulationSoftware">
+            </div>
+
+            <div class="mf-form-group">
+                <label for="simulationMethod">Simulation Method *</label>
+                <textarea id="simulationMethod" name="simulationMethod" rows="4" maxlength="500"></textarea>
+                <small class="char-count">0 / 500 characters</small>
+            </div>
+
+            <h4>Motor Neuron Pool Model</h4>
+
+            <div class="mf-form-group">
+                <label for="numMotorUnitsSimulated">Number of Motor Units Simulated</label>
+                <input type="number" id="numMotorUnitsSimulated" name="numMotorUnitsSimulated">
+            </div>
+
+            <div class="mf-form-group">
+                <label for="recruitmentModel">Recruitment Model</label>
+                <input type="text" id="recruitmentModel" name="recruitmentModel" placeholder="e.g., size principle, Fuglevand">
+            </div>
+
+            <div class="mf-form-group">
+                <label for="rateCodingModel">Rate Coding Model</label>
+                <input type="text" id="rateCodingModel" name="rateCodingModel">
+            </div>
+
+            <h4>Volume Conductor Model</h4>
+
+            <div class="mf-form-group">
+                <label for="tissueLayers">Tissue Layers</label>
+                <input type="text" id="tissueLayers" name="tissueLayers" placeholder="e.g., muscle, fat, skin">
+            </div>
+
+            <div class="mf-form-group">
+                <label for="conductivityValues">Conductivity Values</label>
+                <input type="text" id="conductivityValues" name="conductivityValues">
+            </div>
+
+            <h4>Noise Model</h4>
+
+            <div class="mf-form-group">
+                <label>Noise Types (check all that apply)</label>
+                <div class="mf-checkbox-group">
+                    <label>
+                        <input type="checkbox" name="noiseThermal">
+                        Thermal noise
+                    </label>
+                    <label>
+                        <input type="checkbox" name="noiseMotion">
+                        Motion artifact
+                    </label>
+                    <label>
+                        <input type="checkbox" name="noiseCrosstalk">
+                        Crosstalk
+                    </label>
+                </div>
+            </div>
+
+            <div class="mf-form-group">
+                <label for="snrRange">SNR Range</label>
+                <input type="text" id="snrRange" name="snrRange" placeholder="e.g., 20-40 dB">
+            </div>
+        </div>
     </section>
 
     <!-- Section 3: General Dataset Metadata -->
@@ -464,78 +534,8 @@ layout: page
         </div>
     </section>
 
-    <!-- Section 8: Synthetic Data (conditional — shown only for synthetic data types) -->
-    <section class="form-section" data-section="8" id="syntheticDataSection" style="display:none;">
-        <h2>Synthetic Data Details</h2>
-
-        <div class="mf-form-group">
-            <label for="simulationSoftware">Simulation Software *</label>
-            <input type="text" id="simulationSoftware" name="simulationSoftware">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="simulationMethod">Simulation Method *</label>
-            <textarea id="simulationMethod" name="simulationMethod" rows="4" maxlength="500"></textarea>
-            <small class="char-count">0 / 500 characters</small>
-        </div>
-
-        <h3>Motor Neuron Pool Model</h3>
-
-        <div class="mf-form-group">
-            <label for="numMotorUnitsSimulated">Number of Motor Units Simulated</label>
-            <input type="number" id="numMotorUnitsSimulated" name="numMotorUnitsSimulated">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="recruitmentModel">Recruitment Model</label>
-            <input type="text" id="recruitmentModel" name="recruitmentModel" placeholder="e.g., size principle, Fuglevand">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="rateCodingModel">Rate Coding Model</label>
-            <input type="text" id="rateCodingModel" name="rateCodingModel">
-        </div>
-
-        <h3>Volume Conductor Model</h3>
-
-        <div class="mf-form-group">
-            <label for="tissueLayers">Tissue Layers</label>
-            <input type="text" id="tissueLayers" name="tissueLayers" placeholder="e.g., muscle, fat, skin">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="conductivityValues">Conductivity Values</label>
-            <input type="text" id="conductivityValues" name="conductivityValues">
-        </div>
-
-        <h3>Noise Model</h3>
-
-        <div class="mf-form-group">
-            <label>Noise Types (check all that apply)</label>
-            <div class="mf-checkbox-group">
-                <label>
-                    <input type="checkbox" name="noiseThermal">
-                    Thermal noise
-                </label>
-                <label>
-                    <input type="checkbox" name="noiseMotion">
-                    Motion artifact
-                </label>
-                <label>
-                    <input type="checkbox" name="noiseCrosstalk">
-                    Crosstalk
-                </label>
-            </div>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="snrRange">SNR Range</label>
-            <input type="text" id="snrRange" name="snrRange" placeholder="e.g., 20-40 dB">
-        </div>
-    </section>
-
-    <!-- Section 9: Review & Download -->
-    <section class="form-section" data-section="9">
+    <!-- Section 8: Review & Download -->
+    <section class="form-section" data-section="8">
         <h2>Review &amp; Download</h2>
 
         <div class="mf-review-container">
