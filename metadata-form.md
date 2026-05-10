@@ -1,10 +1,12 @@
 ---
-title: Metadata Form
+title: BIDS-EMG Metadata Tool
 feature_image: "/Images/header.jpeg"
 layout: page
 ---
 
-<p>Fill in the fields below to describe your dataset. When you reach the final step, click <strong>Download metadata.zip</strong> — a ZIP file containing all metadata files will be saved to your computer. Upload this file alongside your data ZIP to the shared drive. Your progress is saved automatically in your browser.</p>
+<p>Fill in the fields below to describe your dataset. When you reach the final step, click <strong>Download metadata.zip</strong> — a ZIP file containing all metadata files will be saved to your computer. Upload this file alongside your data ZIP to the shared drive. Your progress is saved automatically in your browser.
+
+For more instructions, go to the EMG-BIDS Specifications page <a href="https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html" target="_blank">here</a>.</p>
 
 <div class="metadata-form">
 
@@ -23,15 +25,15 @@ layout: page
     </div>
     <div class="mf-progress-step" data-step="4">
         <div class="mf-step-number">4</div>
-        <div class="mf-step-label">Recording</div>
+        <div class="mf-step-label">Recording Info </div>
     </div>
     <div class="mf-progress-step" data-step="5">
         <div class="mf-step-number">5</div>
-        <div class="mf-step-label">Task Protocol</div>
+        <div class="mf-step-label">Experimental Protocol</div>
     </div>
     <div class="mf-progress-step" data-step="6">
         <div class="mf-step-number">6</div>
-        <div class="mf-step-label">Labeling</div>
+        <div class="mf-step-label">Decomposition and Editing</div>
     </div>
     <div class="mf-progress-step" data-step="7">
         <div class="mf-step-number">7</div>
@@ -192,12 +194,12 @@ layout: page
         <div class="mf-form-group">
             <label>Step 1 — Download the template and fill it in</label>
             <div style="display:flex; align-items:center; gap:10px;">
-                <span>template_participants.csv</span>
-                <a href="/assets/files/template_participants.csv" download title="Download template" style="color:var(--mf-text-muted); line-height:0;">
+                <span>Download template:</span>
+                <a href="/assets/files/template_participants.csv" download title="Download template" style="color:var(--color-slate-blue); line-height:0;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
             </div>
-            <small>Columns: <code>participant_id, sex, age, height, weight, handedness, group</code></small>
+            <small>Columns: participant_id, sex, age, height, weight, handedness, group</small>
         </div>
 
         <div class="mf-form-group">
@@ -383,86 +385,78 @@ layout: page
  
         <h2>Task &amp; Protocol Information</h2>
 
-        <div class="mf-form-group">
-            <label>Task</label>
-            <div id="taskList"></div>
+        <h3>Recordings</h3>
 
-            <button type="button" class="mf-btn-secondary" onclick="addTask('taskList')">
-                + Add Task
-            </button>
-        </div> 
+        <div class="mf-form-group">
+            <label>Step 1 — Download the template and fill it in</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span>Download template:</span>
+                <a href="/assets/files/template_recordings.csv" download title="Download template" style="color:var(--color-slate-blue); line-height:0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </a>
+            </div>
+            <small>Columns: sub, ses, task_name, repetition, path_to_emg_file, path_to_labels_file</small>
+        </div>
+
+        <div class="mf-form-group">
+            <label for="recordingsFile">Step 2 — Upload your completed file *</label>
+            <input type="file" id="recordingsFile" name="recordingsFile" accept=".csv"
+                onchange="handleRecordingsUpload(this)">
+            <div id="recordingsValidationMsg"></div>
+        </div>
 
     </section>
 
-    <!-- Section 6: Motor Unit Labeling -->
+    <!-- Section 6: Decomposition and Editing -->
     <section class="form-section" data-section="6">
-        <h2>Motor Unit Labeling</h2>
+        <h2>Decomposition and Editing</h2>
 
         <div class="mf-form-group">
             <label for="decompositionMethod">Decomposition Method *</label>
             <select id="decompositionMethod" name="decompositionMethod" required>
                 <option value="">Select</option>
-                <option value="manual">Expert manual annotation</option>
-                <option value="semi-automated">Semi-automated (specify algorithm)</option>
-                <option value="fully-automated">Fully automated (specify algorithm)</option>
+                <option value="semi-automated">Semi-automated (algorithm-assisted)</option>
+                <option value="fully-automated">Fully automated</option>
                 <option value="two-source">Two-source validation (concurrent iEMG)</option>
                 <option value="simulation">Simulation ground truth</option>
             </select>
         </div>
 
-        <div id="experimentalLabelingFields" style="display:none;">
-            <div class="mf-form-group">
-                <label for="decompositionSoftware">Decomposition Software *</label>
-                <input type="text" id="decompositionSoftware" name="decompositionSoftware" placeholder="e.g., DEMUSE, OTBiolab+, Custom">
-            </div>
+        <div id="decompositionAlgorithmSection" style="display:none;">
+        <div class="mf-form-group">
+            <label>Decomposition Algorithm(s) *</label>
+            <small>Add one entry per algorithm used, in processing order.</small>
+            <div id="decompositionPipelineList"></div>
+            <button type="button" class="mf-btn-secondary" onclick="addDecompositionPipeline()">
+                + Add Algorithm
+            </button>
+        </div>
 
-            <div class="mf-form-group">
-                <label for="softwareVersion">Software Version</label>
-                <input type="text" id="softwareVersion" name="softwareVersion">
-            </div>
-
-            <div class="mf-form-group">
-                <label>Manual Editing Performed?</label>
-                <div class="mf-radio-group">
-                    <label>
-                        <input type="radio" name="manualEditingPerformed" value="yes">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="manualEditingPerformed" value="no">
-                        No
-                    </label>
-                </div>
-            </div>
-
-            <div class="mf-form-group" id="editingCriteriaGroup" style="display:none;">
-                <label for="editingCriteria">Describe Editing Criteria</label>
-                <textarea id="editingCriteria" name="editingCriteria" rows="3" maxlength="200"></textarea>
-                <small class="char-count">0 / 200 characters</small>
-            </div>
-
-            <h3>Quality Thresholds Applied</h3>
-
-            <div class="mf-form-group">
-                <label for="minPNR">Minimum Pulse-to-Noise Ratio (dB)</label>
-                <input type="number" id="minPNR" name="minPNR" step="0.1">
-            </div>
-
-            <div class="mf-form-group">
-                <label for="minSilhouette">Minimum Silhouette Score (0-1)</label>
-                <input type="number" id="minSilhouette" name="minSilhouette" step="0.01" min="0" max="1">
-            </div>
-
-            <div class="mf-form-group">
-                <label for="maxCoVISI">Maximum CoV-ISI (0-1)</label>
-                <input type="number" id="maxCoVISI" name="maxCoVISI" step="0.01" min="0" max="1">
-            </div>
-
-            <div class="mf-form-group">
-                <label for="minSpikes">Minimum Number of Spikes</label>
-                <input type="number" id="minSpikes" name="minSpikes" min="1">
+        <div class="mf-form-group">
+            <label>Was manual annotation / editing performed? *</label>
+            <div class="mf-radio-group mf-radio-compact">
+                <label class="mf-radio-card">
+                    <input type="radio" name="manualEditing" value="yes" required>
+                    <div class="mf-radio-content"><strong>Yes</strong><p>Spike trains were manually reviewed or edited</p></div>
+                </label>
+                <label class="mf-radio-card">
+                    <input type="radio" name="manualEditing" value="no">
+                    <div class="mf-radio-content"><strong>No</strong><p>No manual editing was performed</p></div>
+                </label>
             </div>
         </div>
+
+        <div id="editingToolSection" style="display:none;">
+            <div class="mf-form-group">
+                <label>Editing Tool</label>
+                <small>Only fill this in if a different tool was used for manual editing (leave empty if same as above).</small>
+                <div id="editingToolList"></div>
+                <button type="button" class="mf-btn-secondary" onclick="addEditingTool()">
+                    + Add Editing Tool
+                </button>
+            </div>
+        </div>
+        </div><!-- end decompositionAlgorithmSection -->
 
         <div class="mf-form-group">
             <label for="numMotorUnits">Total Number of Motor Units Identified *</label>

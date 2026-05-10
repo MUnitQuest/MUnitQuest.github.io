@@ -432,11 +432,12 @@ p {
 
   /* --- Radio cards --- */
   .mf-radio-card {
-    display: block;
-    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.9rem 0.9rem;
     border: 2px solid var(--mf-border);
     border-radius: var(--mf-radius);
-    margin-bottom: 0.75rem;
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
     font-weight: normal;
@@ -453,25 +454,46 @@ p {
 
     input[type="radio"] {
       width: auto;
-      margin-right: 0.6rem;
+      flex-shrink: 0;
+      margin-top: 3px;
     }
   }
 
   .mf-radio-content {
-    display: inline-block;
-    vertical-align: middle;
+    display: block;
 
     strong {
       display: block;
       font-size: 1rem;
-      margin-bottom: 2px;
+      line-height: 1.2;
+      margin-bottom: 0;
       color: var(--mf-text);
     }
 
     p {
       font-size: 0.85rem;
+      line-height: 1.5;
       color: var(--mf-text-muted);
       margin: 0;
+    }
+  }
+
+  /* --- Compact radio group (binary yes/no) --- */
+  .mf-radio-compact {
+    flex-direction: row;
+    gap: 0.5rem;
+
+    .mf-radio-card {
+      padding: 0.4rem 0.9rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+      gap: 0.5rem;
+    }
+
+    .mf-radio-content {
+      strong { font-size: 0.95rem; margin-bottom: 0; }
+      p { font-size: 0.8rem; }
     }
   }
 

@@ -7,9 +7,9 @@ const totalSections = 7; // sections 1-6 + review (section 7); synthetic details
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
-    loadDraft();
     setupEventListeners();
     updateNavigation();
+    try { loadDraft(); } catch(e) { console.warn('Draft restore failed:', e); }
 });
 
 function initializeForm() {
@@ -71,16 +71,17 @@ function setupEventListeners() {
         });
     });
 
-    // Decomposition method - show/hide experimental fields
+    // Decomposition method - hide algorithm + manual editing section for simulation ground truth
     document.getElementById('decompositionMethod').addEventListener('change', function() {
-        document.getElementById('experimentalLabelingFields').style.display =
-            (this.value !== 'simulation') ? 'block' : 'none';
+        const showAlgo = this.value && this.value !== 'simulation';
+        document.getElementById('decompositionAlgorithmSection').style.display = showAlgo ? 'block' : 'none';
+        if (!showAlgo) document.getElementById('editingToolSection').style.display = 'none';
     });
 
-    // Manual editing - show/hide criteria
-    document.querySelectorAll('input[name="manualEditingPerformed"]').forEach(radio => {
+    // Manual editing yes/no - show editing tool section
+    document.querySelectorAll('input[name="manualEditing"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('editingCriteriaGroup').style.display =
+            document.getElementById('editingToolSection').style.display =
                 this.value === 'yes' ? 'block' : 'none';
         });
     });
@@ -232,6 +233,30 @@ function addSyntheticPipeline() {
     addListItem("syntheticPipelineList", syntheticPipelineSchema, "mf-misc-entry", "Pipeline");
 }
 
+// Decomposition pipelines (GeneratedBy entries for section 6)
+const decompositionPipelineSchema = [
+    { name: "decomp_name",        type: "text", label: "Name *",      placeholder: "e.g., DEMUSE, convolutive BSS, CKC" },
+    { name: "decomp_version",     type: "text", label: "Version",     placeholder: "e.g., 1.0.0" },
+    { name: "decomp_description", type: "text", label: "Description", placeholder: "Brief description of the algorithm" },
+    { name: "decomp_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addDecompositionPipeline() {
+    addListItem("decompositionPipelineList", decompositionPipelineSchema, "mf-misc-entry", "Algorithm");
+}
+
+// Editing tool (optional second GeneratedBy entry if different from decomp tool)
+const editingToolSchema = [
+    { name: "edit_name",        type: "text", label: "Name",        placeholder: "e.g., OTBiolab+, custom script" },
+    { name: "edit_version",     type: "text", label: "Version",     placeholder: "e.g., 2.3.1" },
+    { name: "edit_description", type: "text", label: "Description", placeholder: "Brief description" },
+    { name: "edit_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addEditingTool() {
+    addListItem("editingToolList", editingToolSchema, "mf-misc-entry", "Editing Tool");
+}
+
 // Source datasets (SourceDatasets entries)
 const sourceDatasetSchema = [
     { name: "src_doi",     type: "text", label: "DOI",     placeholder: "e.g., 10.18112/openneuro.ds004632.v1.0.0" },
@@ -334,6 +359,62 @@ function showParticipantMsg(el, messages, type) {
     el.innerHTML = messages.map(m => `${icons[type]} ${m}`).join('<br>');
 }
 
+// Recordings CSV upload
+let recordingsData = [];
+const RECORDING_COLS = ['sub', 'ses', 'task_name', 'repetition', 'path_to_emg_file', 'path_to_labels_file'];
+
+function handleRecordingsUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => validateAndParseRecordings(e.target.result);
+    reader.readAsText(file);
+}
+
+function validateAndParseRecordings(csvText) {
+    const msgEl = document.getElementById('recordingsValidationMsg');
+    const lines = csvText.trim().split(/\r?\n/).filter(l => l.trim());
+
+    if (lines.length === 0) {
+        showRecordingMsg(msgEl, ['File is empty.'], 'error');
+        recordingsData = [];
+        return;
+    }
+
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    const dataRows = lines.slice(1);
+
+    const missing    = RECORDING_COLS.filter(c => !headers.includes(c));
+    const unexpected = headers.filter(h => !RECORDING_COLS.includes(h));
+    const warnings   = [];
+
+    if (missing.length)    warnings.push(`Missing expected columns: ${missing.join(', ')}`);
+    if (unexpected.length) warnings.push(`Unexpected columns will be ignored: ${unexpected.join(', ')}`);
+    if (dataRows.length === 0) warnings.push('No recording rows found.');
+
+    recordingsData = dataRows.map(line => {
+        const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
+        return obj;
+    });
+
+    if (missing.length) {
+        showRecordingMsg(msgEl, warnings, 'error');
+        recordingsData = [];
+    } else if (warnings.length) {
+        showRecordingMsg(msgEl, warnings, 'warning');
+    } else {
+        showRecordingMsg(msgEl, [`${dataRows.length} recording(s) loaded.`], 'ok');
+    }
+}
+
+function showRecordingMsg(el, messages, type) {
+    const icons = { ok: '✓', warning: '⚠', error: '✕' };
+    el.className = `mf-participants-msg mf-participants-${type}`;
+    el.innerHTML = messages.map(m => `${icons[type]} ${m}`).join('<br>');
+}
+
 // Coordinate systems
 const coordSchema = [
     { name: "type", type: "select", options: ["anatomical", "grid"], placeholder: "Coordinate system type"},
@@ -400,18 +481,6 @@ const surfaceEMGSchema = [
 
 function addSurfaceEMG() {
     addListItem("surfaceEMGList", surfaceEMGSchema, "mf-misc-entry", "surfaceEMG");
-}
-
-// Tasks
-const taskSchema = [
-    { name: "taskName", type: "text", placeholder: "Unique task label, e.g., isometricContraction." },
-    { name: "taskDescription", type: "text", placeholder: "Longer free-text description of the task."},
-    { name: "taskInstructions", type: "text", placeholder: "Instructions given to participants before the recording."},
-    { name: "taskRuns", type: "number", placeholder: "Number of repetitions.", min: 1, step: 1}
-];
-
-function addTask() {
-    addListItem("taskList", taskSchema, "mf-task-entry", "task");
 }
 
 
@@ -490,6 +559,23 @@ function checkSection(sectionNumber) {
     if (sectionNumber === 3) {
         if (participantsData.length === 0) return false;
     }
+    if (sectionNumber === 5) {
+        if (recordingsData.length === 0) return false;
+    }
+    if (sectionNumber === 6) {
+        const method = document.getElementById('decompositionMethod').value;
+        if (!method) return false;
+        if (method !== 'simulation') {
+            const pipelines = document.querySelectorAll('#decompositionPipelineList .mf-misc-entry');
+            if (pipelines.length === 0) return false;
+            for (const p of pipelines) {
+                const nameInput = p.querySelector('[name="decomp_name[]"]');
+                if (!nameInput || !nameInput.value.trim()) return false;
+            }
+            const manualEditing = document.querySelector('input[name="manualEditing"]:checked');
+            if (!manualEditing) return false;
+        }
+    }
     if (sectionNumber === 1) {
         const dataTypeEl = document.querySelector('input[name="dataType"]:checked');
         if (!dataTypeEl) return false;
@@ -527,17 +613,20 @@ function generateReview() {
 
     html += '<h4>Recording Details</h4>';
     html += `<p><strong>Participants:</strong> ${participantsData.length || 'none uploaded'}</p>`;
+    html += `<p><strong>Recordings:</strong> ${recordingsData.length || 'none uploaded'}</p>`;
     html += `<p><strong>EMG Channels:</strong> ${data.emgChannelCount || 'N/A'}</p>`;
     html += `<p><strong>Sampling Frequency:</strong> ${data.samplingFrequency || 'N/A'} Hz</p>`;
     html += `<p><strong>Manufacturer:</strong> ${data.manufacturer || 'N/A'} ${data.manufacturerModel || ''}</p>`;
 
-    html += '<h4>Task Information</h4>';
-    html += `<p><strong>Task Name:</strong> ${data.taskName || 'N/A'}</p>`;
-    html += `<p><strong>Number of Trials:</strong> ${data.numTrials || 'N/A'}</p>`;
+    html += '<h4>Recordings</h4>';
+    const taskNames = [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))];
+    html += `<p><strong>Recordings:</strong> ${recordingsData.length || 'none uploaded'}</p>`;
+    html += `<p><strong>Tasks:</strong> ${taskNames.length ? taskNames.join(', ') : 'N/A'}</p>`;
 
     html += '<h4>Motor Units</h4>';
     html += `<p><strong>Total Motor Units:</strong> ${data.numMotorUnits || 'N/A'}</p>`;
     html += `<p><strong>Decomposition Method:</strong> ${data.decompositionMethod || 'N/A'}</p>`;
+    html += `<p><strong>Manual Editing:</strong> ${data.manualEditing || 'N/A'}</p>`;
 
     reviewSummary.innerHTML = html;
     getBIDS_datasetJson(data);
@@ -558,6 +647,36 @@ function getBIDS_datasetJson(data) {
                 "CodeURL":     entry.sim_codeUrl     || undefined
             }))
         : [];
+
+    const decompMethod = document.getElementById('decompositionMethod').value;
+    if (decompMethod && decompMethod !== 'simulation') {
+        const decompPipelines = buildArrayFromListFields(
+            "decompositionPipelineList",
+            ["decomp_name", "decomp_version", "decomp_description", "decomp_codeUrl"],
+            (entry) => ({
+                "Name":        entry.decomp_name        || "",
+                "Version":     entry.decomp_version     || undefined,
+                "Description": entry.decomp_description || undefined,
+                "CodeURL":     entry.decomp_codeUrl     || undefined
+            })
+        );
+        generatedBy.push(...decompPipelines);
+
+        const manualEditing = document.querySelector('input[name="manualEditing"]:checked');
+        if (manualEditing && manualEditing.value === 'yes') {
+            const editingTools = buildArrayFromListFields(
+                "editingToolList",
+                ["edit_name", "edit_version", "edit_description", "edit_codeUrl"],
+                (entry) => ({
+                    "Name":        entry.edit_name        || "",
+                    "Version":     entry.edit_version     || undefined,
+                    "Description": entry.edit_description || undefined,
+                    "CodeURL":     entry.edit_codeUrl     || undefined
+                })
+            );
+            generatedBy.push(...editingTools);
+        }
+    }
 
     const sourceDatasets = isSynthetic
         ? buildArrayFromListFields("sourceDatasetList", ["src_doi", "src_url", "src_version"],
@@ -605,8 +724,7 @@ function buildArrayFromListFields(containerId, fieldNames, mapper) {
 
 function getBIDS_emgJson(data) {
     const bids = {
-        "TaskName": (data.taskName || [])[0] || "n/a",
-        "TaskDescription": (data.taskDescription || [])[0] || "n/a",
+        "TaskName": [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))].join(', ') || "n/a",
         "Manufacturer": data.manufacturer || "n/a",
         "ManufacturersModelName": data.manufacturerModel || "n/a",
         "SamplingFrequency": parseFloat(data.samplingFrequency) || "n/a",
@@ -723,41 +841,10 @@ function buildMetadata() {
             emgReference: data.emgReference || "n/a",
             emgGround: data.emgGround || "n/a"
         },
-        task: {
-            taskName: data.taskName || "",
-            taskDescription: data.taskDescription || "",
-            instructions: data.instructions || "",
-            contractionIsometric: data.contractionIsometric === 'on',
-            contractionConcentric: data.contractionConcentric === 'on',
-            contractionEccentric: data.contractionEccentric === 'on',
-            contractionMixed: data.contractionMixed === 'on',
-            targetForceLevels: data.targetForceLevels || "",
-            contractionDuration: parseFloat(data.contractionDuration) || null,
-            restDuration: parseFloat(data.restDuration) || null,
-            jointROM: data.jointROM || "",
-            movementSpeed: data.movementSpeed || "",
-            loadType: data.loadType || "",
-            numTrials: parseInt(data.numTrials) || null,
-            forceDataIncluded: data.forceDataIncluded || "",
-            forceSensorType: data.forceSensorType || "",
-            forceSamplingFrequency: parseFloat(data.forceSamplingFrequency) || null,
-            forceUnits: data.forceUnits || "",
-            kinematicsDataIncluded: data.kinematicsDataIncluded || "",
-            motionCaptureSystem: data.motionCaptureSystem || "",
-            kinematicsSamplingFrequency: parseFloat(data.kinematicsSamplingFrequency) || null,
-            trackedJoints: data.trackedJoints || "",
-            videoIncluded: data.videoIncluded || ""
-        },
+        recordings: recordingsData,
         labeling: {
             decompositionMethod: data.decompositionMethod || "",
-            decompositionSoftware: data.decompositionSoftware || "",
-            softwareVersion: data.softwareVersion || "",
-            manualEditingPerformed: data.manualEditingPerformed || "",
-            editingCriteria: data.editingCriteria || "",
-            minPNR: parseFloat(data.minPNR) || null,
-            minSilhouette: parseFloat(data.minSilhouette) || null,
-            maxCoVISI: parseFloat(data.maxCoVISI) || null,
-            minSpikes: parseInt(data.minSpikes) || null,
+            manualEditing: document.querySelector('input[name="manualEditing"]:checked')?.value || "",
             numMotorUnits: parseInt(data.numMotorUnits) || null
         },
         synthetic: (data.dataType || "").startsWith('synthetic') ? {
