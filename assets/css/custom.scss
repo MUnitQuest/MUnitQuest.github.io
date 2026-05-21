@@ -186,6 +186,14 @@ p {
 .table-scroll {
   overflow-x: auto;
   max-width: 100%;
+
+  &.table-sm table {
+    font-size: 0.82em;
+
+    th, td {
+      padding: 0.3rem 0.6rem;
+    }
+  }
 }
 
 table.submission-req {
@@ -442,7 +450,8 @@ table.submission-req {
   .mf-progress-bar {
     display: flex;
     justify-content: space-between;
-    margin: 1.5rem 0 2rem;
+    width: 75%;
+    margin: 1.5rem auto 2rem;
     padding: 0 4px;
     overflow-x: auto;
   }
@@ -453,7 +462,7 @@ table.submission-req {
     align-items: center;
     flex: 1;
     position: relative;
-    min-width: 70px;
+    min-width: 60px;
     cursor: pointer;
 
     &::after {
@@ -551,6 +560,107 @@ table.submission-req {
   .form-section h3 {
     font-size: 1.05rem;
     margin: 1.5rem 0 0.75rem;
+  }
+
+  /* --- Section 4 download list --- */
+  .mf-download-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .mf-download-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .mf-download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    color: var(--mf-primary);
+    font-weight: 600;
+    text-decoration: none;
+    flex: 0 0 auto;
+
+    &:hover { text-decoration: underline; }
+
+    svg { flex-shrink: 0; }
+  }
+
+  .mf-download-desc {
+    font-size: 0.85rem;
+    color: var(--mf-text-muted);
+  }
+
+  /* --- Section 4 upload list --- */
+  .mf-upload-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .mf-upload-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+    gap: 0.5rem 1rem;
+
+    .mf-upload-label {
+      padding-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    input[type="file"] { margin-bottom: 0; }
+
+    > div { grid-column: 2; }
+  }
+
+  /* --- Section notice (e.g. "please fill section 2 first") --- */
+  .mf-notice {
+    background: #f0f4ff;
+    border-left: 3px solid var(--mf-primary);
+    padding: 0.6rem 1rem;
+    border-radius: var(--mf-radius);
+    font-size: 0.9rem;
+    color: var(--mf-text);
+    margin-bottom: 1.25rem;
+  }
+
+  /* --- Getting Started table --- */
+  .mf-getting-started-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 1rem 0 1.25rem;
+
+    th, td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--mf-border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    thead th {
+      background: var(--mf-bg);
+      font-weight: 600;
+      color: var(--mf-text);
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #fafbfc;
+    }
+
+    code {
+      background: #eef0f5;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
   }
 
   /* --- Form groups --- */
@@ -886,5 +996,12 @@ table.submission-req {
     .mf-range-inputs input {
       width: 100%;
     }
+  }
+}
+
+/* Widen the metadata form page to use most of the container */
+@media screen and (min-width: 40em) {
+  body.munitquest-bids-emg-metadata-tool .content {
+    width: 90%;
   }
 }

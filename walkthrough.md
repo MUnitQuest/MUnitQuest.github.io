@@ -74,7 +74,7 @@ The critical challenge for HD-EMG is linking physical sensor locations to record
 - `_electrodes.tsv` lists every electrode by name and gives its x, y, z position in some coordinate system.
 - `_coordsystem.json` defines what that coordinate system is — where its origin sits, how its axes are oriented, and how it relates to anatomy (e.g., origin at the medial malleolus, x-axis pointing proximally along the tibia).
 
-For HD-EMG grids it is rarely practical to measure every electrode position directly. Instead, the grid geometry is known (regular spacing, fixed layout), so you measure just one anchor electrode in the anatomical frame and derive all others from the grid's internal coordinate system. `_coordsystem.json` records both the anatomical frame and the grid's child frame, with the anchor point linking the two.
+For HD-EMG grids it is rarely practical to measure every electrode position directly. Instead, the grid geometry is known (regular spacing, fixed layout), so you measure just one anchor electrode in the anatomical frame and derive all others from the grid's internal coordinate system. EMG-BIDS uses **one `_coordsystem.json` file per coordinate space**, distinguished by a `space-<label>` entity in the filename. An anatomical frame (`space-thigh_coordsystem.json`) describes the body-relative reference; a grid frame (`space-grid1_coordsystem.json`) describes electrode geometry relative to its own origin and — when an anchor measurement is available — references the parent anatomical frame with `ParentCoordinateSystem`, `AnchorElectrode`, and `AnchorCoordinates` fields. If no anatomical measurement was taken, the grid file stands alone with grid-internal coordinates only.
 
 ---
 
@@ -84,13 +84,17 @@ Filling in BIDS metadata by hand — one JSON or TSV per recording — is error-
 
 The five files and what they produce:
 
+<div class="table-scroll table-sm" markdown="1">
+
 | File you fill | What it describes | BIDS files generated |
 |---------------|-------------------|----------------------|
 | `participants.csv` | Subject demographics (age, sex, height, weight, group) | `participants.tsv` |
 | `recordings.csv` | One row per recording: which subject, which session, which task, and which recording configuration was used | Internal index used to name and route all other output files |
 | `setup.csv` | Hardware and acquisition settings for each recording configuration | `*_emg.json` (one per setup) |
 | `coordsystems.csv` | Anatomical and grid coordinate systems for each setup | `*_coordsystem.json` (one per setup) |
-| `channels_electrodes.csv` | Every channel and its corresponding electrode position | `*_channels.tsv` + `*_electrodes.tsv` (one pair per setup) |
+| `channels_electrodes.csv` | Every channel and its corresponding electrode position | `*_channels.tsv` (one per recording) + `*_electrodes.tsv` (one per setup) |
+
+</div>
 
 **A note on `setup.csv`.** This file does not correspond directly to any single BIDS file! Instead, each *setup* is a named bundle of hardware settings and electrode configuration that can be shared across many recordings. The name appears as a column in `recordings.csv`, so each recording row simply declares which setup it belongs to. This is especially useful when different recordings in the same dataset use different grids (e.g., different muscles, different grid sizes), different amplifiers, or additional recording modalities such as concurrent intramuscular EMG. Without this abstraction you would need to re-specify the full hardware description for every recording individually.
 
@@ -230,7 +234,7 @@ Correspondingly, our `coordsystems.csv` and `channels_electrodes.csv` rows look 
 
 ---
 
-#### Setup `TA_dual_3x3` — sub-02 session 1, two simultaneous 3 × 3 grids on right tibialis anterior
+#### Setup TA_dual_3x3 — sub-02 session 1, two simultaneous 3 × 3 grids on right tibialis anterior
 
 Both grids are on the same muscle — one placed over the proximal region, one over the distal region — recorded simultaneously into a single file per trial. Because both grids are on the same body segment, they share one anatomical coordinate system (`lowerLeg`) but each gets its own grid coordinate system (`grid1`, `grid2`), anchored to a different reference electrode.
 
@@ -280,9 +284,9 @@ x=0   x=8   x=16
 
 ---
 
-#### Setup `TA_4x4` — sub-02 session 2, single 4 × 4 grid on right tibialis anterior
+#### Setup TA_4x4 — sub-02 session 2, single 4 × 4 grid on right tibialis anterior
 
-A single grid with 4 rows and 4 columns, 8 mm inter-electrode distance. Channels EMG001–EMG016 in row-major order. The same anatomical coordinate system (`lowerLeg`) is reused; only the anchor point changes because the grid was placed in a different position.
+In this setup, a single grid with 4 rows and 4 columns, 8 mm inter-electrode distance. Channels EMG001–EMG016 in row-major order. However, the electrode position relative to anatomical landmarks was not recorded, so no anatomical row appears in `coordsystems.csv`. The grid-internal positions are still fully specified — they describe electrode geometry relative to E1 — but they are not tied to any body landmark. This produces a single `space-grid1_coordsystem.json` for this setup/ session, with no `ParentCoordinateSystem`, `AnchorElectrode`, or `AnchorCoordinates` fields.
 
 Grid layout — electrode labels:
 
@@ -298,8 +302,7 @@ x=0    x=8    x=16   x=24
 
 | setup | name | type | units | description | parent_coord_system | anchor_electrode | anchor_x | anchor_y |
 |-------|------|------|-------|-------------|---------------------|------------------|----------|----------|
-| TA_4x4 | lowerLeg | anatomical | mm | Origin at the medial malleolus. x-axis points proximally along the tibial shaft. y-axis points laterally. z-axis points anteriorly. | | | | |
-| TA_4x4 | grid1 | grid | mm | 4x4 grid over right tibialis anterior. Origin at electrode E1. | lowerLeg | E1 | 28 | 200 |
+| TA_4x4 | grid1 | grid | mm | 4x4 grid over right tibialis anterior. Origin at electrode E1 (top-left corner). x-axis points distally, y-axis points laterally. No anatomical landmark measures available. | | | | |
 
 `channels_electrodes.csv`:
 
@@ -339,61 +342,54 @@ dataset/
 ├── participants.json
 │
 ├── sub-01/
-│   ├── sub-01_scans.tsv
 │   └── emg/
+│       ├── sub-01_electrodes.tsv                               ← inherited: one per subject
+│       ├── sub-01_space-thigh_coordsystem.json                 ← inherited: anatomical frame
+│       ├── sub-01_space-grid1_coordsystem.json                 ← inherited: grid frame (anchored to thigh)
 │       ├── sub-01_task-rest_run-01_emg.edf
 │       ├── sub-01_task-rest_run-01_emg.json
 │       ├── sub-01_task-rest_run-01_channels.tsv
-│       ├── sub-01_task-rest_run-01_electrodes.tsv
 │       ├── sub-01_task-isometric30percentMVC_run-01_emg.edf
 │       ├── sub-01_task-isometric30percentMVC_run-01_emg.json
 │       ├── sub-01_task-isometric30percentMVC_run-01_channels.tsv
-│       ├── sub-01_task-isometric30percentMVC_run-01_electrodes.tsv
 │       ├── sub-01_task-isometric50percentMVC_run-01_emg.edf
 │       ├── sub-01_task-isometric50percentMVC_run-01_emg.json
 │       ├── sub-01_task-isometric50percentMVC_run-01_channels.tsv
-│       ├── sub-01_task-isometric50percentMVC_run-01_electrodes.tsv
 │       ├── sub-01_task-isometric50percentMVC_run-02_emg.edf
 │       ├── sub-01_task-isometric50percentMVC_run-02_emg.json
-│       ├── sub-01_task-isometric50percentMVC_run-02_channels.tsv
-│       ├── sub-01_task-isometric50percentMVC_run-02_electrodes.tsv
-│       └── sub-01_coordsystem.json
+│       └── sub-01_task-isometric50percentMVC_run-02_channels.tsv
 │
 └── sub-02/
     ├── ses-01/
-    │   ├── sub-02_ses-01_scans.tsv
     │   └── emg/
+    │       ├── sub-02_ses-01_electrodes.tsv                    ← inherited
+    │       ├── sub-02_ses-01_space-lowerLeg_coordsystem.json   ← inherited: anatomical frame
+    │       ├── sub-02_ses-01_space-grid1_coordsystem.json      ← inherited: proximal grid
+    │       ├── sub-02_ses-01_space-grid2_coordsystem.json      ← inherited: distal grid
     │       ├── sub-02_ses-01_task-rest_run-01_emg.edf
     │       ├── sub-02_ses-01_task-rest_run-01_emg.json
     │       ├── sub-02_ses-01_task-rest_run-01_channels.tsv
-    │       ├── sub-02_ses-01_task-rest_run-01_electrodes.tsv
     │       ├── sub-02_ses-01_task-isometric30percentMVC_run-01_emg.edf
     │       ├── sub-02_ses-01_task-isometric30percentMVC_run-01_emg.json
     │       ├── sub-02_ses-01_task-isometric30percentMVC_run-01_channels.tsv
-    │       ├── sub-02_ses-01_task-isometric30percentMVC_run-01_electrodes.tsv
     │       ├── sub-02_ses-01_task-isometric30percentMVC_run-02_emg.edf
     │       ├── sub-02_ses-01_task-isometric30percentMVC_run-02_emg.json
-    │       ├── sub-02_ses-01_task-isometric30percentMVC_run-02_channels.tsv
-    │       ├── sub-02_ses-01_task-isometric30percentMVC_run-02_electrodes.tsv
-    │       └── sub-02_ses-01_coordsystem.json
+    │       └── sub-02_ses-01_task-isometric30percentMVC_run-02_channels.tsv
     └── ses-02/
-        ├── sub-02_ses-02_scans.tsv
         └── emg/
+            ├── sub-02_ses-02_electrodes.tsv                    ← inherited
+            ├── sub-02_ses-02_space-grid1_coordsystem.json      ← inherited: grid only, no anatomical
             ├── sub-02_ses-02_task-isometric30percentMVC_run-01_emg.edf
             ├── sub-02_ses-02_task-isometric30percentMVC_run-01_emg.json
             ├── sub-02_ses-02_task-isometric30percentMVC_run-01_channels.tsv
-            ├── sub-02_ses-02_task-isometric30percentMVC_run-01_electrodes.tsv
             ├── sub-02_ses-02_task-isometric30percentMVC_run-02_emg.edf
             ├── sub-02_ses-02_task-isometric30percentMVC_run-02_emg.json
             ├── sub-02_ses-02_task-isometric30percentMVC_run-02_channels.tsv
-            ├── sub-02_ses-02_task-isometric30percentMVC_run-02_electrodes.tsv
             ├── sub-02_ses-02_task-isometric30percentMVC_run-03_emg.edf
             ├── sub-02_ses-02_task-isometric30percentMVC_run-03_emg.json
-            ├── sub-02_ses-02_task-isometric30percentMVC_run-03_channels.tsv
-            ├── sub-02_ses-02_task-isometric30percentMVC_run-03_electrodes.tsv
-            └── sub-02_ses-02_coordsystem.json
+            └── sub-02_ses-02_task-isometric30percentMVC_run-03_channels.tsv
 ```
 
-Each recording has its own `_emg.json`, `_channels.tsv`, and `_electrodes.tsv` sidecar files, all generated from the three setups defined in your CSVs. The `_coordsystem.json` is shared across all recordings within a session and is placed at the session (or subject) level.
+Each recording has its own `_emg.json` and `_channels.tsv`. `_electrodes.tsv` and `_coordsystem.json` files are **inherited** — shared across all recordings in a session and placed at the session (or subject) level. There is one `_coordsystem.json` per coordinate space: sub-01 gets two (anatomical + grid), sub-02 session 1 gets three (anatomical + two grids), and sub-02 session 2 gets one (grid only, since no anatomical landmark was measured in that session).
 
 Once you have the metadata ZIP and your recordings converted to EDF, you have everything needed for a fully BIDS-compliant HD-EMG dataset — self-describing, shareable, and ready for any BIDS-compatible tool or repository.
