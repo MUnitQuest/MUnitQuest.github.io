@@ -2,16 +2,14 @@
 
 // Global variables
 let currentSection = 1;
-const totalSections = 9; // sections 1-8 + review (was 10, removed upload section 9)
-let sectionMap = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // logical section -> data-section attribute
-// section 8 (synthetic) is conditional; section 9 in HTML = review
+const totalSections = 7; // sections 1-6 + review (section 7); synthetic details are inline in section 1
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
-    loadDraft();
     setupEventListeners();
     updateNavigation();
+    try { loadDraft(); } catch(e) { console.warn('Draft restore failed:', e); }
 });
 
 function initializeForm() {
@@ -46,42 +44,44 @@ function setupEventListeners() {
     // Health status - show pathological conditions
     document.querySelectorAll('input[name="healthStatus"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('pathologicalConditionsGroup').style.display =
+            const group = document.getElementById('pathologicalConditionsGroup');
+            if (group) group.style.display =
                 (this.value === 'pathological' || this.value === 'mixed') ? 'block' : 'none';
         });
     });
 
     // Contraction type - show/hide specific fields
     ['contractionIsometric', 'contractionConcentric', 'contractionEccentric', 'contractionMixed'].forEach(id => {
-        document.getElementById(id).addEventListener('change', toggleContractionFields);
+        document.getElementById(id)?.addEventListener('change', toggleContractionFields);
     });
 
     // Force data - show/hide fields
     document.querySelectorAll('input[name="forceDataIncluded"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('forceDataFields').style.display =
-                this.value === 'yes' ? 'block' : 'none';
+            const el = document.getElementById('forceDataFields');
+            if (el) el.style.display = this.value === 'yes' ? 'block' : 'none';
         });
     });
 
     // Kinematics data - show/hide fields
     document.querySelectorAll('input[name="kinematicsDataIncluded"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('kinematicsDataFields').style.display =
-                this.value === 'yes' ? 'block' : 'none';
+            const el = document.getElementById('kinematicsDataFields');
+            if (el) el.style.display = this.value === 'yes' ? 'block' : 'none';
         });
     });
 
-    // Decomposition method - show/hide experimental fields
+    // Decomposition method - hide algorithm + manual editing section for simulation ground truth
     document.getElementById('decompositionMethod').addEventListener('change', function() {
-        document.getElementById('experimentalLabelingFields').style.display =
-            (this.value !== 'simulation') ? 'block' : 'none';
+        const showAlgo = this.value && this.value !== 'simulation';
+        document.getElementById('decompositionAlgorithmSection').style.display = showAlgo ? 'block' : 'none';
+        if (!showAlgo) document.getElementById('editingToolSection').style.display = 'none';
     });
 
-    // Manual editing - show/hide criteria
-    document.querySelectorAll('input[name="manualEditingPerformed"]').forEach(radio => {
+    // Manual editing yes/no - show editing tool section
+    document.querySelectorAll('input[name="manualEditing"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            document.getElementById('editingCriteriaGroup').style.display =
+            document.getElementById('editingToolSection').style.display =
                 this.value === 'yes' ? 'block' : 'none';
         });
     });
@@ -99,11 +99,12 @@ function updateCharCount() {
     }
 }
 
-// Handle data type change - show/hide synthetic section in progress bar + navigation
+// Handle data type change - show/hide synthetic sub-section within section 2
 function handleDataTypeChange() {
     const selectedType = document.querySelector('input[name="dataType"]:checked').value;
-    const syntheticSection = document.getElementById('syntheticDataSection');
-    syntheticSection.style.display = selectedType.startsWith('synthetic') ? 'block' : 'none';
+    const isSynthetic = selectedType.startsWith('synthetic');
+    document.getElementById('syntheticDataSection').style.display = isSynthetic ? 'block' : 'none';
+    document.getElementById('pipelineRequiredMark').style.display = 'inline';
 }
 
 function toggleContractionFields() {
@@ -138,9 +139,12 @@ function addListItem(containerId, schema, className, title = null) {
             data-depends-value='${JSON.stringify(field.dependsOn.values || field.dependsOn.value)}'`
             : "";
 
+        const labelHtml = field.label ? `<label>${field.label}</label>` : "";
+
         if (field.type === "select") {
             html += `
                 <div class="mf-field-row" data-field="${field.name}" ${dependsAttr}>
+                    ${labelHtml}
                     <select name="${field.name}[]">
                         ${field.options.map(opt => `
                             <option value="${opt}">${opt}</option>
@@ -151,6 +155,7 @@ function addListItem(containerId, schema, className, title = null) {
         } else {
             html += `
                 <div class="mf-field-row" data-field="${field.name}" ${dependsAttr}>
+                    ${labelHtml}
                     <input type="${field.type}"
                         name="${field.name}[]"
                         placeholder="${field.placeholder || ""}">
@@ -216,6 +221,53 @@ function setupConditionalFields(entry) {
     update();
 }
 
+// Synthetic pipelines (GeneratedBy entries)
+const syntheticPipelineSchema = [
+    { name: "sim_name",        type: "text", label: "Name *",      placeholder: "e.g., NeuroMotion, MyoGen, Manual" },
+    { name: "sim_version",     type: "text", label: "Version",     placeholder: "e.g., 1.0.0" },
+    { name: "sim_description", type: "text", label: "Description", placeholder: "What this pipeline does" },
+    { name: "sim_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addSyntheticPipeline() {
+    addListItem("syntheticPipelineList", syntheticPipelineSchema, "mf-misc-entry", "Pipeline");
+}
+
+// Decomposition pipelines (GeneratedBy entries for section 6)
+const decompositionPipelineSchema = [
+    { name: "decomp_name",        type: "text", label: "Name *",      placeholder: "e.g., DEMUSE, convolutive BSS, CKC" },
+    { name: "decomp_version",     type: "text", label: "Version",     placeholder: "e.g., 1.0.0" },
+    { name: "decomp_description", type: "text", label: "Description", placeholder: "Brief description of the algorithm" },
+    { name: "decomp_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addDecompositionPipeline() {
+    addListItem("decompositionPipelineList", decompositionPipelineSchema, "mf-misc-entry", "Algorithm");
+}
+
+// Editing tool (optional second GeneratedBy entry if different from decomp tool)
+const editingToolSchema = [
+    { name: "edit_name",        type: "text", label: "Name",        placeholder: "e.g., OTBiolab+, custom script" },
+    { name: "edit_version",     type: "text", label: "Version",     placeholder: "e.g., 2.3.1" },
+    { name: "edit_description", type: "text", label: "Description", placeholder: "Brief description" },
+    { name: "edit_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addEditingTool() {
+    addListItem("editingToolList", editingToolSchema, "mf-misc-entry", "Editing Tool");
+}
+
+// Source datasets (SourceDatasets entries)
+const sourceDatasetSchema = [
+    { name: "src_doi",     type: "text", label: "DOI",     placeholder: "e.g., 10.18112/openneuro.ds004632.v1.0.0" },
+    { name: "src_url",     type: "text", label: "URL",     placeholder: "e.g., https://openneuro.org/datasets/ds004632" },
+    { name: "src_version", type: "text", label: "Version", placeholder: "e.g., 1.0.0" }
+];
+
+function addSourceDataset() {
+    addListItem("sourceDatasetList", sourceDatasetSchema, "mf-misc-entry", "Source Dataset");
+}
+
 // Authors management
 const authorSchema = [
     { name: "author", type: "text", placeholder: "LastName, FirstName" }
@@ -253,18 +305,114 @@ function addReference() {
 }
 
 // Subjects management
-const subjectSchema = [
-    { name: "participant_id", type: "text", placeholder: "Unique subject ID, e.g., 01" },
-    { name: "sex", type: "select", options: ["female", "male", "other", "n/a"]},
-    { name: "age", type: "number", placeholder: "Age in years" },
-    { name: "height", type: "number", placeholder: "Height in cm" },
-    { name: "weight", type: "number", placeholder: "Weight in kg" },
-    { name: "handedness", type: "select", options: ["left handedness", "right handedness", "n/a"]},
-    { name: "group", type: "text", placeholder: "Experimentale.g., patients or controls"}
-];
+// Participants CSV upload
+let participantsData = [];
+const PARTICIPANT_COLS = ['participant_id', 'sex', 'age', 'height', 'weight', 'handedness', 'group'];
 
-function addSubject() {
-    addListItem("subjectsList", subjectSchema, "mf-subject-entry", "Subject");
+function handleParticipantsUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => validateAndParseParticipants(e.target.result);
+    reader.readAsText(file);
+}
+
+function validateAndParseParticipants(csvText) {
+    const msgEl = document.getElementById('participantsValidationMsg');
+    const lines = csvText.trim().split(/\r?\n/).filter(l => l.trim());
+
+    if (lines.length === 0) {
+        showParticipantMsg(msgEl, ['File is empty.'], 'error');
+        participantsData = [];
+        return;
+    }
+
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    const dataRows = lines.slice(1);
+
+    const unexpected = headers.filter(h => !PARTICIPANT_COLS.includes(h));
+    const missing    = PARTICIPANT_COLS.filter(c => !headers.includes(c));
+    const warnings   = [];
+
+    if (missing.length)    warnings.push(`Missing expected columns: ${missing.join(', ')}`);
+    if (unexpected.length) warnings.push(`Unexpected columns will be ignored: ${unexpected.join(', ')}`);
+    if (dataRows.length === 0) warnings.push('No participant rows found.');
+    if (dataRows.length > 1000) warnings.push(`${dataRows.length} rows — maximum is 1000.`);
+
+    participantsData = dataRows.map(line => {
+        const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
+        return obj;
+    });
+
+    if (warnings.length) {
+        showParticipantMsg(msgEl, warnings, 'warning');
+    } else {
+        showParticipantMsg(msgEl, [`${dataRows.length} participant(s) loaded.`], 'ok');
+    }
+}
+
+function showParticipantMsg(el, messages, type) {
+    const icons = { ok: '✓', warning: '⚠', error: '✕' };
+    el.className = `mf-participants-msg mf-participants-${type}`;
+    el.innerHTML = messages.map(m => `${icons[type]} ${m}`).join('<br>');
+}
+
+// Recordings CSV upload
+let recordingsData = [];
+const RECORDING_COLS = ['sub', 'ses', 'task_name', 'repetition', 'path_to_emg_file', 'path_to_labels_file'];
+
+function handleRecordingsUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => validateAndParseRecordings(e.target.result);
+    reader.readAsText(file);
+}
+
+function validateAndParseRecordings(csvText) {
+    const msgEl = document.getElementById('recordingsValidationMsg');
+    const lines = csvText.trim().split(/\r?\n/).filter(l => l.trim());
+
+    if (lines.length === 0) {
+        showRecordingMsg(msgEl, ['File is empty.'], 'error');
+        recordingsData = [];
+        return;
+    }
+
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    const dataRows = lines.slice(1);
+
+    const missing    = RECORDING_COLS.filter(c => !headers.includes(c));
+    const unexpected = headers.filter(h => !RECORDING_COLS.includes(h));
+    const warnings   = [];
+
+    if (missing.length)    warnings.push(`Missing expected columns: ${missing.join(', ')}`);
+    if (unexpected.length) warnings.push(`Unexpected columns will be ignored: ${unexpected.join(', ')}`);
+    if (dataRows.length === 0) warnings.push('No recording rows found.');
+
+    recordingsData = dataRows.map(line => {
+        const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
+        return obj;
+    });
+
+    if (missing.length) {
+        showRecordingMsg(msgEl, warnings, 'error');
+        recordingsData = [];
+    } else if (warnings.length) {
+        showRecordingMsg(msgEl, warnings, 'warning');
+    } else {
+        showRecordingMsg(msgEl, [`${dataRows.length} recording(s) loaded.`], 'ok');
+    }
+}
+
+function showRecordingMsg(el, messages, type) {
+    const icons = { ok: '✓', warning: '⚠', error: '✕' };
+    el.className = `mf-participants-msg mf-participants-${type}`;
+    el.innerHTML = messages.map(m => `${icons[type]} ${m}`).join('<br>');
 }
 
 // Coordinate systems
@@ -335,36 +483,17 @@ function addSurfaceEMG() {
     addListItem("surfaceEMGList", surfaceEMGSchema, "mf-misc-entry", "surfaceEMG");
 }
 
-// Tasks
-const taskSchema = [
-    { name: "taskName", type: "text", placeholder: "Unique task label, e.g., isometricContraction." },
-    { name: "taskDescription", type: "text", placeholder: "Longer free-text description of the task."},
-    { name: "taskInstructions", type: "text", placeholder: "Instructions given to participants before the recording."},
-    { name: "taskRuns", type: "number", placeholder: "Number of repetitions.", min: 1, step: 1}
-];
-
-function addTask() {
-    addListItem("taskList", taskSchema, "mf-task-entry", "task");
-}
-
 
 // Get the list of visible section numbers (data-section attributes) for navigation
 function getVisibleSections() {
-    const syntheticSelected = document.querySelector('input[name="dataType"]:checked');
-    const isSynthetic = syntheticSelected && syntheticSelected.value.startsWith('synthetic');
-    // data-section values in the HTML: 1,2,3,4,5,6,7,8(synthetic),9(review)
-    // Section 8 (synthetic) is only shown if synthetic data type selected
-    const sections = [1, 2, 3, 4, 5, 6, 7];
-    if (isSynthetic) sections.push(8);
-    sections.push(9); // review is always last
-    return sections;
+    // Synthetic details are now an inline sub-section within section 1, not a nav step.
+    return [1, 2, 3, 4, 5, 6, 7]; // section 7 = Review
 }
 
 // Form navigation
 function navigateForm(direction) {
-    if (direction === 1 && !validateSection(currentSection)) {
-        return;
-    }
+    sectionValidState[currentSection] = checkSection(currentSection);
+    updateProgressBar();
 
     const visible = getVisibleSections();
     const idx = visible.indexOf(currentSection);
@@ -385,26 +514,26 @@ function showSection(sectionNumber) {
         updateNavigation();
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        if (sectionNumber === 9) {
+        if (sectionNumber === 7) {
             generateReview();
         }
     }
 }
 
+const sectionValidState = {};
+
 function updateProgressBar() {
     const visible = getVisibleSections();
-    const currentIdx = visible.indexOf(currentSection); // 0-based position
+    const currentIdx = visible.indexOf(currentSection);
 
     document.querySelectorAll('.mf-progress-step').forEach((step, index) => {
-        // Progress steps are always 1..N in order; map them to visible sections
-        if (index < currentIdx) {
-            step.classList.add('completed');
-            step.classList.remove('active');
-        } else if (index === currentIdx) {
+        const sectionNum = visible[index];
+        step.classList.remove('active', 'completed', 'invalid');
+
+        if (index === currentIdx) {
             step.classList.add('active');
-            step.classList.remove('completed');
-        } else {
-            step.classList.remove('active', 'completed');
+        } else if (sectionNum in sectionValidState) {
+            step.classList.add(sectionValidState[sectionNum] ? 'completed' : 'invalid');
         }
     });
 }
@@ -421,37 +550,56 @@ function updateNavigation() {
 }
 
 // Validation
-function validateSection(sectionNumber) {
+function checkSection(sectionNumber) {
     const section = document.querySelector(`.form-section[data-section="${sectionNumber}"]`);
     const inputs = section.querySelectorAll('input[required], select[required], textarea[required]');
-    let isValid = true;
-
     for (const input of inputs) {
-        if (!input.checkValidity()) {
-            isValid = false;
-            input.reportValidity();
-            break;
+        if (!input.checkValidity()) return false;
+    }
+    if (sectionNumber === 3) {
+        if (participantsData.length === 0) return false;
+    }
+    if (sectionNumber === 5) {
+        if (recordingsData.length === 0) return false;
+    }
+    if (sectionNumber === 6) {
+        const method = document.getElementById('decompositionMethod').value;
+        if (!method) return false;
+        if (method !== 'simulation') {
+            const pipelines = document.querySelectorAll('#decompositionPipelineList .mf-misc-entry');
+            if (pipelines.length === 0) return false;
+            for (const p of pipelines) {
+                const nameInput = p.querySelector('[name="decomp_name[]"]');
+                if (!nameInput || !nameInput.value.trim()) return false;
+            }
+            const manualEditing = document.querySelector('input[name="manualEditing"]:checked');
+            if (!manualEditing) return false;
         }
     }
-
-    if (sectionNumber === 2) {
-        if (!document.querySelector('input[name="dataType"]:checked')) {
-            alert('Please select a data type');
-            return false;
+    if (sectionNumber === 1) {
+        const dataTypeEl = document.querySelector('input[name="dataType"]:checked');
+        if (!dataTypeEl) return false;
+        const dataType = dataTypeEl.value;
+        if (dataType.startsWith('synthetic')) {
+            const pipelines = document.querySelectorAll('#syntheticPipelineList .mf-misc-entry');
+            if (pipelines.length === 0) return false;
+            for (const p of pipelines) {
+                const nameInput = p.querySelector('[name="sim_name[]"]');
+                if (!nameInput || !nameInput.value.trim()) return false;
+            }
         }
     }
+    return true;
+}
 
-    //if (sectionNumber === 6) {
-    //    const contractionChecked = document.querySelector(
-    //        '#contractionIsometric:checked, #contractionConcentric:checked, #contractionEccentric:checked, #contractionMixed:checked'
-    //    );
-    //    if (!contractionChecked) {
-    //        alert('Please select at least one contraction type');
-    //        return false;
-    //    }
-    //}
-
-    return isValid;
+function validateSection(sectionNumber) {
+    const valid = checkSection(sectionNumber);
+    if (!valid) {
+        const section = document.querySelector(`.form-section[data-section="${sectionNumber}"]`);
+        const firstInvalid = section.querySelector('input[required]:invalid, select[required]:invalid, textarea[required]:invalid');
+        if (firstInvalid) firstInvalid.reportValidity();
+    }
+    return valid;
 }
 
 // Generate review summary
@@ -460,23 +608,25 @@ function generateReview() {
     const reviewSummary = document.getElementById('reviewSummary');
 
     let html = '<h4>Dataset Information</h4>';
-    html += `<p><strong>Team:</strong> ${data.teamName || 'N/A'}</p>`;
     html += `<p><strong>Dataset:</strong> ${data.datasetName || 'N/A'}</p>`;
     html += `<p><strong>Data Type:</strong> ${data.dataType || 'N/A'}</p>`;
 
     html += '<h4>Recording Details</h4>';
-    html += `<p><strong>Participants:</strong> ${data.numParticipants || 'N/A'}</p>`;
+    html += `<p><strong>Participants:</strong> ${participantsData.length || 'none uploaded'}</p>`;
+    html += `<p><strong>Recordings:</strong> ${recordingsData.length || 'none uploaded'}</p>`;
     html += `<p><strong>EMG Channels:</strong> ${data.emgChannelCount || 'N/A'}</p>`;
     html += `<p><strong>Sampling Frequency:</strong> ${data.samplingFrequency || 'N/A'} Hz</p>`;
     html += `<p><strong>Manufacturer:</strong> ${data.manufacturer || 'N/A'} ${data.manufacturerModel || ''}</p>`;
 
-    html += '<h4>Task Information</h4>';
-    html += `<p><strong>Task Name:</strong> ${data.taskName || 'N/A'}</p>`;
-    html += `<p><strong>Number of Trials:</strong> ${data.numTrials || 'N/A'}</p>`;
+    html += '<h4>Recordings</h4>';
+    const taskNames = [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))];
+    html += `<p><strong>Recordings:</strong> ${recordingsData.length || 'none uploaded'}</p>`;
+    html += `<p><strong>Tasks:</strong> ${taskNames.length ? taskNames.join(', ') : 'N/A'}</p>`;
 
     html += '<h4>Motor Units</h4>';
     html += `<p><strong>Total Motor Units:</strong> ${data.numMotorUnits || 'N/A'}</p>`;
     html += `<p><strong>Decomposition Method:</strong> ${data.decompositionMethod || 'N/A'}</p>`;
+    html += `<p><strong>Manual Editing:</strong> ${data.manualEditing || 'N/A'}</p>`;
 
     reviewSummary.innerHTML = html;
     getBIDS_datasetJson(data);
@@ -486,33 +636,95 @@ function generateReview() {
 }
 
 function getBIDS_datasetJson(data) {
+    const isSynthetic = (data.dataType || "").startsWith("synthetic");
+
+    const generatedBy = isSynthetic
+        ? buildArrayFromListFields("syntheticPipelineList", ["sim_name", "sim_version", "sim_description", "sim_codeUrl"],
+            (entry) => ({
+                "Name":        entry.sim_name        || "",
+                "Version":     entry.sim_version     || undefined,
+                "Description": entry.sim_description || undefined,
+                "CodeURL":     entry.sim_codeUrl     || undefined
+            }))
+        : [];
+
+    const decompMethod = document.getElementById('decompositionMethod').value;
+    if (decompMethod && decompMethod !== 'simulation') {
+        const decompPipelines = buildArrayFromListFields(
+            "decompositionPipelineList",
+            ["decomp_name", "decomp_version", "decomp_description", "decomp_codeUrl"],
+            (entry) => ({
+                "Name":        entry.decomp_name        || "",
+                "Version":     entry.decomp_version     || undefined,
+                "Description": entry.decomp_description || undefined,
+                "CodeURL":     entry.decomp_codeUrl     || undefined
+            })
+        );
+        generatedBy.push(...decompPipelines);
+
+        const manualEditing = document.querySelector('input[name="manualEditing"]:checked');
+        if (manualEditing && manualEditing.value === 'yes') {
+            const editingTools = buildArrayFromListFields(
+                "editingToolList",
+                ["edit_name", "edit_version", "edit_description", "edit_codeUrl"],
+                (entry) => ({
+                    "Name":        entry.edit_name        || "",
+                    "Version":     entry.edit_version     || undefined,
+                    "Description": entry.edit_description || undefined,
+                    "CodeURL":     entry.edit_codeUrl     || undefined
+                })
+            );
+            generatedBy.push(...editingTools);
+        }
+    }
+
+    const sourceDatasets = isSynthetic
+        ? buildArrayFromListFields("sourceDatasetList", ["src_doi", "src_url", "src_version"],
+            (entry) => ({
+                "DOI":     entry.src_doi     || undefined,
+                "URL":     entry.src_url     || undefined,
+                "Version": entry.src_version || undefined
+            }))
+        : [];
+
     const bids = {
         "Name": data.datasetName || "",
         "BIDSVersion": "1.11.1",
         "DatasetType": "raw",
         "License": data.license || "",
         "Authors": getArrayField("author", { emptyValue: "" }),
-        "Acknowledgements": data.fundingSources || "",
         "Funding": getArrayField("funding", { emptyValue: "" }),
         "ReferencesAndLinks": getArrayField("reference", { emptyValue: "" }),
         "EthicsApprovals": getArrayField("ethics", { emptyValue: "" }),
         "InstitutionName": data.institutionName || "",
         "InstitutionAddress": data.institutionAddress || "",
-        "GeneratedBy": [
-            {
-                "Name": "MUnitQuest BIDS-Tools",
-                "Version": "0.1.0",
-                "Description": "Assisted manual metadata annotaion"
-            }
-        ],
     };
+
+    if (generatedBy.length > 0)   bids["GeneratedBy"]    = generatedBy;
+    if (sourceDatasets.length > 0) bids["SourceDatasets"] = sourceDatasets;
+
     document.getElementById('bidsDatasetPreview').textContent = JSON.stringify(bids, null, 2);
+}
+
+function buildArrayFromListFields(containerId, fieldNames, mapper) {
+    const container = document.getElementById(containerId);
+    if (!container) return [];
+    const entries = container.querySelectorAll(".mf-misc-entry");
+    return Array.from(entries).map(entry => {
+        const values = {};
+        fieldNames.forEach(name => {
+            const el = entry.querySelector(`[name="${name}[]"]`);
+            values[name] = el ? el.value.trim() : "";
+        });
+        const mapped = mapper(values);
+        // strip undefined keys
+        return Object.fromEntries(Object.entries(mapped).filter(([, v]) => v !== undefined && v !== ""));
+    }).filter(obj => Object.keys(obj).length > 0);
 }
 
 function getBIDS_emgJson(data) {
     const bids = {
-        "TaskName": data.taskName[0] || "n/a", // TODO
-        "TaskDescription": data.taskDescription[0] || "n/a", // TODO
+        "TaskName": [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))].join(', ') || "n/a",
         "Manufacturer": data.manufacturer || "n/a",
         "ManufacturersModelName": data.manufacturerModel || "n/a",
         "SamplingFrequency": parseFloat(data.samplingFrequency) || "n/a",
@@ -529,37 +741,13 @@ function getBIDS_emgJson(data) {
 }
 
 function getBIDS_subjectsTSV(data) {
-    const participant_id = data.participant_id || [];
-    const ages = data.subjects_age || [];
-    const heights = data.subjects_height || [];
-    const weights = data.subjects_weight || [];
-
-    const length = Math.max(participant_id.length, ages.length, heights.length, weights.length);
-    //const length = Math.max(ages.length, heights.length, weights.length);
-
-    const subjects = [];
-
-    for (let i = 0; i < length; i++) {
-        subjects.push({
-            participant_id: `sub-${participant_id[i]}` || "",
-            age: ages[i] || "n/a",
-            height: heights[i] || "n/a",
-            weight: weights[i] || "n/a"
-        });
+    if (participantsData.length === 0) {
+        document.getElementById('bidsSubjectsPreview').textContent = '(no participants file uploaded)';
+        return;
     }
-
-    let tsv = "participant_id\tage\theight\tweight\n";
-
-    subjects.forEach((s, index) => {
-        tsv += [
-            s.participant_id,
-            s.age,
-            s.height,
-            s.weight
-        ].join("\t") + "\n";
-    });
-
-    document.getElementById('bidsSubjectsPreview').textContent = tsv;
+    const headers = Object.keys(participantsData[0]);
+    const lines = participantsData.map(row => headers.map(h => row[h] || '').join('\t'));
+    document.getElementById('bidsSubjectsPreview').textContent = [headers.join('\t'), ...lines].join('\n');
 }
 
 function getBIDS_channelsTSV(data) {
@@ -621,37 +809,19 @@ function getFormData() {
 function buildMetadata() {
     const data = getFormData();
     return {
-        submissionInfo: {
-            teamName: data.teamName || "",
-            teamLeaderName: data.teamLeaderName || "",
-            teamLeaderEmail: data.teamLeaderEmail || "",
-            submittedAt: new Date().toISOString()
-        },
         dataset: {
             name: data.datasetName || "",
             description: data.datasetDescription || "",
             dataType: data.dataType || "",
             license: data.license === 'other' ? (data.otherLicense || "") : (data.license || ""),
-            authors: getAuthors(),
+            authors: getArrayField("author", { emptyValue: "" }),
             fundingSources: data.fundingSources || "",
             ethicsApprovalNumber: data.ethicsApprovalNumber || "",
             ethicsCommittee: data.ethicsCommittee || "",
             institutionName: data.institutionName || "",
             institutionAddress: data.institutionAddress || ""
         },
-        participants: {
-            numParticipants: parseInt(data.numParticipants) || null,
-            ageMin: parseInt(data.ageMin) || null,
-            ageMax: parseInt(data.ageMax) || null,
-            sexFemale: data.sexFemale === 'on',
-            femaleCount: parseInt(data.femaleCount) || null,
-            sexMale: data.sexMale === 'on',
-            maleCount: parseInt(data.maleCount) || null,
-            sexOther: data.sexOther === 'on',
-            otherCount: parseInt(data.otherCount) || null,
-            healthStatus: data.healthStatus || "",
-            pathologicalConditions: data.pathologicalConditions || ""
-        },
+        participants: participantsData,
         recording: {
             manufacturer: data.manufacturer || "n/a",
             manufacturerModel: data.manufacturerModel || "n/a",
@@ -671,96 +841,45 @@ function buildMetadata() {
             emgReference: data.emgReference || "n/a",
             emgGround: data.emgGround || "n/a"
         },
-        task: {
-            taskName: data.taskName || "",
-            taskDescription: data.taskDescription || "",
-            instructions: data.instructions || "",
-            contractionIsometric: data.contractionIsometric === 'on',
-            contractionConcentric: data.contractionConcentric === 'on',
-            contractionEccentric: data.contractionEccentric === 'on',
-            contractionMixed: data.contractionMixed === 'on',
-            targetForceLevels: data.targetForceLevels || "",
-            contractionDuration: parseFloat(data.contractionDuration) || null,
-            restDuration: parseFloat(data.restDuration) || null,
-            jointROM: data.jointROM || "",
-            movementSpeed: data.movementSpeed || "",
-            loadType: data.loadType || "",
-            numTrials: parseInt(data.numTrials) || null,
-            forceDataIncluded: data.forceDataIncluded || "",
-            forceSensorType: data.forceSensorType || "",
-            forceSamplingFrequency: parseFloat(data.forceSamplingFrequency) || null,
-            forceUnits: data.forceUnits || "",
-            kinematicsDataIncluded: data.kinematicsDataIncluded || "",
-            motionCaptureSystem: data.motionCaptureSystem || "",
-            kinematicsSamplingFrequency: parseFloat(data.kinematicsSamplingFrequency) || null,
-            trackedJoints: data.trackedJoints || "",
-            videoIncluded: data.videoIncluded || ""
-        },
+        recordings: recordingsData,
         labeling: {
             decompositionMethod: data.decompositionMethod || "",
-            decompositionSoftware: data.decompositionSoftware || "",
-            softwareVersion: data.softwareVersion || "",
-            manualEditingPerformed: data.manualEditingPerformed || "",
-            editingCriteria: data.editingCriteria || "",
-            minPNR: parseFloat(data.minPNR) || null,
-            minSilhouette: parseFloat(data.minSilhouette) || null,
-            maxCoVISI: parseFloat(data.maxCoVISI) || null,
-            minSpikes: parseInt(data.minSpikes) || null,
+            manualEditing: document.querySelector('input[name="manualEditing"]:checked')?.value || "",
             numMotorUnits: parseInt(data.numMotorUnits) || null
         },
         synthetic: (data.dataType || "").startsWith('synthetic') ? {
-            simulationSoftware: data.simulationSoftware || "",
-            simulationMethod: data.simulationMethod || "",
-            numMotorUnitsSimulated: parseInt(data.numMotorUnitsSimulated) || null,
-            recruitmentModel: data.recruitmentModel || "",
-            rateCodingModel: data.rateCodingModel || "",
-            tissueLayers: data.tissueLayers || "",
-            conductivityValues: data.conductivityValues || "",
-            noiseThermal: data.noiseThermal === 'on',
-            noiseMotion: data.noiseMotion === 'on',
-            noiseCrosstalk: data.noiseCrosstalk === 'on',
-            snrRange: data.snrRange || ""
-        } : null,
-        bidsDatasetDescription: {
-            Name: data.datasetName || "",
-            BIDSVersion: "1.10.1",
-            DatasetType: "raw",
-            License: data.license === 'other' ? (data.otherLicense || "") : (data.license || ""),
-            Authors: getAuthors(),
-            Funding: data.fundingSources ? [data.fundingSources] : [],
-            EthicsApprovals: [data.ethicsApprovalNumber || ""],
-            InstitutionName: data.institutionName || "",
-            TaskName: data.taskName || "",
-            Manufacturer: data.manufacturer || "",
-            ManufacturersModelName: data.manufacturerModel || "",
-            SamplingFrequency: parseFloat(data.samplingFrequency) || null,
-            PowerLineFrequency: data.powerLineFrequency || "",
-            HardwareFilters: data.hardwareFilters || "",
-            EMGChannelCount: parseInt(data.emgChannelCount) || null,
-            EMGReference: data.emgReference || "",
-            EMGGround: data.emgGround || ""
-        }
+            generatedBy: buildArrayFromListFields("syntheticPipelineList",
+                ["sim_name", "sim_version", "sim_description", "sim_codeUrl"],
+                (e) => ({ Name: e.sim_name, Version: e.sim_version, Description: e.sim_description, CodeURL: e.sim_codeUrl })),
+            sourceDatasets: buildArrayFromListFields("sourceDatasetList",
+                ["src_doi", "src_url", "src_version"],
+                (e) => ({ DOI: e.src_doi, URL: e.src_url, Version: e.src_version }))
+        } : null
     };
 }
 
 // Download metadata as JSON
 function downloadMetadata(metadata) {
-    const teamName = (metadata.submissionInfo.teamName || 'metadata').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const datasetName = (metadata.dataset.name || 'metadata').replace(/[^a-zA-Z0-9_-]/g, '_');
     const json = JSON.stringify(metadata, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `${teamName}_metadata.json`;
+    a.download = `${datasetName}_metadata.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
+    setTimeout(() => URL.revokeObjectURL(a.href), 100);
 }
 
 function handleDownload(e) {
     e.preventDefault();
 
-    if (!validateSection(currentSection)) {
+    const visible = getVisibleSections().filter(n => n !== 7); // exclude review
+    visible.forEach(n => { sectionValidState[n] = checkSection(n); });
+    updateProgressBar();
+    if (visible.some(n => !sectionValidState[n])) {
+        alert('Some sections are incomplete. Please check the highlighted steps in the progress bar.');
         return;
     }
 
