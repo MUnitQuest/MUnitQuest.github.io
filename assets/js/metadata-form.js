@@ -71,20 +71,26 @@ function setupEventListeners() {
         });
     });
 
-    // Decomposition method - hide algorithm + manual editing section for simulation ground truth
-    document.getElementById('decompositionMethod').addEventListener('change', function() {
-        const showAlgo = this.value && this.value !== 'simulation';
-        document.getElementById('decompositionAlgorithmSection').style.display = showAlgo ? 'block' : 'none';
-        if (!showAlgo) document.getElementById('editingToolSection').style.display = 'none';
+    // Decomposition method radio cards - show/hide subsections
+    document.querySelectorAll('input[name="decompositionMethod"]').forEach(radio => {
+        radio.addEventListener('change', handleDecompositionMethodChange);
     });
 
-    // Manual editing yes/no - show editing tool section
-    document.querySelectorAll('input[name="manualEditing"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            document.getElementById('editingToolSection').style.display =
-                this.value === 'yes' ? 'block' : 'none';
+    // iEMG decomposition method radio cards
+    document.querySelectorAll('input[name="iemgDecompositionMethod"]').forEach(radio => {
+        radio.addEventListener('change', handleIemgDecompositionMethodChange);
+    });
+
+    // Progress bar step navigation
+    document.querySelectorAll('.mf-progress-step').forEach((step, index) => {
+        step.style.cursor = 'pointer';
+        step.addEventListener('click', function() {
+            const visible = getVisibleSections();
+            const sectionNum = visible[index];
+            if (sectionNum) showSection(sectionNum);
         });
     });
+
 
     // Download button
     document.getElementById('downloadBtn').addEventListener('click', handleDownload);
@@ -99,12 +105,57 @@ function updateCharCount() {
     }
 }
 
-// Handle data type change - show/hide synthetic sub-section within section 2
+// Handle data type change - show/hide synthetic sub-section and decomposition blocks
 function handleDataTypeChange() {
     const selectedType = document.querySelector('input[name="dataType"]:checked').value;
-    const isSynthetic = selectedType.startsWith('synthetic');
+    const isSynthetic  = selectedType.startsWith('synthetic');
+    const isConcurrent = selectedType === 'experimental_iemg';
+
     document.getElementById('syntheticDataSection').style.display = isSynthetic ? 'block' : 'none';
     document.getElementById('pipelineRequiredMark').style.display = 'inline';
+
+    // Hide notice, reveal decomposition blocks
+    document.getElementById('decompSection2Notice').style.display = 'none';
+    document.getElementById('semgDecompBlock').style.display = 'block';
+    document.getElementById('iemgDecompBlock').style.display = isConcurrent ? 'block' : 'none';
+
+    // Only show "Surface EMG" heading when iEMG block is also visible
+    const semgHeading = document.getElementById('semgDecompHeading');
+    if (semgHeading) semgHeading.style.display = isConcurrent ? '' : 'none';
+
+    // Show/hide the correct sEMG method cards
+    document.querySelectorAll('.mf-dec-opt').forEach(card => {
+        card.style.display = 'none';
+        card.querySelector('input').checked = false;
+    });
+    if (isSynthetic) {
+        document.querySelectorAll('.mf-dec-simulation').forEach(c => c.style.display = '');
+        const gtRadio = document.querySelector('input[name="decompositionMethod"][value="ground-truth"]');
+        if (gtRadio) { gtRadio.checked = true; }
+    } else {
+        document.querySelectorAll('.mf-dec-experimental').forEach(c => c.style.display = '');
+    }
+    handleDecompositionMethodChange();
+}
+
+// sEMG: show/hide algorithm / editing subsections
+function handleDecompositionMethodChange() {
+    const method = document.querySelector('input[name="decompositionMethod"]:checked')?.value || '';
+    document.getElementById('decompositionAlgorithmSection').style.display =
+        (method === 'fully-automated' || method === 'semi-automated') ? 'block' : 'none';
+    document.getElementById('editingToolSection').style.display =
+        method === 'semi-automated' ? 'block' : 'none';
+}
+
+// iEMG: show/hide algorithm / editing / annotation subsections
+function handleIemgDecompositionMethodChange() {
+    const method = document.querySelector('input[name="iemgDecompositionMethod"]:checked')?.value || '';
+    document.getElementById('iemgDecompositionAlgorithmSection').style.display =
+        (method === 'fully-automated' || method === 'semi-automated') ? 'block' : 'none';
+    document.getElementById('iemgEditingToolSection').style.display =
+        method === 'semi-automated' ? 'block' : 'none';
+    document.getElementById('iemgAnnotationToolSection').style.display =
+        method === 'manual' ? 'block' : 'none';
 }
 
 function toggleContractionFields() {
@@ -257,6 +308,40 @@ function addEditingTool() {
     addListItem("editingToolList", editingToolSchema, "mf-misc-entry", "Editing Tool");
 }
 
+// iEMG decomposition pipelines
+const iemgDecompositionPipelineSchema = [
+    { name: "iemg_decomp_name",        type: "text", label: "Name *",      placeholder: "e.g., Spike2, OTBiolab+" },
+    { name: "iemg_decomp_version",     type: "text", label: "Version",     placeholder: "e.g., 1.0.0" },
+    { name: "iemg_decomp_description", type: "text", label: "Description", placeholder: "Brief description" },
+    { name: "iemg_decomp_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addIemgDecompositionPipeline() {
+    addListItem("iemgDecompositionPipelineList", iemgDecompositionPipelineSchema, "mf-misc-entry", "Algorithm");
+}
+
+const iemgEditingToolSchema = [
+    { name: "iemg_edit_name",        type: "text", label: "Name",        placeholder: "e.g., Spike2, custom script" },
+    { name: "iemg_edit_version",     type: "text", label: "Version",     placeholder: "e.g., 2.3.1" },
+    { name: "iemg_edit_description", type: "text", label: "Description", placeholder: "Brief description" },
+    { name: "iemg_edit_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addIemgEditingTool() {
+    addListItem("iemgEditingToolList", iemgEditingToolSchema, "mf-misc-entry", "Editing Tool");
+}
+
+const iemgAnnotationToolSchema = [
+    { name: "iemg_annot_name",        type: "text", label: "Name *",      placeholder: "e.g., Spike2, MATLAB custom" },
+    { name: "iemg_annot_version",     type: "text", label: "Version",     placeholder: "e.g., 1.0.0" },
+    { name: "iemg_annot_description", type: "text", label: "Description", placeholder: "Brief description" },
+    { name: "iemg_annot_codeUrl",     type: "text", label: "CodeURL",     placeholder: "e.g., https://github.com/..." }
+];
+
+function addIemgAnnotationTool() {
+    addListItem("iemgAnnotationToolList", iemgAnnotationToolSchema, "mf-misc-entry", "Annotation Tool");
+}
+
 // Source datasets (SourceDatasets entries)
 const sourceDatasetSchema = [
     { name: "src_doi",     type: "text", label: "DOI",     placeholder: "e.g., 10.18112/openneuro.ds004632.v1.0.0" },
@@ -361,7 +446,16 @@ function showParticipantMsg(el, messages, type) {
 
 // Recordings CSV upload
 let recordingsData = [];
-const RECORDING_COLS = ['sub', 'ses', 'task_name', 'repetition', 'path_to_emg_file', 'path_to_labels_file'];
+const RECORDING_COLS = ['sub', 'ses', 'task_name', 'run', 'setup', 'path_to_emg_file', 'path_to_labels_file'];
+
+// Setup / coordsystems / channels+electrodes CSV uploads
+let setupData = [];
+let coordsystemsData = [];
+let channelsElectrodesData = [];
+
+const SETUP_REQUIRED_COLS = ['setup_name', 'SamplingFrequency', 'PowerLineFrequency', 'RecordingType', 'SoftwareHighPassHz', 'SoftwareLowPassHz', 'EMGReference', 'EMGPlacementScheme'];
+const COORDSYSTEMS_REQUIRED_COLS = ['setup', 'name', 'type', 'units', 'description'];
+const CHANNELS_REQUIRED_COLS = ['setup', 'electrode_name', 'channel_name', 'type', 'units'];
 
 function handleRecordingsUpload(input) {
     const file = input.files[0];
@@ -415,73 +509,162 @@ function showRecordingMsg(el, messages, type) {
     el.innerHTML = messages.map(m => `${icons[type]} ${m}`).join('<br>');
 }
 
-// Coordinate systems
-const coordSchema = [
-    { name: "type", type: "select", options: ["anatomical", "grid"], placeholder: "Coordinate system type"},
-    { name: "name", type: "text", placeholder: "Coordinate system name, e.g., lowerLeg or grid1" },
-    { name: "description", type: "text" , placeholder: "Describes origin and positive axis directions relative to anatomical landmarks."},
-    { name: "units", type: "select", options: ["m", "cm", "mm", "percent", "n/a"], placeholder: "Unit"},
+// --- CSV parsing helpers ---
 
-    { name: "parent", type: "text", dependsOn: { field: "type", value: ["grid"] }, placeholder: "The name of the parent (anatomical) coordinate system"},
-    { name: "anchor_coords", type: "text", dependsOn: { field: "type", value: ["grid"] }, placeholder: "Coordinates of the AnchorElectrode" },
-    { name: "anchor_electrode", type: "text", dependsOn: { field: "type", value: ["grid"] }, placeholder: "Name of the AnchorElectrode" }
-];
-
-function addCoord() {
-    addListItem("coordList", coordSchema, "mf-misc-entry", "coord_systems");
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        if (line[i] === '"') {
+            inQuotes = !inQuotes;
+        } else if (line[i] === ',' && !inQuotes) {
+            result.push(current);
+            current = '';
+        } else {
+            current += line[i];
+        }
+    }
+    result.push(current);
+    return result;
 }
 
-// MISC channels
-const miscSchema = [
-    { name: "name", type: "text", placeholder: "None EMG channels, e.g., torque or requested task profile" },
-    { name: "units", type: "select", options: ["V", "mV", "uV", "percent MVC", "percent MVC / s", "N", "Nm", "m", "m/s", "m/s^2", "other", "n/a"], placeholder: "Unit of the measurement, e.g., V or % MVC"},
-    { name: "myunits", type: "text", dependsOn: {field: "units", value: ["other"]}, placeholder: "Add your unit"}
-];
-
-function addMISC() {
-    addListItem("miscList", miscSchema, "mf-misc-entry", "MISC");
+function parseCSV(csvText) {
+    const lines = csvText.trim().split(/\r?\n/).filter(l => l.trim());
+    if (lines.length === 0) return { headers: [], rows: [] };
+    const headers = parseCSVLine(lines[0]).map(h => h.trim().replace(/^"|"$/g, ''));
+    const rows = lines.slice(1).map(line => {
+        const vals = parseCSVLine(line);
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = (vals[i] || '').trim().replace(/^"|"$/g, ''); });
+        return obj;
+    }).filter(row => Object.values(row).some(v => v));
+    return { headers, rows };
 }
 
-// HDsEMG arrays
-const refElectrodeSchema = [
-    { name: "name", type: "text", placeholder: "Unique electrode name, e.g. R1"},
-    { name: "type", type: "select", options: ["band", "ring", "other"]},
-    { name: "mytype", type: "text", dependsOn: { field: "type", value: ["other"]}, placeholder: "Specify the type of your electrode"} ,
-    { name: "manufacturer", type: "text", placeholder: "Electrode manufacturer, e.g., OTBioelettronica" },
-    { name: "manufacturersModelName", type: "text", placeholder: "Manufacturer's model name, e.g., GR04MM1305"},
-    { name: "material", type: "text", placeholder: "Electrode material, e.g., textile"},
-    { name: "coord_system", type: "text", placeholder: "Coordinate system used to describe elecrode position, e.g., lowerLeg"},
-    { name: "x", type: "number", placeholder: "x coordinate"},
-    { name: "y", type: "number", placeholder: "y coordinate"},
-    { name: "z", type: "number", placeholder: "z coordinate"}
-];
-
-function addRefElectrode() {
-    addListItem("refElectrodeList", refElectrodeSchema, "mf-misc-entry", "refElectrodes");
+function triggerDownload(content, filename, mimeType = 'text/csv') {
+    const blob = new Blob([content], { type: mimeType });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 100);
 }
 
-// HDsEMG arrays
-const surfaceEMGSchema = [
-    { name: "name", type: "text", placeholder: "Unique electrode name, e.g. grid1"},
-    { name: "montage", type: "select", options: ["monopolar", "bipolar"]},
-    { name: "manufacturer", type: "text", placeholder: "Electrode manufacturer, e.g., OTBioelettronica" },
-    { name: "manufacturersModelName", type: "text", placeholder: "Manufacturer's model name, e.g., GR04MM1305"},
-    { name: "interelectrode_distance", type: "number", min: 0, step:0.1, placeholder: "Interelectrode distance in mm"},
-    { name: "numChannels", type: "number", min:1, step:1, placeholder: "Number of channels in that grid"},
-    { name: "material", type: "text", placeholder: "Electrode material, e.g., gold or Ag/AgCl"},
-    { name: "targetMuscle", type: "text", placeholder: "Muscle (or muscle group) the electrode records from, e.g., right tibialis anterior"},
-    { name: "lowCutOff", type: "number", placeholder: "Cut-off frequency of the low pass filter in Hz"},
-    { name: "highCutOff", type: "number", placeholder: "Cut-off frequency of the high pass filter in Hz"},
-    { name: "reference", type: "text", dependsOn: { field: "montage", value: ["monopolar"]}, placeholder: "Name of the electrode used for referencing"},
-    { name: "coord_system", type: "text", placeholder: "Coordinate system used to describe elecrode position, e.g., grid1"},
-    { name: "x", type: "text", placeholder: "list of x coordinates, e.g. 0, 4, 8, 12, 12, 8, 4, 0"},
-    { name: "y", type: "text", placeholder: "list of y coordinates, e.g. 0, 0, 0, 0, 4, 4, 4, 4"},
-    { name: "z", type: "text", placeholder: "list of z coordinates, or n/a"}
-];
-
-function addSurfaceEMG() {
-    addListItem("surfaceEMGList", surfaceEMGSchema, "mf-misc-entry", "surfaceEMG");
+function showCsvMsg(el, messages, type) {
+    const icons = { ok: '✓', warning: '⚠', error: '✕' };
+    el.className = `mf-participants-msg mf-participants-${type}`;
+    el.innerHTML = messages.map(m => `${icons[type]} ${m}`).join('<br>');
 }
+
+// --- Setup CSV ---
+
+function handleSetupUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => validateAndParseSetup(e.target.result);
+    reader.readAsText(file);
+}
+
+function validateAndParseSetup(csvText) {
+    const msgEl = document.getElementById('setupValidationMsg');
+    const { headers, rows } = parseCSV(csvText);
+    const warnings = [];
+
+    if (rows.length === 0) {
+        showCsvMsg(msgEl, ['File is empty or has no data rows.'], 'error');
+        setupData = [];
+        return;
+    }
+
+    const missing = SETUP_REQUIRED_COLS.filter(c => !headers.includes(c));
+    const unexpected = headers.filter(h => !['setup_name','Manufacturer','ManufacturersModelName','ElectrodeManufacturer','ElectrodeManufacturersModelName','SamplingFrequency','PowerLineFrequency','RecordingType','SoftwareHighPassHz','SoftwareLowPassHz','HardwareHighPassHz','HardwareLowPassHz','EMGChannelCount','EMGReference','EMGPlacementScheme','TaskDescription','Instructions'].includes(h));
+
+    if (missing.length) {
+        showCsvMsg(msgEl, [`Missing required columns: ${missing.join(', ')}`], 'error');
+        setupData = [];
+        return;
+    }
+    if (unexpected.length) warnings.push(`Unrecognised columns (will be ignored): ${unexpected.join(', ')}`);
+
+    setupData = rows;
+
+    if (warnings.length) {
+        showCsvMsg(msgEl, [`${rows.length} setup(s) loaded. ` + warnings.join(' ')], 'warning');
+    } else {
+        showCsvMsg(msgEl, [`${rows.length} setup(s) loaded: ${rows.map(r => r.setup_name).join(', ')}`], 'ok');
+    }
+}
+
+// --- Coordinate systems CSV ---
+
+function handleCoordsystemsUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => validateAndParseCoordsystems(e.target.result);
+    reader.readAsText(file);
+}
+
+function validateAndParseCoordsystems(csvText) {
+    const msgEl = document.getElementById('coordsystemsValidationMsg');
+    const { headers, rows } = parseCSV(csvText);
+
+    if (rows.length === 0) {
+        showCsvMsg(msgEl, ['File is empty or has no data rows.'], 'error');
+        coordsystemsData = [];
+        return;
+    }
+
+    const missing = COORDSYSTEMS_REQUIRED_COLS.filter(c => !headers.includes(c));
+    if (missing.length) {
+        showCsvMsg(msgEl, [`Missing required columns: ${missing.join(', ')}`], 'error');
+        coordsystemsData = [];
+        return;
+    }
+
+    coordsystemsData = rows;
+    const setups = [...new Set(rows.map(r => r.setup).filter(Boolean))];
+    showCsvMsg(msgEl, [`${rows.length} coordinate system(s) loaded across ${setups.length} setup(s).`], 'ok');
+}
+
+// --- Channels + Electrodes CSV ---
+
+function handleChannelsElectrodesUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => validateAndParseChannelsElectrodes(e.target.result);
+    reader.readAsText(file);
+}
+
+function validateAndParseChannelsElectrodes(csvText) {
+    const msgEl = document.getElementById('channelsElectrodesValidationMsg');
+    const { headers, rows } = parseCSV(csvText);
+
+    if (rows.length === 0) {
+        showCsvMsg(msgEl, ['File is empty or has no data rows.'], 'error');
+        channelsElectrodesData = [];
+        return;
+    }
+
+    const missing = CHANNELS_REQUIRED_COLS.filter(c => !headers.includes(c));
+    if (missing.length) {
+        showCsvMsg(msgEl, [`Missing required columns: ${missing.join(', ')}`], 'error');
+        channelsElectrodesData = [];
+        return;
+    }
+
+    channelsElectrodesData = rows;
+    const setups = [...new Set(rows.map(r => r.setup).filter(Boolean))];
+    showCsvMsg(msgEl, [`${rows.length} channel(s) loaded across ${setups.length} setup(s).`], 'ok');
+}
+
+// --- Pre-filled setup.csv download ---
+
 
 
 // Get the list of visible section numbers (data-section attributes) for navigation
@@ -554,29 +737,51 @@ function checkSection(sectionNumber) {
     const section = document.querySelector(`.form-section[data-section="${sectionNumber}"]`);
     const inputs = section.querySelectorAll('input[required], select[required], textarea[required]');
     for (const input of inputs) {
+        if (input.offsetParent === null) continue; // skip inputs inside hidden blocks
         if (!input.checkValidity()) return false;
     }
     if (sectionNumber === 3) {
         if (participantsData.length === 0) return false;
     }
+    if (sectionNumber === 4) {
+        if (setupData.length === 0) return false;
+        if (channelsElectrodesData.length === 0) return false;
+        if (coordsystemsData.length === 0) return false;
+    }
     if (sectionNumber === 5) {
         if (recordingsData.length === 0) return false;
     }
     if (sectionNumber === 6) {
-        const method = document.getElementById('decompositionMethod').value;
-        if (!method) return false;
-        if (method !== 'simulation') {
-            const pipelines = document.querySelectorAll('#decompositionPipelineList .mf-misc-entry');
-            if (pipelines.length === 0) return false;
-            for (const p of pipelines) {
-                const nameInput = p.querySelector('[name="decomp_name[]"]');
-                if (!nameInput || !nameInput.value.trim()) return false;
+        // sEMG block must have a method selected (block hidden for unset dataset type → skip)
+        const semgBlock = document.getElementById('semgDecompBlock');
+        if (semgBlock && semgBlock.offsetParent !== null) {
+            const method = document.querySelector('input[name="decompositionMethod"]:checked')?.value;
+            if (!method) return false;
+            if (method === 'fully-automated' || method === 'semi-automated') {
+                const pipelines = document.querySelectorAll('#decompositionPipelineList .mf-misc-entry');
+                if (pipelines.length === 0) return false;
+                for (const p of pipelines) {
+                    const nameInput = p.querySelector('[name="decomp_name[]"]');
+                    if (!nameInput || !nameInput.value.trim()) return false;
+                }
             }
-            const manualEditing = document.querySelector('input[name="manualEditing"]:checked');
-            if (!manualEditing) return false;
+        }
+        // iEMG block validation (only when visible, i.e. concurrent dataset)
+        const iemgBlock = document.getElementById('iemgDecompBlock');
+        if (iemgBlock && iemgBlock.offsetParent !== null) {
+            const iemgMethod = document.querySelector('input[name="iemgDecompositionMethod"]:checked')?.value;
+            if (!iemgMethod) return false;
+            if (iemgMethod === 'fully-automated' || iemgMethod === 'semi-automated') {
+                const pipelines = document.querySelectorAll('#iemgDecompositionPipelineList .mf-misc-entry');
+                if (pipelines.length === 0) return false;
+                for (const p of pipelines) {
+                    const nameInput = p.querySelector('[name="iemg_decomp_name[]"]');
+                    if (!nameInput || !nameInput.value.trim()) return false;
+                }
+            }
         }
     }
-    if (sectionNumber === 1) {
+    if (sectionNumber === 2) {
         const dataTypeEl = document.querySelector('input[name="dataType"]:checked');
         if (!dataTypeEl) return false;
         const dataType = dataTypeEl.value;
@@ -607,35 +812,33 @@ function generateReview() {
     const data = getFormData();
     const reviewSummary = document.getElementById('reviewSummary');
 
+    const setups = [...new Set(recordingsData.map(r => r.setup).filter(Boolean))];
+    const taskNames = [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))];
+
     let html = '<h4>Dataset Information</h4>';
     html += `<p><strong>Dataset:</strong> ${data.datasetName || 'N/A'}</p>`;
     html += `<p><strong>Data Type:</strong> ${data.dataType || 'N/A'}</p>`;
-
     html += '<h4>Recording Details</h4>';
     html += `<p><strong>Participants:</strong> ${participantsData.length || 'none uploaded'}</p>`;
     html += `<p><strong>Recordings:</strong> ${recordingsData.length || 'none uploaded'}</p>`;
-    html += `<p><strong>EMG Channels:</strong> ${data.emgChannelCount || 'N/A'}</p>`;
-    html += `<p><strong>Sampling Frequency:</strong> ${data.samplingFrequency || 'N/A'} Hz</p>`;
-    html += `<p><strong>Manufacturer:</strong> ${data.manufacturer || 'N/A'} ${data.manufacturerModel || ''}</p>`;
-
-    html += '<h4>Recordings</h4>';
-    const taskNames = [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))];
-    html += `<p><strong>Recordings:</strong> ${recordingsData.length || 'none uploaded'}</p>`;
     html += `<p><strong>Tasks:</strong> ${taskNames.length ? taskNames.join(', ') : 'N/A'}</p>`;
-
+    html += `<p><strong>Setups:</strong> ${setups.length ? setups.join(', ') : 'N/A'}</p>`;
+    html += `<p><strong>Manufacturer:</strong> ${data.manufacturer || 'N/A'} ${data.manufacturerModel || ''}</p>`;
+    html += `<p><strong>Sampling Frequency:</strong> ${data.samplingFrequency || 'N/A'} Hz</p>`;
     html += '<h4>Motor Units</h4>';
     html += `<p><strong>Total Motor Units:</strong> ${data.numMotorUnits || 'N/A'}</p>`;
     html += `<p><strong>Decomposition Method:</strong> ${data.decompositionMethod || 'N/A'}</p>`;
-    html += `<p><strong>Manual Editing:</strong> ${data.manualEditing || 'N/A'}</p>`;
 
     reviewSummary.innerHTML = html;
     getBIDS_datasetJson(data);
     getBIDS_subjectsTSV(data);
-    getBIDS_emgJson(data);
-    getBIDS_channelsTSV(data);
+    getBIDS_emgJson();
+    getBIDS_channelsTSV();
+    getBIDS_electrodesTSV();
+    getBIDS_coordsystemJSON();
 }
 
-function getBIDS_datasetJson(data) {
+function buildBIDS_datasetJson(data) {
     const isSynthetic = (data.dataType || "").startsWith("synthetic");
 
     const generatedBy = isSynthetic
@@ -648,8 +851,8 @@ function getBIDS_datasetJson(data) {
             }))
         : [];
 
-    const decompMethod = document.getElementById('decompositionMethod').value;
-    if (decompMethod && decompMethod !== 'simulation') {
+    const decompMethod = document.querySelector('input[name="decompositionMethod"]:checked')?.value;
+    if (decompMethod === 'fully-automated' || decompMethod === 'semi-automated') {
         const decompPipelines = buildArrayFromListFields(
             "decompositionPipelineList",
             ["decomp_name", "decomp_version", "decomp_description", "decomp_codeUrl"],
@@ -661,21 +864,19 @@ function getBIDS_datasetJson(data) {
             })
         );
         generatedBy.push(...decompPipelines);
-
-        const manualEditing = document.querySelector('input[name="manualEditing"]:checked');
-        if (manualEditing && manualEditing.value === 'yes') {
-            const editingTools = buildArrayFromListFields(
-                "editingToolList",
-                ["edit_name", "edit_version", "edit_description", "edit_codeUrl"],
-                (entry) => ({
-                    "Name":        entry.edit_name        || "",
-                    "Version":     entry.edit_version     || undefined,
-                    "Description": entry.edit_description || undefined,
-                    "CodeURL":     entry.edit_codeUrl     || undefined
-                })
-            );
-            generatedBy.push(...editingTools);
-        }
+    }
+    if (decompMethod === 'semi-automated') {
+        const editingTools = buildArrayFromListFields(
+            "editingToolList",
+            ["edit_name", "edit_version", "edit_description", "edit_codeUrl"],
+            (entry) => ({
+                "Name":        entry.edit_name        || "",
+                "Version":     entry.edit_version     || undefined,
+                "Description": entry.edit_description || undefined,
+                "CodeURL":     entry.edit_codeUrl     || undefined
+            })
+        );
+        generatedBy.push(...editingTools);
     }
 
     const sourceDatasets = isSynthetic
@@ -700,9 +901,14 @@ function getBIDS_datasetJson(data) {
         "InstitutionAddress": data.institutionAddress || "",
     };
 
-    if (generatedBy.length > 0)   bids["GeneratedBy"]    = generatedBy;
+    if (generatedBy.length > 0)    bids["GeneratedBy"]    = generatedBy;
     if (sourceDatasets.length > 0) bids["SourceDatasets"] = sourceDatasets;
 
+    return bids;
+}
+
+function getBIDS_datasetJson(data) {
+    const bids = buildBIDS_datasetJson(data);
     document.getElementById('bidsDatasetPreview').textContent = JSON.stringify(bids, null, 2);
 }
 
@@ -722,21 +928,125 @@ function buildArrayFromListFields(containerId, fieldNames, mapper) {
     }).filter(obj => Object.keys(obj).length > 0);
 }
 
-function getBIDS_emgJson(data) {
-    const bids = {
-        "TaskName": [...new Set(recordingsData.map(r => r.task_name).filter(Boolean))].join(', ') || "n/a",
-        "Manufacturer": data.manufacturer || "n/a",
-        "ManufacturersModelName": data.manufacturerModel || "n/a",
-        "SamplingFrequency": parseFloat(data.samplingFrequency) || "n/a",
-        "PowerLineFrequency": parseFloat(data.powerLineFrequency) || "n/a",
-        "HardwareFilters": {
-            "HighPassFilter":  parseFloat(data.highPassFilter) || "n/a",
-            "LowPassFilter":  parseFloat(data.lowPassFilter) || "n/a"
+// --- BIDS filename helpers ---
+
+function bidsPrefix(sub, ses) {
+    let p = `sub-${sub}`;
+    if (ses && ses !== '') p += `_ses-${ses}`;
+    return p;
+}
+
+function bidsFolder(sub, ses) {
+    let f = `sub-${sub}/`;
+    if (ses && ses !== '') f += `ses-${ses}/`;
+    return f + 'emg/';
+}
+
+// --- BIDS output builders ---
+
+function buildBIDS_emgJson(rec, setupRow) {
+    const def = v => (v && v !== '') ? v : undefined;
+    const defNum = v => { const n = parseFloat(v); return isNaN(n) ? undefined : n; };
+    const defInt = v => { const n = parseInt(v); return isNaN(n) ? undefined : n; };
+
+    const raw = {
+        TaskName: def(rec.task_name) || 'n/a',
+        Manufacturer: def(setupRow.Manufacturer) || 'n/a',
+        ManufacturersModelName: def(setupRow.ManufacturersModelName) || 'n/a',
+        SamplingFrequency: defNum(setupRow.SamplingFrequency) ?? 'n/a',
+        PowerLineFrequency: defNum(setupRow.PowerLineFrequency) ?? 'n/a',
+        RecordingType: def(setupRow.RecordingType) || 'continuous',
+        SoftwareFilters: {
+            HighPassFilter: { HalfAmplitudeCutOffHz: defNum(setupRow.SoftwareHighPassHz) ?? 'n/a' },
+            LowPassFilter:  { HalfAmplitudeCutOffHz: defNum(setupRow.SoftwareLowPassHz)  ?? 'n/a' }
         },
-        "EMGChannelCount": parseInt(data.emgChannelCount) || null,
-        "EMGReference": data.emgReference || "n/a",
-        "EMGGround": data.emgGround || "n/a"
+        HardwareFilters: (setupRow.HardwareHighPassHz || setupRow.HardwareLowPassHz) ? {
+            HighPassFilter: { HalfAmplitudeCutOffHz: defNum(setupRow.HardwareHighPassHz) ?? 'n/a' },
+            LowPassFilter:  { HalfAmplitudeCutOffHz: defNum(setupRow.HardwareLowPassHz)  ?? 'n/a' }
+        } : undefined,
+        ElectrodeManufacturer: def(setupRow.ElectrodeManufacturer),
+        ElectrodeManufacturersModelName: def(setupRow.ElectrodeManufacturersModelName),
+        EMGReference: def(setupRow.EMGReference) || 'n/a',
+        EMGPlacementScheme: def(setupRow.EMGPlacementScheme) || 'n/a',
+        EMGChannelCount: defInt(setupRow.EMGChannelCount),
+        TaskDescription: def(setupRow.TaskDescription),
+        Instructions: def(setupRow.Instructions),
+        InstitutionName: def(document.getElementById('institutionName')?.value),
+        InstitutionAddress: def(document.getElementById('institutionAddress')?.value),
+        InstitutionalDepartmentName: def(document.getElementById('institutionalDepartmentName')?.value),
     };
+
+    return Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== undefined));
+}
+
+function buildBIDS_channelsTSV(setupName) {
+    const rows = channelsElectrodesData.filter(r =>
+        r.setup === setupName && r.channel_name && r.channel_name !== 'n/a'
+    );
+    if (rows.length === 0) return '(no channels data for this setup)';
+
+    const cols = ['channel_name','type','units','electrode_name','reference','group','target_muscle','low_cutoff','high_cutoff'];
+    const bidsNames = ['name','type','units','signal_electrode','reference','group','target_muscle','low_cutoff','high_cutoff'];
+
+    const lines = rows.map(r =>
+        cols.map(c => (r[c] && r[c] !== '') ? r[c] : 'n/a').join('\t')
+    );
+    return [bidsNames.join('\t'), ...lines].join('\n');
+}
+
+function buildBIDS_electrodesTSV(setupName) {
+    const rows = channelsElectrodesData.filter(r =>
+        r.setup === setupName && r.electrode_name && r.electrode_name !== 'n/a'
+    );
+    if (rows.length === 0) return '(no electrode position data for this setup)';
+
+    const seen = new Set();
+    const unique = rows.filter(r => {
+        if (seen.has(r.electrode_name)) return false;
+        seen.add(r.electrode_name);
+        return true;
+    });
+
+    const header = 'name\tx\ty\tz\tcoordinate_system\ttype\tmaterial\timpedance\tgroup';
+    const lines = unique.map(r => [
+        r.electrode_name, r.x, r.y, r.z,
+        r.coordinate_system, r.type, r.material, r.impedance, r.group
+    ].map(v => (v && v !== '') ? v : 'n/a').join('\t'));
+
+    return [header, ...lines].join('\n');
+}
+
+// Returns { spaceName: jsonObject } — one entry per coordinate system row (anatomical + grids).
+// Each grid gets its own space-{name}_coordsystem.json with top-level ParentCoordinateSystem,
+// AnchorElectrode, AnchorCoordinates fields per the BIDS EMG spec.
+function buildBIDS_coordsystemJSONs(setupName) {
+    const rows = coordsystemsData.filter(r => r.setup === setupName);
+    if (rows.length === 0) return {};
+
+    const result = {};
+    for (const row of rows) {
+        const json = {
+            EMGCoordinateSystem: 'Other',
+            EMGCoordinateUnits: row.units,
+        };
+        if (row.description) json.EMGCoordinateSystemDescription = row.description;
+        if (row.parent_coord_system) json.ParentCoordinateSystem = row.parent_coord_system;
+        if (row.anchor_electrode) json.AnchorElectrode = row.anchor_electrode;
+        if (row.anchor_x || row.anchor_y) {
+            json.AnchorCoordinates = [
+                parseFloat(row.anchor_x) || 0,
+                parseFloat(row.anchor_y) || 0,
+            ];
+        }
+        result[row.name] = json;
+    }
+    return result;
+}
+
+function getBIDS_emgJson() {
+    const setupRow = setupData[0];
+    const rec = recordingsData.find(r => r.setup === setupRow?.setup_name) || {};
+    const bids = setupRow ? buildBIDS_emgJson(rec, setupRow) : { '(no setup file uploaded)': true };
     document.getElementById('bidsEMGPreview').textContent = JSON.stringify(bids, null, 2);
 }
 
@@ -750,32 +1060,30 @@ function getBIDS_subjectsTSV(data) {
     document.getElementById('bidsSubjectsPreview').textContent = [headers.join('\t'), ...lines].join('\n');
 }
 
-function getBIDS_channelsTSV(data) {
-
-    const channels = [];
-
-    const length = 2
-
-    // TODO fill with meaningfull content
-    for (let i = 0; i < length; i++) {
-        channels.push({
-            name: `Ch${String(i + 1).padStart(3, "0")}`, 
-            type: "EMG",
-            units: "mV",
-        });
-    }
-
-    let tsv = "name\ttype\tunits\n";
-
-    channels.forEach((c, index) => {
-        tsv += [
-            c.name,
-            c.type,
-            c.units,
-        ].join("\t") + "\n";
-    });
-
+function getBIDS_channelsTSV() {
+    const setupName = setupData[0]?.setup_name;
+    const tsv = setupName ? buildBIDS_channelsTSV(setupName) : '(no setup file uploaded)';
     document.getElementById('bidsChannelsPreview').textContent = tsv;
+}
+
+function getBIDS_electrodesTSV() {
+    const setupName = setupData[0]?.setup_name;
+    const tsv = setupName ? buildBIDS_electrodesTSV(setupName) : '(no setup file uploaded)';
+    document.getElementById('bidsElectrodesPreview').textContent = tsv;
+}
+
+function getBIDS_coordsystemJSON() {
+    const setupName = setupData[0]?.setup_name;
+    const jsons = setupName ? buildBIDS_coordsystemJSONs(setupName) : {};
+    const entries = Object.entries(jsons);
+    if (entries.length === 0) {
+        document.getElementById('bidsCoordPreview').textContent = '(no coordinate system data for first setup)';
+        return;
+    }
+    const text = entries.map(([name, json]) =>
+        `// space-${name}_coordsystem.json\n${JSON.stringify(json, null, 2)}`
+    ).join('\n\n');
+    document.getElementById('bidsCoordPreview').textContent = text;
 }
 
 // Collect all form data from an array field
@@ -805,7 +1113,7 @@ function getFormData() {
     return data;
 }
 
-// Build the full metadata object for download
+// Build the internal metadata summary (used for draft save/restore context)
 function buildMetadata() {
     const data = getFormData();
     return {
@@ -815,67 +1123,24 @@ function buildMetadata() {
             dataType: data.dataType || "",
             license: data.license === 'other' ? (data.otherLicense || "") : (data.license || ""),
             authors: getArrayField("author", { emptyValue: "" }),
-            fundingSources: data.fundingSources || "",
-            ethicsApprovalNumber: data.ethicsApprovalNumber || "",
-            ethicsCommittee: data.ethicsCommittee || "",
             institutionName: data.institutionName || "",
             institutionAddress: data.institutionAddress || ""
         },
         participants: participantsData,
-        recording: {
-            manufacturer: data.manufacturer || "n/a",
-            manufacturerModel: data.manufacturerModel || "n/a",
-            samplingFrequency: parseFloat(data.samplingFrequency) || null,
-            powerLineFrequency: data.powerLineFrequency || "n/a",
-            hardwareFilters: data.hardwareFilters || "n/a",
-            lowPassFilter: data.lowPassFilter || "n/a",
-            lowPassFilter: data.highPassFilter || "n/a",
-            recordingDuration: parseFloat(data.recordingDuration) || null,
-            emgChannelCount: parseInt(data.emgChannelCount) || null,
-            electrodeMaterial: data.electrodeMaterial || "n/a",
-            electrodeShape: data.electrodeShape || "n/a",
-            electrodeDiameter: parseFloat(data.electrodeDiameter) || null,
-            interElectrodeDistance: parseFloat(data.interElectrodeDistance) || null,
-            electrodeArrayType: data.electrodeArrayType || "n/a",
-            electrodePlacement: data.electrodePlacement || "n/a",
-            emgReference: data.emgReference || "n/a",
-            emgGround: data.emgGround || "n/a"
-        },
         recordings: recordingsData,
+        setups: setupData,
         labeling: {
             decompositionMethod: data.decompositionMethod || "",
-            manualEditing: document.querySelector('input[name="manualEditing"]:checked')?.value || "",
             numMotorUnits: parseInt(data.numMotorUnits) || null
-        },
-        synthetic: (data.dataType || "").startsWith('synthetic') ? {
-            generatedBy: buildArrayFromListFields("syntheticPipelineList",
-                ["sim_name", "sim_version", "sim_description", "sim_codeUrl"],
-                (e) => ({ Name: e.sim_name, Version: e.sim_version, Description: e.sim_description, CodeURL: e.sim_codeUrl })),
-            sourceDatasets: buildArrayFromListFields("sourceDatasetList",
-                ["src_doi", "src_url", "src_version"],
-                (e) => ({ DOI: e.src_doi, URL: e.src_url, Version: e.src_version }))
-        } : null
+        }
     };
 }
 
-// Download metadata as JSON
-function downloadMetadata(metadata) {
-    const datasetName = (metadata.dataset.name || 'metadata').replace(/[^a-zA-Z0-9_-]/g, '_');
-    const json = JSON.stringify(metadata, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `${datasetName}_metadata.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(a.href), 100);
-}
 
-function handleDownload(e) {
+async function handleDownload(e) {
     e.preventDefault();
 
-    const visible = getVisibleSections().filter(n => n !== 7); // exclude review
+    const visible = getVisibleSections().filter(n => n !== 7);
     visible.forEach(n => { sectionValidState[n] = checkSection(n); });
     updateProgressBar();
     if (visible.some(n => !sectionValidState[n])) {
@@ -883,19 +1148,80 @@ function handleDownload(e) {
         return;
     }
 
-    const metadata = buildMetadata();
-    downloadMetadata(metadata);
+    const data = getFormData();
+    const zip = new JSZip();
+    const datasetName = (data.datasetName || 'bids_dataset').replace(/[^a-zA-Z0-9_-]/g, '_');
 
-    // Show success message
+    // Root-level files
+    zip.file('dataset_description.json', JSON.stringify(buildBIDS_datasetJson(data), null, 2));
+
+    if (participantsData.length > 0) {
+        const headers = Object.keys(participantsData[0]);
+        const lines = participantsData.map(row => headers.map(h => row[h] || 'n/a').join('\t'));
+        zip.file('participants.tsv', [headers.join('\t'), ...lines].join('\n'));
+        zip.file('participants.json', JSON.stringify({
+            participant_id: { Description: 'Unique subject identifier' },
+            age:            { Description: 'Age of the participant at time of testing', Unit: 'years' },
+            sex:            { Description: 'Biological sex of the participant', Levels: { F: 'female', M: 'male', O: 'other' } },
+            handedness:     { Description: 'Handedness as reported by participant', Levels: { L: 'left', R: 'right' } },
+            weight:         { Description: 'Body weight of the participant', Unit: 'kg' },
+            height:         { Description: 'Body height of the participant', Unit: 'm' },
+        }, null, 2));
+    }
+
+    // Group recordings by (sub, ses) — determines inheritance scope
+    const groups = {};
+    for (const rec of recordingsData) {
+        const key = `${rec.sub}|||${rec.ses || ''}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(rec);
+    }
+
+    for (const [key, recs] of Object.entries(groups)) {
+        const [sub, ses] = key.split('|||');
+        const folder = bidsFolder(sub, ses);
+        const prefix = bidsPrefix(sub, ses);
+
+        // Determine setup for this sub/ses (use first; warn if mixed)
+        const setupName = recs.map(r => r.setup).filter(Boolean)[0];
+        const setupRow  = setupData.find(r => r.setup_name === setupName) || {};
+
+        // Inherited files: electrodes.tsv + coordsystem.json (one per sub/ses)
+        const elecTSV = buildBIDS_electrodesTSV(setupName);
+        if (elecTSV) zip.file(`${folder}${prefix}_electrodes.tsv`, elecTSV);
+
+        const coordJSONs = buildBIDS_coordsystemJSONs(setupName);
+        for (const [coordName, coordJSON] of Object.entries(coordJSONs)) {
+            zip.file(`${folder}${prefix}_space-${coordName}_coordsystem.json`,
+                JSON.stringify(coordJSON, null, 2));
+        }
+
+        // Per-recording files: emg.json + channels.tsv
+        for (const rec of recs) {
+            let recPrefix = `${prefix}_task-${rec.task_name}`;
+            if (rec.run && rec.run !== '') recPrefix += `_run-${rec.run}`;
+            zip.file(`${folder}${recPrefix}_emg.json`,
+                JSON.stringify(buildBIDS_emgJson(rec, setupRow), null, 2));
+            const chTSV = buildBIDS_channelsTSV(setupName);
+            if (chTSV && !chTSV.startsWith('(')) zip.file(`${folder}${recPrefix}_channels.tsv`, chTSV);
+        }
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const zipName = `${datasetName}_metadata.zip`;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = zipName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 100);
+
     const statusDiv = document.getElementById('submissionStatus');
     statusDiv.className = 'mf-submission-status mf-success';
-    statusDiv.innerHTML = `
-        <strong>metadata.json downloaded!</strong><br>
-        Upload this file alongside your data ZIP to the shared drive.
-    `;
+    statusDiv.innerHTML = `<strong>${zipName} downloaded!</strong><br>Contains BIDS metadata for ${Object.keys(groups).length} subject/session(s).`;
     statusDiv.style.display = 'block';
 
-    // Clear draft
     localStorage.removeItem('munitquest_draft');
     localStorage.removeItem('munitquest_draft_section');
 }

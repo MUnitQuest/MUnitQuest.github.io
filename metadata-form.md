@@ -1,19 +1,17 @@
 ---
-title: BIDS-EMG Metadata Tool
+title: MUnitQuest BIDS-EMG Metadata Tool
 feature_image: "/Images/header.jpeg"
 layout: page
 ---
 
-<p>Fill in the fields below to describe your dataset. When you reach the final step, click <strong>Download metadata.zip</strong> — a ZIP file containing all metadata files will be saved to your computer. Upload this file alongside your data ZIP to the shared drive. Your progress is saved automatically in your browser.
-
-For more instructions, go to the EMG-BIDS Specifications page <a href="https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html" target="_blank">here</a>.</p>
+<p>Fill in the fields below to describe your dataset. When you reach the final step, click <strong>Download metadata.zip</strong> — a ZIP file containing all metadata files will be saved to your computer. For more instructions, go to the EMG-BIDS Specifications page <a href="https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html" target="_blank">here</a>, and our walkthrough <a href="/walkthrough/">here</a>.</p>
 
 <div class="metadata-form">
 
 <div class="mf-progress-bar">
     <div class="mf-progress-step active" data-step="1">
         <div class="mf-step-number">1</div>
-        <div class="mf-step-label">Data Type</div>
+        <div class="mf-step-label">Getting Started</div>
     </div>
     <div class="mf-progress-step" data-step="2">
         <div class="mf-step-number">2</div>
@@ -43,12 +41,56 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
 
 <form id="submissionForm" class="mf-submission-form">
 
-    <!-- Section 1: Data Type Selection -->
+    <!-- Section 1: Getting Started -->
     <section class="form-section active" data-section="1">
-        <h2>Data Type Selection</h2>
+        <h2>Getting Started</h2>
+
+        <p>This tool generates a complete set of BIDS-EMG metadata files for your dataset. Work through each section and click <strong>Download metadata.zip</strong> at the end. We recommend going through our <a href="/walkthrough/" target="_blank">walkthrough</a> alongside this form — it explains every field with a worked example.</p>
+
+        <p>Before you begin, prepare the following five CSV files. Templates are provided in Sections 3–5 below.</p>
+
+        <table class="mf-getting-started-table">
+            <thead>
+                <tr><th>File</th><th>What it describes</th><th>Where to upload</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>participants.csv</code></td>
+                    <td>One row per subject — age, sex, height, weight, handedness</td>
+                    <td>Section 3</td>
+                </tr>
+                <tr>
+                    <td><code>setup.csv</code></td>
+                    <td>Amplifier and acquisition settings for each recording configuration</td>
+                    <td>Section 4</td>
+                </tr>
+                <tr>
+                    <td><code>coordsystems.csv</code></td>
+                    <td>Anatomical and grid coordinate systems for each setup</td>
+                    <td>Section 4</td>
+                </tr>
+                <tr>
+                    <td><code>channels_electrodes.csv</code></td>
+                    <td>Every channel and its corresponding electrode position</td>
+                    <td>Section 4</td>
+                </tr>
+                <tr>
+                    <td><code>recordings.csv</code></td>
+                    <td>One row per recording — subject, session, task, run, and which setup applies</td>
+                    <td>Section 5</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Your progress is saved automatically in your browser.</p>
+    </section>
+
+    <!-- Section 2: General Dataset Metadata -->
+    <section class="form-section" data-section="2">
+        <h2>General Dataset Metadata</h2>
 
         <div class="mf-form-group">
-            <label>Data Type *</label>
+            <label>Submission Type *</label>
             <div class="mf-radio-group">
                 <label class="mf-radio-card">
                     <input type="radio" name="dataType" value="experimental" required>
@@ -106,11 +148,6 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
                 </button>
             </div>
         </div>
-    </section>
-
-    <!-- Section 2: General Dataset Metadata -->
-    <section class="form-section" data-section="2">
-        <h2>General Dataset Metadata</h2>
 
         <div class="mf-form-group">
             <label for="datasetName">Dataset Name *</label>
@@ -185,21 +222,28 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
             <label for="institutionAddress">Institution Address</label>
             <input type="text" id="institutionAddress" name="institutionAddress">
         </div>
+
+        <div class="mf-form-group">
+            <label for="institutionalDepartmentName">Institutional Department Name</label>
+            <input type="text" id="institutionalDepartmentName" name="institutionalDepartmentName" placeholder="e.g., Department of Neuroscience">
+        </div>
     </section>
 
     <!-- Section 3: Participant Information -->
     <section class="form-section" data-section="3">
         <h2>Participant Information</h2>
 
+        <p>One row per subject. Use the same subject IDs here that you will use in <code>recordings.csv</code> — these become the <code>sub-XX</code> labels throughout the BIDS output.</p>
+
         <div class="mf-form-group">
             <label>Step 1 — Download the template and fill it in</label>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span>Download template:</span>
-                <a href="/assets/files/template_participants.csv" download title="Download template" style="color:var(--color-slate-blue); line-height:0;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <div class="mf-download-item">
+                <a href="/assets/files/template_participants.csv" download class="mf-download-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download participants template
                 </a>
+                <small class="mf-download-desc">Columns: participant_id, sex, age, height, weight, handedness, group</small>
             </div>
-            <small>Columns: participant_id, sex, age, height, weight, handedness, group</small>
         </div>
 
         <div class="mf-form-group">
@@ -215,187 +259,78 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
     <section class="form-section" data-section="4">
         <h2>Recording Information</h2>
 
-        <h3>Hardware &amp; Acquisition</h3>
+        <p>A <strong>setup</strong> is a named bundle of hardware and electrode configuration shared across a group of recordings. All setup details — amplifier, filters, electrode positions, and coordinate systems — live in the three CSV files below. See the <a href="/walkthrough/" target="_blank">walkthrough</a> for column-by-column guidance.</p>
 
         <div class="mf-form-group">
-            <label for="manufacturer">Manufacturer *</label>
-            <input type="text" id="manufacturer" name="manufacturer" placeholder="Manufacturer of your EMG amplifier." required>
+            <label>Step 1 — Download the templates and fill them in</label>
+            <small>Add one block of rows per setup in your dataset. Refer to the walkthrough for examples.</small>
+            <div class="mf-download-list">
+                <div class="mf-download-item">
+                    <a href="/assets/files/template_setup.csv" download class="mf-download-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download setup template
+                    </a>
+                    <small class="mf-download-desc">Columns: setup_name, Manufacturer, ManufacturersModelName, ElectrodeManufacturer, ElectrodeManufacturersModelName, SamplingFrequency, PowerLineFrequency, RecordingType, SoftwareHighPassHz, SoftwareLowPassHz, HardwareHighPassHz, HardwareLowPassHz, EMGChannelCount, EMGReference, EMGPlacementScheme, TaskDescription, Instructions</small>
+                </div>
+                <div class="mf-download-item">
+                    <a href="/assets/files/template_coordsystems.csv" download class="mf-download-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download coordinate systems template
+                    </a>
+                    <small class="mf-download-desc">Columns: setup, name, type, units, description, parent_coord_system, anchor_electrode, anchor_x, anchor_y</small>
+                </div>
+                <div class="mf-download-item">
+                    <a href="/assets/files/template_channels_electrodes.csv" download class="mf-download-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download channels &amp; electrodes template
+                    </a>
+                    <small class="mf-download-desc">Columns: setup, electrode_name, channel_name, type, units, x, y, z, coordinate_system, reference, group, target_muscle, material, impedance, low_cutoff, high_cutoff</small>
+                </div>
+            </div>
         </div>
 
         <div class="mf-form-group">
-            <label for="manufacturerModel">Manufacturer's Model Name *</label>
-            <input type="text" id="manufacturerModel" name="manufacturerModel" placeholder="Model name of your EMG amplifier." required>
+            <label>Step 2 — Upload your completed files *</label>
+            <div class="mf-upload-list">
+                <div class="mf-upload-item">
+                    <span class="mf-upload-label"><code>setup.csv</code></span>
+                    <input type="file" id="setupFile" name="setupFile" accept=".csv"
+                        onchange="handleSetupUpload(this)">
+                    <div id="setupValidationMsg"></div>
+                </div>
+                <div class="mf-upload-item">
+                    <span class="mf-upload-label"><code>coordsystems.csv</code></span>
+                    <input type="file" id="coordsystemsFile" name="coordsystemsFile" accept=".csv"
+                        onchange="handleCoordsystemsUpload(this)">
+                    <div id="coordsystemsValidationMsg"></div>
+                </div>
+                <div class="mf-upload-item">
+                    <span class="mf-upload-label"><code>channels_electrodes.csv</code></span>
+                    <input type="file" id="channelsElectrodesFile" name="channelsElectrodesFile" accept=".csv"
+                        onchange="handleChannelsElectrodesUpload(this)">
+                    <div id="channelsElectrodesValidationMsg"></div>
+                </div>
+            </div>
         </div>
-
-        <div class="mf-form-group">
-            <label for="softwareVersions">Software versions *</label>
-            <input type="text" id="softwareVersions" name="softwareVersions" placeholder="Version of the softwrae used for the recording" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="samplingFrequency">Sampling Frequency (Hz) *</label>
-            <input type="number" id="samplingFrequency" name="samplingFrequency" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="powerLineFrequency">Power Line Frequency *</label>
-            <select id="powerLineFrequency" name="powerLineFrequency" required>
-                <option value="">Select</option>
-                <option value="50">50 Hz</option>
-                <option value="60">60 Hz</option>
-                <option value="n/a">Not applicable</option>
-            </select>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="highPassFilter">High-pass Filter *</label>
-            <input type="number" id="highPassFilter" name="highPassFilter" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="lowPassFilter">Low-pass Filter *</label>
-            <input type="number" id="lowPassFilter" name="lowPassFilter" required>
-        </div>
-
-        <h3>Preparation</h3>
-
-        <div class="mf-form-group">
-            <label for="skinPreparation">Skin Preparation</label>
-            <input type="text" id="skinPreparation" name="skinPreparation" placeholder="Method used to precondition the skin.">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="placementSchemeDescription">EMG Placement Scheme Description</label>
-            <input type="text" id="placementSchemeDescription" name="placementSchemeDescription" placeholder="Free text describing the method used to position your grids.">
-        </div>
-
-        <h3>Coordinate systems</h3>
-
-        <div class="mf-form-group">
-            <label>Coordinates</label>
-            <div id="coordList"></div>
-
-            <button type="button" class="mf-btn-secondary" onclick="addCoord('coordList')">
-                + Add Coordinate System
-            </button>
-        </div>
-
-        <h3>Electrode Configuration</h3>
-
-        <div class="mf-form-group">
-            <label>Reference and Ground Electrodes</label>
-            <div id="refElectrodeList"></div>
-
-            <button type="button" class="mf-btn-secondary" onclick="addRefElectrode('refElectrodeList')">
-                + Add Reference Electrode
-            </button>
-        </div> 
-
-        <div class="mf-form-group">
-            <label>Surface EMG</label>
-            <div id="surfaceEMGList"></div>
-
-            <button type="button" class="mf-btn-secondary" onclick="addSurfaceEMG('surfaceEMGList')">
-                + Add surface Electrode
-            </button>
-        </div> 
-
-        <div class="mf-form-group">
-            <label for="emgChannelCount">EMG Channel Count *</label>
-            <input type="number" id="emgChannelCount" name="emgChannelCount" min="1" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="emgChannelUnits">Units *</label>
-            <select id="emgChannelUnits" name="emgChannelUnits">
-                <option value="">Select</option>
-                <option value="V">V</option>
-                <option value="mV">mV</option>
-                <option value="uV">uV</option>
-            </select>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="electrodeMaterial">Electrode Material</label>
-            <select id="electrodeMaterial" name="electrodeMaterial">
-                <option value="">Select</option>
-                <option value="Ag/AgCl">Ag/AgCl</option>
-                <option value="Gold">Gold</option>
-                <option value="Platinum">Platinum</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="electrodeShape">Electrode Shape</label>
-            <select id="electrodeShape" name="electrodeShape">
-                <option value="">Select</option>
-                <option value="disc">Disc</option>
-                <option value="ring">Ring</option>
-                <option value="pad">Pad</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="electrodeDiameter">Electrode Diameter (mm)</label>
-            <input type="number" id="electrodeDiameter" name="electrodeDiameter" step="0.1">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="interElectrodeDistance">Inter-Electrode Distance (mm) *</label>
-            <input type="number" id="interElectrodeDistance" name="interElectrodeDistance" step="0.1" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="electrodeArrayType">Electrode Array Type</label>
-            <input type="text" id="electrodeArrayType" name="electrodeArrayType" placeholder="e.g., 8x8 grid, 16x4 linear">
-        </div>
-
-        <div class="mf-form-group">
-            <label for="electrodePlacement">Electrode Placement *</label>
-            <input type="text" id="electrodePlacement" name="electrodePlacement" placeholder="e.g., tibialis anterior, middle of muscle belly" required>
-        </div>
-
-        <h3>Reference &amp; Ground</h3>
-
-        <div class="mf-form-group">
-            <label for="emgReference">EMG Reference *</label>
-            <input type="text" id="emgReference" name="emgReference" placeholder="e.g., single differential, bipolar derivation" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label for="emgGround">EMG Ground *</label>
-            <input type="text" id="emgGround" name="emgGround" placeholder="e.g., wrist, electrode on patella" required>
-        </div>
-
-        <div class="mf-form-group">
-            <label>MISC Channels</label>
-            <div id="miscList"></div>
-
-            <button type="button" class="mf-btn-secondary" onclick="addMISC('miscList')">
-                + Add MISC
-            </button>
-        </div>   
 
     </section>
 
     <!-- Section 5: Task & Protocol Information -->
     <section class="form-section" data-section="5">
- 
+
         <h2>Task &amp; Protocol Information</h2>
 
-        <h3>Recordings</h3>
+        <p>One row per recording file. The <code>setup</code> column links each recording to the hardware configuration you described in Section 4 — every recording that shares the same electrode grid and amplifier settings should reference the same setup name.</p>
 
         <div class="mf-form-group">
             <label>Step 1 — Download the template and fill it in</label>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span>Download template:</span>
-                <a href="/assets/files/template_recordings.csv" download title="Download template" style="color:var(--color-slate-blue); line-height:0;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <div class="mf-download-item">
+                <a href="/assets/files/template_recordings.csv" download class="mf-download-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download recordings template
                 </a>
+                <small class="mf-download-desc">Columns: sub, ses, task_name, run, setup, path_to_emg_file, path_to_labels_file</small>
             </div>
-            <small>Columns: sub, ses, task_name, repetition, path_to_emg_file, path_to_labels_file</small>
         </div>
 
         <div class="mf-form-group">
@@ -411,52 +346,133 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
     <section class="form-section" data-section="6">
         <h2>Decomposition and Editing</h2>
 
-        <div class="mf-form-group">
-            <label for="decompositionMethod">Decomposition Method *</label>
-            <select id="decompositionMethod" name="decompositionMethod" required>
-                <option value="">Select</option>
-                <option value="semi-automated">Semi-automated (algorithm-assisted)</option>
-                <option value="fully-automated">Fully automated</option>
-                <option value="two-source">Two-source validation (concurrent iEMG)</option>
-                <option value="simulation">Simulation ground truth</option>
-            </select>
+        <p>Describe how motor unit spike trains were identified in your dataset. For concurrent sEMG + iEMG datasets, fill in both the surface and intramuscular decomposition separately.</p>
+
+        <!-- Shown until a dataset type is selected in Section 2 -->
+        <div id="decompSection2Notice" class="mf-notice">
+            Please select a <strong>Submission Type</strong> in Section 2 to see the relevant options here.
         </div>
 
-        <div id="decompositionAlgorithmSection" style="display:none;">
-        <div class="mf-form-group">
-            <label>Decomposition Algorithm(s) *</label>
-            <small>Add one entry per algorithm used, in processing order.</small>
-            <div id="decompositionPipelineList"></div>
-            <button type="button" class="mf-btn-secondary" onclick="addDecompositionPipeline()">
-                + Add Algorithm
-            </button>
-        </div>
+        <!-- sEMG decomposition block (shown for experimental and concurrent) -->
+        <div id="semgDecompBlock" style="display:none;">
 
-        <div class="mf-form-group">
-            <label>Was manual annotation / editing performed? *</label>
-            <div class="mf-radio-group mf-radio-compact">
-                <label class="mf-radio-card">
-                    <input type="radio" name="manualEditing" value="yes" required>
-                    <div class="mf-radio-content"><strong>Yes</strong><p>Spike trains were manually reviewed or edited</p></div>
-                </label>
-                <label class="mf-radio-card">
-                    <input type="radio" name="manualEditing" value="no">
-                    <div class="mf-radio-content"><strong>No</strong><p>No manual editing was performed</p></div>
-                </label>
-            </div>
-        </div>
+            <h3 id="semgDecompHeading">Surface EMG</h3>
 
-        <div id="editingToolSection" style="display:none;">
             <div class="mf-form-group">
-                <label>Editing Tool</label>
-                <small>Only fill this in if a different tool was used for manual editing (leave empty if same as above).</small>
-                <div id="editingToolList"></div>
-                <button type="button" class="mf-btn-secondary" onclick="addEditingTool()">
-                    + Add Editing Tool
-                </button>
+                <label>How were motor unit spike trains identified? *</label>
+                <div class="mf-radio-group">
+
+                    <label class="mf-radio-card mf-dec-opt mf-dec-experimental mf-dec-concurrent">
+                        <input type="radio" name="decompositionMethod" value="fully-automated" required>
+                        <div class="mf-radio-content">
+                            <strong>Fully automated</strong>
+                            <p>Decomposition algorithm output used as-is — no manual review or curation was performed</p>
+                        </div>
+                    </label>
+
+                    <label class="mf-radio-card mf-dec-opt mf-dec-experimental mf-dec-concurrent">
+                        <input type="radio" name="decompositionMethod" value="semi-automated">
+                        <div class="mf-radio-content">
+                            <strong>Semi-automated</strong>
+                            <p>Algorithm output was manually reviewed and curated before finalising spike trains</p>
+                        </div>
+                    </label>
+
+                    <label class="mf-radio-card mf-dec-opt mf-dec-simulation" style="display:none;">
+                        <input type="radio" name="decompositionMethod" value="ground-truth">
+                        <div class="mf-radio-content">
+                            <strong>Simulation ground truth</strong>
+                            <p>Spike trains are exact outputs of the simulation model — no decomposition was performed</p>
+                        </div>
+                    </label>
+
+                </div>
             </div>
-        </div>
-        </div><!-- end decompositionAlgorithmSection -->
+
+            <div id="decompositionAlgorithmSection" style="display:none;">
+                <div class="mf-form-group">
+                    <label>Decomposition Algorithm(s) *</label>
+                    <small>Add one entry per algorithm, in processing order.</small>
+                    <div id="decompositionPipelineList"></div>
+                    <button type="button" class="mf-btn-secondary" onclick="addDecompositionPipeline()">+ Add Algorithm</button>
+                </div>
+            </div>
+
+            <div id="editingToolSection" style="display:none;">
+                <div class="mf-form-group">
+                    <label>Curation / Editing Tool</label>
+                    <small>Only fill this in if a different tool was used for manual curation (leave empty if same as the decomposition algorithm above).</small>
+                    <div id="editingToolList"></div>
+                    <button type="button" class="mf-btn-secondary" onclick="addEditingTool()">+ Add Editing Tool</button>
+                </div>
+            </div>
+
+        </div><!-- end semgDecompBlock -->
+
+        <!-- iEMG decomposition block (shown for concurrent only) -->
+        <div id="iemgDecompBlock" style="display:none;">
+
+            <h3>Intramuscular EMG</h3>
+
+            <div class="mf-form-group">
+                <label>How were motor unit spike trains identified from the intramuscular recordings? *</label>
+                <div class="mf-radio-group">
+
+                    <label class="mf-radio-card">
+                        <input type="radio" name="iemgDecompositionMethod" value="fully-automated" required>
+                        <div class="mf-radio-content">
+                            <strong>Fully automated</strong>
+                            <p>Decomposition algorithm output used as-is — no manual review or curation was performed</p>
+                        </div>
+                    </label>
+
+                    <label class="mf-radio-card">
+                        <input type="radio" name="iemgDecompositionMethod" value="semi-automated">
+                        <div class="mf-radio-content">
+                            <strong>Semi-automated</strong>
+                            <p>Algorithm output was manually reviewed and curated before finalising spike trains</p>
+                        </div>
+                    </label>
+
+                    <label class="mf-radio-card">
+                        <input type="radio" name="iemgDecompositionMethod" value="manual">
+                        <div class="mf-radio-content">
+                            <strong>Manual annotation</strong>
+                            <p>Spike trains identified by a human annotator against the intramuscular reference, without an automated algorithm</p>
+                        </div>
+                    </label>
+
+                </div>
+            </div>
+
+            <div id="iemgDecompositionAlgorithmSection" style="display:none;">
+                <div class="mf-form-group">
+                    <label>Decomposition Algorithm(s) *</label>
+                    <small>Add one entry per algorithm, in processing order.</small>
+                    <div id="iemgDecompositionPipelineList"></div>
+                    <button type="button" class="mf-btn-secondary" onclick="addIemgDecompositionPipeline()">+ Add Algorithm</button>
+                </div>
+            </div>
+
+            <div id="iemgEditingToolSection" style="display:none;">
+                <div class="mf-form-group">
+                    <label>Curation / Editing Tool</label>
+                    <small>Only fill this in if a different tool was used for manual curation (leave empty if same as above).</small>
+                    <div id="iemgEditingToolList"></div>
+                    <button type="button" class="mf-btn-secondary" onclick="addIemgEditingTool()">+ Add Editing Tool</button>
+                </div>
+            </div>
+
+            <div id="iemgAnnotationToolSection" style="display:none;">
+                <div class="mf-form-group">
+                    <label>Annotation Tool *</label>
+                    <small>Software used to manually identify and label spike trains from intramuscular recordings.</small>
+                    <div id="iemgAnnotationToolList"></div>
+                    <button type="button" class="mf-btn-secondary" onclick="addIemgAnnotationTool()">+ Add Annotation Tool</button>
+                </div>
+            </div>
+
+        </div><!-- end iemgDecompBlock -->
 
         <div class="mf-form-group">
             <label for="numMotorUnits">Total Number of Motor Units Identified *</label>
@@ -474,10 +490,25 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
             <div id="reviewSummary"></div>
 
             <h3>Generated BIDS Metadata Preview</h3>
+            <p><em>Previews show the first setup. All setups are included in the downloaded ZIP.</em></p>
+
+            <h4>dataset_description.json</h4>
             <pre id="bidsDatasetPreview" class="mf-json-preview">{}</pre>
-            <pre id="bidsSubjectsPreview" class="mf-json-preview">{}</pre>
+
+            <h4>participants.tsv</h4>
+            <pre id="bidsSubjectsPreview" class="mf-json-preview"></pre>
+
+            <h4>*_emg.json</h4>
             <pre id="bidsEMGPreview" class="mf-json-preview">{}</pre>
-            <pre id="bidsChannelsPreview" class="mf-json-preview">{}</pre>
+
+            <h4>*_channels.tsv</h4>
+            <pre id="bidsChannelsPreview" class="mf-json-preview"></pre>
+
+            <h4>*_electrodes.tsv</h4>
+            <pre id="bidsElectrodesPreview" class="mf-json-preview"></pre>
+
+            <h4>*_coordsystem.json</h4>
+            <pre id="bidsCoordPreview" class="mf-json-preview">{}</pre>
         </div>
 
         <div class="mf-form-group">
@@ -515,4 +546,5 @@ For more instructions, go to the EMG-BIDS Specifications page <a href="https://b
 </form>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="/assets/js/metadata-form.js"></script>

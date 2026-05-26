@@ -52,8 +52,8 @@ To obtain a diverse data collection for MUnitQuest that balances realism and lab
 </div>
 
 **EMG data and metadata:** Data needs to be submitted in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. To make getting started with EMG-BIDS as easy as possible, we provide
-- tutorials (coming soon) that you can adopt according to your specific recording setup
-- a web interface for the assisted generation of BIDS datasets (coming soon)
+- a [step-by-step tutorial](/walkthrough) that walks through preparing a real HD-EMG dataset for sharing
+- a [web-based metadata tool](/metadata-form) for the assisted generation of BIDS-compliant metadata files
 
 **Labeled motor unit spike trains:** A key requirement for a competition on motor unit identification methods is the availability of labeled ground truth spikes. Thus, we additionally require submitting:
 - for each recording, a *.tsv* file (BIDS-events file, see example below) containing the labeled motor unit spike trains 
