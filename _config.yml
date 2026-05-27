@@ -52,7 +52,9 @@ navigation_header:
   url: /timeline/
 - title: Rules
   url: /rules/
-- title: Submission and Registration
+- title: Resources
+  url: /resources/
+- title: Participate!
   url: /registration_and_submission/
 #- title: Tmp
 #  url: /metadata-form/
