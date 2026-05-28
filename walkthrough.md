@@ -237,6 +237,8 @@ Correspondingly, our `coordsystems.csv` and `channels_electrodes.csv` rows look 
 
 > **Note:** the grid layout above shows physical electrode labels (E1, E2, …, E_im) — the actual objects attached to or inserted into the tissue. The `channels_electrodes.csv` file specifies how each physical electrode maps to a stored data channel on disk: E1 → EMG001, …, E12 → EMG012, E_im → EMG013. Surface electrodes all sit at z=0 in the grid frame while the intramuscular wire is at z=12 (12 mm insertion depth). The reference electrode R1 appears as a REF channel with no spatial coordinates, since its position is not part of the EMG array.
 
+> **Intramuscular EMG — simplified treatment and ongoing spec work.** The approach above (reusing the surface grid coordinate system, encoding insertion depth as z) works for a single concurrent wire electrode but is a deliberate simplification. Datasets with intramuscular grids, fine wires, or concentric needles involve dedicated coordinate systems, additional physical parameters (wire diameter, tip length, cannula dimensions), and richer electrode type vocabulary that go beyond what this walkthrough covers. Critically, **the EMG-BIDS specification for invasive EMG is still under active development** — see [this open pull request](https://github.com/neuromechanist/bids-examples/pull/5) for the current state of the discussion. For a more complete worked example covering thin-film HD-iEMG grids, fine wires, and concentric needles alongside surface grids, see the [MUnitQuest fictional dataset tutorial](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/fictionalDatasetExample_to_bids.ipynb).
+
 ---
 
 #### Setup TA_dual_3x3 — sub-02 session 1, two simultaneous 3 × 3 grids on right tibialis anterior
