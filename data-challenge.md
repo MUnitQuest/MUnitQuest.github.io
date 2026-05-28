@@ -19,8 +19,8 @@ The Data Challenge is targeted at **experimental researchers** who use HDsEMG an
 
 Community members contribute datasets consisting of experimental or simulated HDsEMG data together with labeled motor unit spike trains. Submissions need to be prepared in the standardized [EMG-BIDS format](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) and are assessed via a double-blind review process by an expert panel. All datasets entering the *MUnitQuest data collection* will be released on an open data repository (for datasets not entering the collection, this remains optional).
 
-See the [participation](/registration_and_submission/) page for the full guide. In short, a submission consists of:
-- **EMG data in EMG-BIDS format** — raw signals and metadata prepared using our [step-by-step tutorial](/walkthrough) and [metadata tool](/metadata-form)
+See the [Participate!](/registration_and_submission/) page for the full guide. In short, a submission consists of:
+- **EMG data in EMG-BIDS format** — raw signals and metadata prepared using our [EMG-BIDS walkthrough](/walkthrough) and [metadata tool](/metadata-form)
 - **Labeled spike trains** — a `*_events.tsv` file per recording with labeled motor unit spikes
 - **A 2-page PDF** — describing your labelling approach (experimental) or simulation model (synthetic)
 

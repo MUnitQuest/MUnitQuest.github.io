@@ -7,9 +7,9 @@ layout: page
 
 ### Getting Started
 
-This tutorial walks you through preparing a real HD-EMG dataset for sharing using the [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) standard. By the end, you will have a complete set of BIDS-compliant metadata files ready to accompany your recordings.
+This tutorial covers how to prepare an HD-EMG dataset in [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format and organise your labeled spike trains. It covers **Steps 1 and 2** of the [MUnitQuest dataset submission process](/registration_and_submission/).
 
-The process has two stages: first, we fill in five simple CSV files that capture everything BIDS needs to know about the dataset - participants, recordings, hardware, electrode layout, and coordinate systems. Second, we upload those CSVs into the [MUnitQuest Metadata tool](/metadata-form/) — along with a short online form for dataset-level details — and download a ZIP containing all the generated metadata files.
+The process has two stages: first, we fill in five simple CSV files that capture everything BIDS needs to know about the dataset — participants, recordings, hardware, electrode layout, and coordinate systems. Second, we upload those CSVs into the [MUnitQuest Metadata tool](/metadata-form/) — along with a short online form for dataset-level details — and download a ZIP containing all the generated metadata files.
 
 > **Follow along on GitHub!** The CSV files, the source data files and the python scripts used to assemble the BIDS data are available in this [MUnitQuest_Tutorial](https://github.com/MUnitQuest/MUnitQuest_tutorials/tree/main/emg_bids_tutorial1) repository!
 
@@ -523,7 +523,7 @@ The pipeline folder also needs its own `dataset_description.json` with `"Dataset
 
 ---
 
-### Part 5: Assembling the dataset
+### Part 5 — Assembling the dataset
 
 With the five CSVs filled in, `metadata.zip` downloaded from the MUnitQuest tool, and your recordings and events files ready, you can assemble the full BIDS folder in one call:
 

@@ -10,9 +10,9 @@ All tutorials and reference material are available both below and in the [MUnitQ
 
 Tools to help you prepare and submit a BIDS-compliant HD-EMG dataset.
 
-#### MUnitQuest EMG-BIDS Walkthrough (for non-programmers)
+#### MUnitQuest EMG-BIDS Tutorial
 
-A step-by-step tutorial for preparing an HD-EMG dataset using the EMG-BIDS standard. Walks through how to fill five simple CSV template files to generate a complete set of BIDS metadata files.
+A step-by-step guide covering how to prepare an HD-EMG dataset in EMG-BIDS format and organise your labeled spike trains (Steps 1 and 2 of the [submission process](/registration_and_submission/)). Walks through five simple CSV template files that generate a complete set of BIDS metadata files, with Python and MATLAB code throughout.
 
 [Go to the Walkthrough →](/walkthrough/)
 
