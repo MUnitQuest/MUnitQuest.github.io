@@ -231,11 +231,11 @@ Correspondingly, our `coordsystems.csv` and `channels_electrodes.csv` rows look 
 | VL_3x4s_1i | EMG012 | EMG | uV | E12 | 24 | 16 | 0 | grid1 | R1 | grid1 | right vastus lateralis | Ag/AgCl | OTBioelettronica | HD08MM0304 | n/a | 10 | 900 |
 | VL_3x4s_1i | EMG013 | EMG | uV | E_im | 12 | 8 | 12 | grid1 | R1 | intramuscular | right vastus lateralis | stainless steel | OTBioelettronica | Fi-Wi2 | n/a | 10 | 900 |
 | VL_3x4s_1i | Torque | MISC | Nm | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| VL_3x4s_1i | R1 | REF | n/a | R1 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | Ag/AgCl | OTBioelettronica | n/a | n/a | n/a | n/a |
+| VL_3x4s_1i | R1 | REF | n/a | R1 | 370 | 0 | 0 | thigh | n/a | n/a | n/a | Ag/AgCl | OTBioelettronica | n/a | n/a | n/a | n/a |
 
 <p class="wt-table-note">EMG002–EMG011 follow the same pattern as EMG001: x cycles through 0, 8, 16, 24 mm across each column, y increments by 8 mm per row, z=0. EMG013 is the only channel with a non-zero z value.</p>
 
-> **Note:** the grid layout above shows physical electrode labels (E1, E2, …, E_im) — the actual objects attached to or inserted into the tissue. The `channels_electrodes.csv` file specifies how each physical electrode maps to a stored data channel on disk: E1 → EMG001, …, E12 → EMG012, E_im → EMG013. Surface electrodes all sit at z=0 in the grid frame while the intramuscular wire is at z=12 (12 mm insertion depth). The reference electrode R1 appears as a REF channel with no spatial coordinates, since its position is not part of the EMG array.
+> **Note:** the grid layout above shows physical electrode labels (E1, E2, …, E_im) — the actual objects attached to or inserted into the tissue. The `channels_electrodes.csv` file specifies how each physical electrode maps to a stored data channel on disk: E1 → EMG001, …, E12 → EMG012, E_im → EMG013. Surface electrodes all sit at z=0 in the grid frame while the intramuscular wire is at z=12 (12 mm insertion depth). The reference electrode R1 is placed on the patella; its position (370, 0, 0) is expressed in the `thigh` anatomical frame (370 mm distal from the greater trochanter along the femoral shaft).
 
 > **Intramuscular EMG — simplified treatment and ongoing spec work.** The approach above (reusing the surface grid coordinate system, encoding insertion depth as z) works for a single concurrent wire electrode but is a deliberate simplification. Datasets with intramuscular grids, fine wires, or concentric needles involve dedicated coordinate systems, additional physical parameters (wire diameter, tip length, cannula dimensions), and richer electrode type vocabulary that go beyond what this walkthrough covers. Critically, **the EMG-BIDS specification for invasive EMG is still under active development** — see [this open pull request](https://github.com/neuromechanist/bids-examples/pull/5) for the current state of the discussion. For a more complete worked example covering thin-film HD-iEMG grids, fine wires, and concentric needles alongside surface grids, see the [MUnitQuest fictional dataset tutorial](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/fictionalDatasetExample_to_bids.ipynb).
 
@@ -284,8 +284,8 @@ x=0   x=8   x=16
 | TA_dual_3x3 | … | EMG | uV | … | … | … | 0 | grid2 | R2 | grid2 | right tibialis anterior | Ag/AgCl | n/a | 10 | 900 |
 | TA_dual_3x3 | EMG018 | EMG | uV | E18 | 16 | 16 | 0 | grid2 | R2 | grid2 | right tibialis anterior | Ag/AgCl | n/a | 10 | 900 |
 | TA_dual_3x3 | Torque | MISC | Nm | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| TA_dual_3x3 | R1 | REF | n/a | R1 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | Ag/AgCl | n/a | n/a | n/a |
-| TA_dual_3x3 | R2 | REF | n/a | R2 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | Ag/AgCl | n/a | n/a | n/a |
+| TA_dual_3x3 | R1 | REF | n/a | R1 | 0 | 0 | 0 | lowerLeg | n/a | n/a | n/a | Ag/AgCl | n/a | n/a | n/a |
+| TA_dual_3x3 | R2 | REF | n/a | R2 | 0 | 0 | 0 | lowerLeg | n/a | n/a | n/a | Ag/AgCl | n/a | n/a | n/a |
 
 <p class="wt-table-note">EMG001–EMG009 are in <code>grid1</code>, EMG010–EMG018 in <code>grid2</code>. Each grid resets to x=0, y=0 at its own origin — grid2 coordinates are not a continuation of grid1's.</p>
 
@@ -293,7 +293,7 @@ x=0   x=8   x=16
 
 #### Setup TA_4x4 — sub-02 session 2, single 4 × 4 grid on right tibialis anterior
 
-Finally, in this setup, we use a single grid with 4 rows and 4 columns, 8 mm inter-electrode distance. Channels EMG001–EMG016 in row-major order. However, the electrode position relative to anatomical landmarks was not recorded, so no anatomical row appears in `coordsystems.csv`. The grid-internal positions are still fully specified — they describe electrode geometry relative to E1 — but they are not tied to any body landmark. This produces a single `space-grid1_coordsystem.json` for this setup/ session, with no `ParentCoordinateSystem`, `AnchorElectrode`, or `AnchorCoordinates` fields.
+Finally, in this setup, we use a single grid with 4 rows and 4 columns, 8 mm inter-electrode distance. Channels EMG001–EMG016 in row-major order. The electrode position relative to anatomical landmarks was not recorded, so the grid coordinate system has no parent anchor — the grid-internal positions describe electrode geometry relative to E1 but are not tied to a body landmark. We still include a `lowerLeg` anatomical frame so the reference electrode R1 (at the ankle, 0, 0, 0) has a valid coordinate system.
 
 Grid layout — electrode labels:
 
@@ -309,6 +309,7 @@ x=0    x=8    x=16   x=24
 
 | setup | name | type | units | description | parent_coord_system | anchor_electrode | anchor_x | anchor_y |
 |-------|------|------|-------|-------------|---------------------|------------------|----------|----------|
+| TA_4x4 | lowerLeg | anatomical | mm | Origin at the medial malleolus. x-axis points proximally along the tibial shaft. y-axis points laterally. z-axis points anteriorly. | | | | |
 | TA_4x4 | grid1 | grid | mm | 4x4 grid over right tibialis anterior. Origin at electrode E1 (top-left corner). x-axis points distally, y-axis points laterally. No anatomical landmark measures available. | | | | |
 
 `channels_electrodes.csv`:
@@ -320,7 +321,7 @@ x=0    x=8    x=16   x=24
 | TA_4x4 | … | EMG | uV | … | … | … | 0 | grid1 | R1 | grid1 | right tibialis anterior | Ag/AgCl | n/a | 10 | 900 |
 | TA_4x4 | EMG016 | EMG | uV | E16 | 24 | 24 | 0 | grid1 | R1 | grid1 | right tibialis anterior | Ag/AgCl | n/a | 10 | 900 |
 | TA_4x4 | Torque | MISC | Nm | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| TA_4x4 | R1 | REF | n/a | R1 | n/a | n/a | n/a | n/a | n/a | n/a | n/a | Ag/AgCl | n/a | n/a | n/a |
+| TA_4x4 | R1 | REF | n/a | R1 | 0 | 0 | 0 | lowerLeg | n/a | n/a | n/a | Ag/AgCl | n/a | n/a | n/a |
 
 <p class="wt-table-note">EMG003–EMG015 follow the same pattern as VL_3x4 above: x cycles 0 → 8 → 16 → 24 mm across columns, y increments by 8 mm per row.</p>
 
