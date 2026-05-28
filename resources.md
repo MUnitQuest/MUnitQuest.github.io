@@ -4,13 +4,15 @@ title: Resources
 feature_image: "/Images/header.jpeg"
 ---
 
+All tutorials and reference material are available both below and in the [MUnitQuest Tutorials](https://github.com/MUnitQuest/MUnitQuest_tutorials) repository on GitHub. As registration and submission are handled through Codabench, dedicated platform tutorials are included alongside the technical content below.
+
 ### Data Challenge
 
 Tools to help you prepare and submit a BIDS-compliant HD-EMG dataset.
 
-#### EMG-BIDS Walkthrough
+#### MUnitQuest EMG-BIDS Walkthrough (for non-programmers)
 
-A step-by-step tutorial for preparing an HD-EMG dataset using the EMG-BIDS standard. Walks through filling in the five CSV template files and generating a complete set of BIDS metadata files.
+A step-by-step tutorial for preparing an HD-EMG dataset using the EMG-BIDS standard. Walks through how to fill five simple CSV template files to generate a complete set of BIDS metadata files.
 
 [Go to the Walkthrough →](/walkthrough/)
 
@@ -19,6 +21,10 @@ A step-by-step tutorial for preparing an HD-EMG dataset using the EMG-BIDS stand
 An online form that takes your five filled-in CSV files and produces a `metadata.zip` containing all BIDS sidecar files, ready to accompany your recordings.
 
 [Open the Metadata Tool →](/metadata-form/)
+
+#### EMG-BIDS Tutorial (python)
+
+*Coming soon*
 
 ---
 
