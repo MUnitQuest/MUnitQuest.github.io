@@ -6,13 +6,19 @@ feature_image: "/Images/header.jpeg"
 
 All tutorials and reference material are available both below and in the [MUnitQuest Tutorials](https://github.com/MUnitQuest/MUnitQuest_tutorials) repository on GitHub. As registration and submission are handled through Codabench, dedicated platform tutorials are included alongside the technical content below.
 
+### Codabench
+
+[Codabench](https://www.codabench.org/) is an open-source platform for data science competitions and is used in **MUnitQuest** to handle submissions to both the [Data challenge](/data-challenge/) and the [Algorithm challenge](/algorithm-challenge/). We provide a Codabench Tutorial to help you learn how to register on Codabench, form a Team, make a submission, etc.   
+
+[Go to the Codabench Tutorial →](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/codabench_tutorials/codabench_tutorial.md)
+
 ### Data Challenge
 
-Tools to help you prepare and submit a BIDS-compliant HD-EMG dataset.
+We provide tutorials and tools to guide you through building your first [EMG-BIDS](https://bids-specification.readthedocs.io/en/latest/modality-specific-files/electromyography.html) dataset. 
 
 #### MUnitQuest EMG-BIDS Tutorial
 
-A step-by-step guide covering how to prepare an HD-EMG dataset in EMG-BIDS format and organise your labeled spike trains (Steps 1 and 2 of the [submission process](/registration_and_submission/)). Walks through five simple CSV template files that generate a complete set of BIDS metadata files, with Python and MATLAB code throughout.
+A step-by-step guide covering how to prepare an HD-EMG dataset in EMG-BIDS format and organize your labeled spike trains (Steps 1 and 2 of the [submission process](/registration_and_submission/)). A simplified approach tailored to typical HD-EMG recordings, walking through five simple CSV template files that generate a complete set of BIDS metadata files, with Python and MATLAB code throughout.
 
 [Go to the Walkthrough →](/walkthrough/)
 
@@ -22,9 +28,15 @@ An online form that takes your five filled-in CSV files and produces a `metadata
 
 [Open the Metadata Tool →](/metadata-form/)
 
-#### EMG-BIDS Tutorial (python)
+#### MUniverse EMG-BIDS Tutorial (Python)
 
-*Coming soon*
+The Python-based [MUniverse package](https://github.com/dfarinagroup/muniverse/tree/main) includes a set of classes for handling EMG-BIDS datasets. For example, to read, write, and validate a dataset/recording. We provide a tutorial illustrating how to use these utilities to generate your own EMG-BIDS dataset.  
+
+[Open the Jupyter Notebook Tutorial →](https://github.com/MUnitQuest/MUnitQuest_tutorials/tree/main/emg_bids_tutorial2)
+
+#### BIDS documentation and examples
+
+For a deep dive into EMG-BIDS, check out the [BIDS documentation](https://bids-specification.readthedocs.io/en/stable/) and the [BIDS examples](https://github.com/bids-standard/bids-examples). The [online BIDS validator](https://bids-standard.github.io/bids-validator/) allows you to verify your own BIDS dataset. Further, a list of tools to handle BIDS datasets can be found [here](https://bids.neuroimaging.io/tools/others.html).
 
 ---
 

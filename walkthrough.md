@@ -7,11 +7,11 @@ layout: page
 
 ### Getting Started
 
-This tutorial covers how to prepare an HD-EMG dataset in [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format and organise your labeled spike trains. It covers **Steps 1 and 2** of the [MUnitQuest dataset submission process](/registration_and_submission/).
+This tutorial covers how to prepare an HD-EMG dataset in [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format and organize your labeled spike trains. It covers **Steps 1 and 2** of the [MUnitQuest dataset submission process](/registration_and_submission/).
 
 The process has two stages: first, we fill in five simple CSV files that capture everything BIDS needs to know about the dataset — participants, recordings, hardware, electrode layout, and coordinate systems. Second, we upload those CSVs into the [MUnitQuest Metadata tool](/metadata-form/) — along with a short online form for dataset-level details — and download a ZIP containing all the generated metadata files.
 
-> **Follow along on GitHub!** The CSV files, the source data files and the python scripts used to assemble the BIDS data are available in this [MUnitQuest_Tutorial](https://github.com/MUnitQuest/MUnitQuest_tutorials/tree/main/emg_bids_tutorial1) repository!
+> **Follow along on GitHub!** The CSV files, the source data files, and the Python scripts used to assemble the BIDS data are available in this [MUnitQuest_Tutorial](https://github.com/MUnitQuest/MUnitQuest_tutorials/tree/main/emg_bids_tutorial1) repository!
 
 #### Prerequisites
 
@@ -49,38 +49,38 @@ The goal is to turn this into a BIDS-formatted dataset!
 
 ### Why BIDS?
 
-BIDS (Brain Imaging Data Structure) is a community standard for organising neuroscience data so that it is **FAIR** — Findable, Accessible, Interoperable, and Reusable. A BIDS-formatted dataset is self-describing: anyone who picks it up, regardless of which lab or software they use, can understand what was recorded, how it was recorded, and who the participants were, without having to contact the authors.
+[BIDS (Brain Imaging Data Structure)](https://bids.neuroimaging.io/) is a community standard for organizing neuroscience data so that it is **FAIR** — Findable, Accessible, Interoperable, and Reusable. A BIDS-formatted dataset is self-describing: anyone who picks it up, regardless of which lab or software they use, can understand what was recorded, how it was recorded, and who the participants were, without having to contact the authors.
 
 For HD-EMG specifically, this means every recording file is accompanied by a set of metadata files that describe the hardware, the electrode layout, the coordinate system, and the channel list. None of this lives in a separate Word document or lab notebook — it travels with the data.
 
 #### Metadata lives at multiple levels
 
-BIDS organises metadata in a hierarchy that mirrors the structure of a typical experiment:
+BIDS organizes metadata in a hierarchy that mirrors the structure of a typical experiment:
 
 - **Dataset level** — who made this, what license it carries, what kind of data it contains (`dataset_description.json`)
 - **Participant level** — demographics for each subject (`participants.tsv`)
-- **Recording level** — for each individual file: hardware settings, filters, channel list, electrode positions, coordinate system (`*_emg.json`, `*_channels.tsv`, `*_electrodes.tsv`, `*_coordsystem.json`)
+- **Recording level** — for each individual file: hardware settings, filters, channel list, electrode positions, coordinate system and the experimental protocol (`*_emg.json`, `*_channels.tsv`, `*_electrodes.tsv`, `*_coordsystem.json`, `*_events.tsv`)
 
 This walkthrough focuses on the recording level, since that is where most of the complexity lives for HD-EMG datasets.
 
 ---
 
-### The crux: electrodes, channels, and coordinate systems
+### The crux for EMG: electrodes, channels, and coordinate systems
 
-An **electrode** is a physical object attached to the skin. A **channel** is the digitised signal that the acquisition software stores to disk — typically one channel per electrode, though referencing schemes mean the relationship is not always one-to-one. BIDS keeps these concepts separate because knowing where a channel was recorded is not the same as knowing what signal it carries.
+An **electrode** is a physical object attached to the skin. A **channel** is the digitized signal that the acquisition software stores to disk — typically one channel per electrode, though referencing schemes mean the relationship is not always one-to-one. BIDS keeps these concepts separate because knowing where a channel was recorded is not the same as knowing what signal it carries.
 
 The critical challenge for HD-EMG is linking physical sensor locations to recorded channels. EMG-BIDS solves this with two files that work together:
 
 - `_electrodes.tsv` lists every electrode by name and gives its x, y, z position in some coordinate system.
 - `_coordsystem.json` defines what that coordinate system is — where its origin sits, how its axes are oriented, and how it relates to anatomy (e.g., origin at the medial malleolus, x-axis pointing proximally along the tibia).
 
-For HD-EMG grids it is rarely practical to measure every electrode position directly. Instead, the grid geometry is known (regular spacing, fixed layout), so you measure just one anchor electrode in the anatomical frame and derive all others from the grid's internal coordinate system. EMG-BIDS uses **one `_coordsystem.json` file per coordinate space**, distinguished by a `space-<label>` entity in the filename. An anatomical frame (`space-thigh_coordsystem.json`) describes the body-relative reference; a grid frame (`space-grid1_coordsystem.json`) describes electrode geometry relative to its own origin and — when an anchor measurement is available — references the parent anatomical frame with `ParentCoordinateSystem`, `AnchorElectrode`, and `AnchorCoordinates` fields. If no anatomical measurement was taken, the grid file stands alone with grid-internal coordinates only.
+For HD-EMG grids, it is rarely practical to measure every electrode position directly. Instead, the grid geometry is known (regular spacing, fixed layout), so you measure just one anchor electrode in the anatomical frame and derive all others from the grid's internal coordinate system. EMG-BIDS uses **one `_coordsystem.json` file per coordinate space**, distinguished by a `space-<label>` entity in the filename. An anatomical frame (`space-thigh_coordsystem.json`) describes the body-relative reference; a grid frame (`space-grid1_coordsystem.json`) describes electrode geometry relative to its own origin and — when an anchor measurement is available — references the parent anatomical frame with `ParentCoordinateSystem`, `AnchorElectrode`, and `AnchorCoordinates` fields. If no anatomical measurement was taken, the grid file stands alone with grid-internal coordinates only.
 
 ---
 
-### Our approach: all metadata in five simple CSV files
+### Simplified approach: all metadata in five simple CSV files
 
-Filling in BIDS metadata by hand — one JSON or TSV per recording — is error-prone and tedious for anything beyond a handful of files. We simplify this by collecting all the information in five CSV files, then generating the full set of BIDS metadata files automatically.
+Filling in BIDS metadata by hand — one JSON or TSV per recording — is error-prone and tedious for anything beyond a handful of files. For typical HD-EMG datasets, we simplify this by collecting all information in five CSV files and automatically generating the full set of BIDS metadata files.
 
 The five files and what they produce:
 
@@ -96,17 +96,17 @@ The five files and what they produce:
 
 </div>
 
-**A note on `setup.csv`.** This file does not correspond directly to any single BIDS file! Instead, each *setup* is a named bundle of hardware settings and electrode configuration that can be shared across many recordings. The name appears as a column in `recordings.csv`, so each recording row simply declares which setup it belongs to. This is especially useful when different recordings in the same dataset use different grids (e.g., different muscles, different grid sizes), different amplifiers, or additional recording modalities such as concurrent intramuscular EMG. Without this abstraction you would need to re-specify the full hardware description for every recording individually.
+**A note on `setup.csv`.** This file does not correspond directly to any single BIDS file! Instead, each *setup* is a named bundle of hardware settings and electrode configuration that can be shared across many recordings. The name appears as a column in `recordings.csv`, so each recording row simply declares which setup it belongs to. This is especially useful when different recordings in the same dataset use different grids (e.g., different muscles, different grid sizes), different amplifiers, or additional recording modalities such as concurrent intramuscular EMG. Without this abstraction, you would need to re-specify the full hardware description for every recording individually.
 
 In our example dataset, three setups arise naturally across the ten recordings.
 
-> **Disclaimer.** This approach works well for typical HD-EMG experiments with a small number of well-defined recording configurations. It does not cover every possible EMG-BIDS feature, and some datasets — for example those with per-channel impedance measurements, intramuscular concurrent recordings, or complex multi-space electrode layouts — may require additional hand-editing of the generated files. At the end of the day, BIDS requires metadata at multiple levels and this needs to be at the back of the curator's mind when preparing a dataset.
+> **Disclaimer.** This approach works well for typical HD-EMG experiments with a small number of well-defined recording configurations. It does not cover every possible EMG-BIDS feature, and some datasets — for example, those with per-channel impedance measurements, intramuscular concurrent recordings, or complex multi-space electrode layouts — may require additional hand-editing of the generated files/the use of more flexible tools. At the end of the day, BIDS requires metadata at multiple levels and this needs to be at the back of the curator's mind when preparing a dataset.
 
 ---
 
 ### Part 1 — Dataset, participants and recordings
 
-The dataset-level fields — name, authors, licence, BIDS version — are filled in via our [EMG-BIDS Metadata Tool](/metadata-form.md). For our tutorial dataset the resulting `dataset_description.json` looks like this:
+The dataset-level fields — name, authors, license, BIDS version — are filled in via our [EMG-BIDS Metadata Tool](/metadata-form.md). For our tutorial dataset, the resulting `dataset_description.json` looks like this:
 
 ```json
 {
@@ -118,7 +118,7 @@ The dataset-level fields — name, authors, licence, BIDS version — are filled
 }
 ```
 
-Next we fill in the participant-level and recording-level index files. Together these two CSVs define the subject IDs, session labels, and task names that BIDS will use to name every output file.
+Next, we fill in the participant-level and recording-level index files. Together, these two CSVs define the subject IDs, session labels, and task names that BIDS will use to name every output file.
 
 #### `participants.csv`
 
@@ -131,11 +131,11 @@ This file contains one row per subject. The `group` column is optional but usefu
 
 #### `recordings.csv`
 
-This file contains one row per recording file. The `setup` column links each recording to its hardware and electrode configuration. In our dataset, as we indicated before, three distinct setups appear: `VL_3x4s_1i`, `TA_dual_3x3`, and `TA_4x4`. Each will generate its own set of BIDS metadata files.
+This file contains one row per recording file. In BIDS, the folder structure and file names follow a well-defined schema. Thus, each recording is specified by a set of labels (i.e., a string of letters/numbers; no whitespace, underscores, or hyphens). Here,  we limit the complexity to use the labels `sub`, `ses`, `task`, and `run` (generally, BIDS allows for additional labels).  The `setup` column links each recording to its hardware and electrode configuration. In our dataset, as we indicated before, three distinct setups appear: `VL_3x4s_1i`, `TA_dual_3x3`, and `TA_4x4`. Each will generate its own set of BIDS metadata files.
 
-Subject 1 has only a single session, so `ses` field is left blank. Subject 2's three recordings from each session reference different setups because the grid configuration changed between sessions.
+Subject 1 has only a single session, so the `ses` field is left blank. Subject 2's three recordings from each session reference different setups because the grid configuration changed between sessions.
 
-> **Note:** the keyword `ses` is also used to identify any change to the experimental setup of a single subject. E.g., if the electrodes were removed and repositioned, we would count this as a separate session, even though the setup remained identical.
+> **Note:** The keyword `ses` is also used to identify any change to the experimental setup of a single subject. E.g., if the electrodes were removed and repositioned, we would count this as a separate session, even though the setup remained identical.
 
 | sub | ses | task_name | run | setup | path_to_emg_file | path_to_labels_file | path_to_events_file |
 |-----|-----|-----------|-----|-------|------------------|---------------------|---------------------|
@@ -150,9 +150,9 @@ Subject 1 has only a single session, so `ses` field is left blank. Subject 2's t
 | 02 | 02 | isometric30percentMVC | 2 | TA_4x4 | sub2/ta_1grid_trial2.npy | sub2/ta_1grid_trial2_mu.mat | sub2/ta_1grid_trial2_events.csv |
 | 02 | 02 | isometric30percentMVC | 3 | TA_4x4 | sub2/ta_1grid_trial3.npy | sub2/ta_1grid_trial3_mu.mat | sub2/ta_1grid_trial3_events.csv |
 
-Each row points to three data files that together constitute a complete recording: the raw HD-sEMG signal (`path_to_emg_file`), the decomposed spike trains after manual curation (`path_to_labels_file`), and the behavioural event annotations (`path_to_events_file`). These files do not come directly from your acquisition software — you need to export and convert them into the formats the assembly script expects before filling in the paths above.
+Each row points to three data files that together constitute a complete recording: the raw HD-sEMG signal (`path_to_emg_file`), the decomposed spike trains after manual curation (`path_to_labels_file`), and the behavioral event annotations (`path_to_events_file`). These files do not come directly from your acquisition software — you need to export and convert them into the formats the assembly script expects before filling in the paths above.
 
-> **Before filling in these paths**, convert your original acquisition files: `path_to_emg_file` should point to an array file (`.npy` / `.npz` for Python, `.mat` for MATLAB) with shape **n_channels × n_samples**; `path_to_labels_file` to your decomposed spike trains in the same format; and `path_to_events_file` to a behavioural events CSV. Rest recordings with no task structure can leave `path_to_events_file` blank. See [Part 4](#part-4----recorded-data-annotated-events-and-decomposed-spike-trains) for the expected file formats and events CSV column layout.
+> **Before filling in these paths**, convert your original acquisition files: `path_to_emg_file` should point to an array file (`.npy` / `.npz` for Python, `.mat` for MATLAB) with shape **n_channels × n_samples**; `path_to_labels_file` to your decomposed spike trains in the same format; and `path_to_events_file` to a behavioral events CSV. Rest recordings with no task structure can leave `path_to_events_file` blank. See [Part 4](#part-4----recorded-data-annotated-events-and-decomposed-spike-trains) for the expected file formats and events CSV column layout.
 
 ---
 
@@ -219,7 +219,7 @@ Correspondingly, our `coordsystems.csv` and `channels_electrodes.csv` rows look 
 
 | setup | name | type | units | description | parent_coord_system | anchor_electrode | anchor_x | anchor_y |
 |-------|------|------|-------|-------------|---------------------|------------------|----------|----------|
-| VL_3x4s_1i | thigh | anatomical | mm | Origin at the greater trochanter. x-axis points distally along the femoral shaft. y-axis points anteriorly. z-axis points medially. | | | | |
+| VL_3x4s_1i | thigh | anatomical | mm | Origin at the greater trochanter. x-axis points distally along the femoral shaft. y-axis points anteriorly. The z-axis points medially. | | | | |
 | VL_3x4s_1i | grid1 | grid | mm | 3x4 grid over right vastus lateralis. Origin at electrode E1 (top-left corner). x-axis points distally, y-axis points laterally. For intramuscular entries, z represents insertion depth positive into the muscle. | thigh | E1 | 55 | 175 |
 
 `channels_electrodes.csv`:
@@ -235,7 +235,7 @@ Correspondingly, our `coordsystems.csv` and `channels_electrodes.csv` rows look 
 
 <p class="wt-table-note">EMG002–EMG011 follow the same pattern as EMG001: x cycles through 0, 8, 16, 24 mm across each column, y increments by 8 mm per row, z=0. EMG013 is the only channel with a non-zero z value.</p>
 
-> **Note:** the grid layout above shows physical electrode labels (E1, E2, …, E_im) — the actual objects attached to or inserted into the tissue. The `channels_electrodes.csv` file specifies how each physical electrode maps to a stored data channel on disk: E1 → EMG001, …, E12 → EMG012, E_im → EMG013. Surface electrodes all sit at z=0 in the grid frame while the intramuscular wire is at z=12 (12 mm insertion depth). The reference electrode R1 is placed on the patella; its position (370, 0, 0) is expressed in the `thigh` anatomical frame (370 mm distal from the greater trochanter along the femoral shaft).
+> **Note:** the grid layout above shows physical electrode labels (E1, E2, …, E_im) — the actual objects attached to or inserted into the tissue. The `channels_electrodes.csv` file specifies how each physical electrode maps to a stored data channel on disk: E1 → EMG001, …, E12 → EMG012, E_im → EMG013. Surface electrodes all sit at z=0 in the grid frame, while the intramuscular wire is at z=12 (12 mm insertion depth). The reference electrode R1 is placed on the patella; its position (370, 0, 0) is expressed in the `thigh` anatomical frame (370 mm distal from the greater trochanter along the femoral shaft).
 
 > **Intramuscular EMG — simplified treatment and ongoing spec work.** The approach above (reusing the surface grid coordinate system, encoding insertion depth as z) works for a single concurrent wire electrode but is a deliberate simplification. Datasets with intramuscular grids, fine wires, or concentric needles involve dedicated coordinate systems, additional physical parameters (wire diameter, tip length, cannula dimensions), and richer electrode type vocabulary that go beyond what this walkthrough covers. Critically, **the EMG-BIDS specification for invasive EMG is still under active development** — see [this open pull request](https://github.com/neuromechanist/bids-examples/pull/5) for the current state of the discussion. For a more complete worked example covering thin-film HD-iEMG grids, fine wires, and concentric needles alongside surface grids, see the [MUnitQuest fictional dataset tutorial](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/fictionalDatasetExample_to_bids.ipynb).
 
