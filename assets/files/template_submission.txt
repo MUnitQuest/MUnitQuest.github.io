@@ -1,0 +1,27 @@
+Title: 
+A concise, descriptive title for your dataset (e.g., "HDsEMG recordings of tibialis anterior during isometric and dynamic dorsiflexion in 20 healthy adults").
+
+Team name (userid) on Codabench:
+
+Has this dataset been published elsewhere? 
+State yes/no. If yes, provide citation(s) and DOI(s), and clarify what is new in this submission (e.g., additional subjects, re-labelled spike trains, expanded metadata). If the data is under embargo elsewhere, note the release date.
+
+Abstract (≤200 words): 
+Summarize the purpose of the data collection and intended research.
+
+Novelty and diversity statement (≤100 words): 
+Highlight what makes this dataset distinct! Cover any of: novel muscles or movements, atypical contraction modes (eccentric, ballistic, fatiguing, dynamic), patient or pathological cohorts, age range, sex balance, ethnicity, electrode configurations, or recording environments. 
+
+Experimental setup description (if applicable, ≤200 words): 
+Describe participant cohort (N, age, sex, health/pathology status, ethics approval ID); recording setup; task protocol etc. Please include a figure of the setup.
+
+Decomposition and motor unit labelling (if applicable, ≤200 words): 
+Describe the full decomposition and motor unit spike train curation pipeline incl. signal pre-processing, bad-channel detection and handling; decomposition software and version (e.g., DEMUSE, EMGlab, custom blind source separation) with key parameter choices; motor unit inclusion/exclusion criteria; manual curation procedure (who performed it, expertise level etc.); how duplicate motor units across grids or sessions were identified and resolved. 
+
+Alternative for simulated datasets (if applicable, ≤400 words): 
+Describe the muscle model (geometry, fibre distribution, MU territories); the motoneuron pool model and how firing patterns / common drive were generated; MUAP generation approach (volume conductor model, electrode model); noise and artefact model (baseline noise, power-line, motion); the input drive (force profile, excitation signal) and how it maps to the simulated task; software stack with version numbers and a link to the code repository (if available); any validation against experimental recordings; known simplifications and their expected impact on downstream decomposition.
+
+Limitations: 
+List omitted recordings or channels and the reason; segments excluded from labelling; subjects with incomplete data; any known artefacts or sync issues; aspects of the data reviewers should weigh carefully.
+
+References: Up to ~10 entries, any consistent style (APA, IEEE, Vancouver).
