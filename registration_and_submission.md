@@ -54,13 +54,13 @@ To obtain a diverse data collection for MUnitQuest that balances realism and lab
 #### How to prepare your submission
 
 **Step 1 — Prepare your EMG data in EMG-BIDS format**
-Data must be submitted in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. Our [dataset submission walkthrough](/walkthrough) walks through the full process, and the [web-based metadata tool](/metadata-form) generates all BIDS sidecar files from five simple CSV files. We also provide a [Python tutorial] *Coming Soon*.
+Data must be submitted in the standardized [EMG-BIDS](https://bids-specification.readthedocs.io/en/stable/modality-specific-files/electromyography.html) format. To make getting started with EMG-BIDS as easy as possible, check out our [Tuorials](/resources/); we showcase different ways to prepare an EMG-BIDS dataset. 
 
 **Step 2 — Prepare your labeled spike trains**
-For each recording, provide a `*_events.tsv` file (BIDS-events file) containing the labeled motor unit spike trains. See the [example below](#example-how-to-report-motor-unit-spike-trains) for the required format. The [submission walkthrough](/walkthrough) covers how to assemble these into your BIDS dataset.
+For each recording, provide a `*_events.tsv` file (BIDS-events file) containing the labeled motor unit spike trains. See the [example below](#example-how-to-report-motor-unit-spike-trains) for the required format. The [Tutorials](/resources/) cover how to assemble these into your BIDS dataset.
 
 **Step 3 — Write a 2-page PDF**
-Include a short description of your labelling approach (for experimental data) or simulation model (for synthetic data). For concurrent iEMG submissions, describe how the invasive reference was used. This PDF will be placed at the root of your final submission (see Step 5).
+Include a short description of your labeling approach (for experimental data) or simulation model (for synthetic data). For concurrent iEMG submissions, describe how the invasive reference was used. This PDF will be placed at the root of your final submission (see Step 5).
 
 **Step 4 — Upload a metadata-only zip to Codabench**
 Prepare a `.zip` of your BIDS dataset that excludes all raw data files (`.edf`) and upload it to the [Data Challenge on Codabench](https://www.codabench.org/competitions/15762/). You can use the following shell command from the parent directory of your BIDS dataset folder:

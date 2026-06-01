@@ -13,7 +13,7 @@ Here we summarize key dates and the competition timeline.
 | -------------- | ----------- |
 | 01/06/2026     | **Data Challenge:** The data submission portal opens |
 | 15/06/2026     | **Algorithm Challenge – Familiarization:** The prediction submission portal opens |
-| 25/06/2026     | **MUnitQuest Symposium at ISEK2026** (12:30 - 14:00, CET) |
+| 25/06/2026     | **MUnitQuest Symposium at ISEK2026** (12:30 - 14:00, EEST) |
 | 15/09/2026     | **Data Challenge:** The data submission closes (23:59, CET) |
 | 30/09/2026     | **Algorithm Challenge – Familiarization:** The prediction submission portal closes |
 | 15/10/2026     | **Double-blind data evaluation completed** |
@@ -50,6 +50,6 @@ Here we summarize key dates and the competition timeline.
 - Finals to determine the leaderboards of the **Isometric** and **Dynamic** tasks
 - Competitors are provided with the *MUnitQuest data collection* (hidden labels) consisting of anonymized recordings collected during the **Data Challenge**
 - Note that the organizers may make small alterations to the test data (e.g., injected noise, cropping signals, etc.) to limit the advantage of teams also participating in the **Data Challenge**
-- Submission of predicted motor unit spike trains via the Codabench plattform
+- Submission of predicted motor unit spike trains via the Codabench platform
 - To be eligible for awards, competitors need to share their code (e.g., using GitHub) openly
 
