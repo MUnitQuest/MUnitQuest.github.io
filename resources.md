@@ -18,7 +18,7 @@ We provide tutorials and tools to guide you through building your first [EMG-BID
 
 #### MUnitQuest EMG-BIDS Tutorial
 
-A step-by-step guide covering how to prepare an HD-EMG dataset in EMG-BIDS format and organize your labeled spike trains (Steps 1 and 2 of the [submission process](/registration_and_submission/)). A simplified approach tailored to typical HD-EMG recordings, walking through five simple CSV template files that generate a complete set of BIDS metadata files, with Python and MATLAB code throughout.
+A step-by-step guide covering how to prepare an HD-EMG dataset in EMG-BIDS format and organize your labeled spike trains (Steps 1 and 2 of the [submission process](/registration_and_submission/)). We developed a simplified approach tailored to typical HD-EMG recordings, walking through five simple CSV template files that generate a complete set of BIDS metadata files, with Python and MATLAB code throughout.
 
 [Go to the Walkthrough →](/walkthrough/)
 
@@ -30,7 +30,7 @@ An online form that takes your five filled-in CSV files and produces a `metadata
 
 #### MUniverse EMG-BIDS Tutorial (Python)
 
-The Python-based [MUniverse package](https://github.com/dfarinagroup/muniverse/tree/main) includes a set of classes for handling EMG-BIDS datasets. For example, to read, write, and validate a dataset/recording. We provide a tutorial illustrating how to use these utilities to generate your own EMG-BIDS dataset.  
+The Python-based [MUniverse package](https://github.com/dfarinagroup/muniverse/tree/main) includes a set of classes for handling EMG-BIDS datasets. For example, to read, write, and validate a dataset/recording. We provide a tutorial illustrating how to use these utilities to generate your own EMG-BIDS dataset, including motor unit spike labels.  
 
 [Open the Jupyter Notebook Tutorial →](https://github.com/MUnitQuest/MUnitQuest_tutorials/tree/main/emg_bids_tutorial2)
 
