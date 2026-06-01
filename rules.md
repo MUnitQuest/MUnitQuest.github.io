@@ -8,7 +8,7 @@ feature_text:
 
 ### Rules of participation 
 
-Collaboration in teams (no restriction on team size) is allowed and should be declared transparently on the Codabench platform (by creating an Organization for submission). Each person may only belong to one team (per challenge). We score the last submission from each team. Each participant must use only one account on Codabench. Multiple account usage leading to multiple submissions will result in disqualification.
+Collaboration in teams (no restriction on team size) is allowed and should be declared transparently on the Codabench platform (by creating an Organization for submission). Each person may only belong to one team (per challenge). We score the last submission from each team. Each participant must use only one account on Codabench. Multiple account usage leading to multiple submissions will result in disqualification. For teams willing to submit multiple submissions in the data challenge, please contact the organisers for assistance.
 
 ### Code of conduct 
 
