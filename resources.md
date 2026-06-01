@@ -32,7 +32,7 @@ An online form that takes your five filled-in CSV files and produces a `metadata
 
 The Python-based [MUniverse package](https://github.com/dfarinagroup/muniverse/tree/main) includes a set of classes for handling EMG-BIDS datasets. For example, to read, write, and validate a dataset/recording. We provide a tutorial illustrating how to use these utilities to generate your own EMG-BIDS dataset, including motor unit spike labels.  
 
-[Open the Jupyter Notebook Tutorial →](/tutorials/emg_bids_tutorial2.html)
+[Open the Jupyter Notebook Tutorial →](https://nbviewer.org/github/MUnitQuest/MUnitQuest_tutorials/blob/main/emg_bids_tutorial2/emg_bids_tutorial2.ipynb)
 
 #### BIDS documentation and examples
 
