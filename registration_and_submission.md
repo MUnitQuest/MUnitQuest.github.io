@@ -63,10 +63,10 @@ For each recording, provide a `*_events.tsv` file (BIDS-events file) containing 
 Include a short description of your labeling approach (for experimental data) or simulation model (for synthetic data). For concurrent iEMG submissions, describe how the invasive reference was used. This PDF will be placed at the root of your final submission (see Step 5). Use our [submission template](/assets/files/template_submission.txt) as a starting point.
 
 **Step 4 — Upload a metadata-only zip to Codabench**
-Prepare a `.zip` of your BIDS dataset that excludes all raw data files (`.edf`) and upload it to the [Data Challenge on Codabench](https://www.codabench.org/competitions/15762/). You can use the following shell command from the parent directory of your BIDS dataset folder:
+Prepare a `.zip` of your BIDS dataset that excludes all raw data files (`.edf` or `.bdf`) and upload it to the [Data Challenge on Codabench](https://www.codabench.org/competitions/15762/). You can use the following shell command from the parent directory of your BIDS dataset folder:
 
 ```shell
-zip -r submission_metadata.zip <your_bids_folder>/ --exclude "*.edf"
+zip -r submission_metadata.zip <your_bids_folder>/ --exclude "*.edf" --exclude "*.bdf"
 ```
 
 After processing, you will be able to download an HTML report of your submission — review it to confirm everything is in order before proceeding.
