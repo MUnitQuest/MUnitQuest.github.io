@@ -6,11 +6,11 @@ Team name (userid) on Codabench:
 Has this dataset been published elsewhere? 
 State yes/no. If yes, provide citation(s) and DOI(s), and if applicable, clarify what is new in this submission (e.g., additional subjects, re-labeled spike trains, expanded metadata). If the data is under embargo elsewhere, note the release date.
 
-Abstract (≤200 words): 
+Abstract (e): 
 Summarize the purpose of the data collection and intended research.
 
 Novelty and diversity statement (≤100 words): 
-Highlight what makes this dataset distinct! Cover any of: innovative motor unit spike train labeling approaches, rarely decomposed muscles or contraction modes (eccentric, ballistic, fatiguing, dynamic), patient or pathological cohorts, age range, sex balance, ethnicity, electrode configurations, recording environments, or any other sparticular challenges posed on motor unit identification methods (doublets, synchronized firings, etc.). 
+Highlight what makes this dataset distinct! Cover any of: innovative motor unit spike train labeling approaches, rarely decomposed muscles or contraction modes (eccentric, ballistic, fatiguing, dynamic), patient or pathological cohorts, age range, sex balance, ethnicity, electrode configurations, recording environments, or any other specific challenges posed on motor unit identification methods (doublets, synchronized firings, etc.). 
 
 Experimental setup description (if applicable, ≤200 words): 
 Describe participant cohort (N, age, sex, health/pathology status, ethics approval ID); recording setup; task protocol, etc. Please include a figure of the setup.
