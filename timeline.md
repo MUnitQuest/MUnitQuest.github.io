@@ -36,12 +36,12 @@ Here we summarize key dates and the competition timeline.
 #### Familiarization Phase
 
 - Runs parallel to the **Data Challenge**
-- Competitors are provided with training data from the [MUniverse benchmark collection](https://openreview.net/pdf?id=Slrp3l7aYo) (including motor unit spike train labels)
+- Competitors are provided with test data ([Familiarization Phase Isometric Challenge](https://doi.org/10.18419/DARUS-6143) and [Familiarization Phase Dynamic Challenge](https://doi.org/10.18419/DARUS-6144))
 - Competitors develop and optimize their algorithms
 - Participants can compete in both tasks (**Isometric** and **Dynamic**) or in only one task
-- Competitors need to upload their predictions (motor unit spike trains) on Codabench (coming soon)
+- Competitors need to upload their predictions (motor unit spike trains) on [Codabench](https://www.codabench.org/competitions/15749/)
 - An anonymous preliminary leaderboard is provided as feedback
-- Results from baseline algorithms (together with tutorials -- coming soon) are provided for reference
+- Results from baseline algorithms and tutorial (coming soon) are provided for reference
 - Participation in the Familiarization phase is encouraged
 
 
