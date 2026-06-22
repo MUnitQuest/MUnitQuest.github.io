@@ -87,7 +87,7 @@ This is a prediction submission competition. During both the **Familiarization P
 
 Here is a minimal example of the format ([BIDS-event file](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files/events.html)) used for submitting motor unit spike trains (both for labels and algorithm predictions):    
 
-| **onset** | **duration** | **sample** | **unit_id** | **description** |
+| **onset** | **duration** | **sample** | **unit_id** | **event_type** |
 | --------- | ------------ | ---------- | ----------- | ----------------------|
 | 0.001     | 0            | 1          | 0           | motor-unit-spike      |
 | 0.005     | 0            | 5          | 1           | motor-unit-spike      |
@@ -100,9 +100,9 @@ Here is a minimal example of the format ([BIDS-event file](https://bids-specific
 - ``duration:`` Duration of the event (measured from onset) in seconds. As a motor unit spike can be regarded as a Dirac impulse, its duration is zero.  
 - ``sample:`` Sample index of the event onset (zero-indexing).
 - ``unit_id:`` Unique identifier (integer value) of the motor unit corresponding to the detected spike.
-- ``description:`` Human-readable free-text description of the event. Here, it should always be "motor-unit-spike".
+- ``event_type:`` Unique event-type classifier. For a motor unit discharge use the label *"motor-unit-spike"*.
 
-> If you do manual post-processing, we encourage using an additional column ``curation_status`` (optional), and assigning each event a label such as ``accepted_spike``, ``rejected_spike``, or ``added_spike``. For rejected spikes, change the description to a key such as ``artifact`` or ``MISC`` (the scoring function will only consider events that have the description ``motor-unit-spike``).   
+> If you do manual post-processing, we encourage using an additional column ``curation_status`` (optional), and assigning each event a label such as *"accepted-spike"*, *"rejected-spike"*, or *"added-spike"*. For rejected spikes, change the ``event_type`` to a label such as *"artifact-spike"* or *"misc"* (the scoring function will only consider events that have the label *"motor-unit-spike"*).   
 
 #### How to report process metadata
 
