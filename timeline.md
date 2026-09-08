@@ -13,8 +13,8 @@ Here we summarize key dates and the competition timeline.
 | -------------- | ----------- |
 | <span style="color:#d1d5db">01/06/2026</span>     | <span style="color:#d1d5db">**Data Challenge:** The data submission portal opens</span> |
 | <span style="color:#d1d5db">15/06/2026</span>     | <span style="color:#d1d5db">**Algorithm Challenge – Familiarization:** The prediction submission portal opens</span> |
-| 25/06/2026     | **MUnitQuest Symposium at ISEK2026** (12:30 - 14:00, EEST) |
-| 15/09/2026     | **Data Challenge:** The data submission closes (23:59, CET) |
+| <span style="color:#d1d5db">25/06/2026</span>     | <span style="color:#d1d5db">**MUnitQuest Symposium at ISEK2026** (12:30 - 14:00, EEST)</span> |
+| 30/09/2026     | **Data Challenge:** The data submission closes (23:59, CET) |
 | 30/09/2026     | **Algorithm Challenge – Familiarization:** The prediction submission portal closes |
 | 15/10/2026     | **Double-blind data evaluation completed** |
 | 01/11/2026     | **Algorithm Challenge – Showdown:** Starts by releasing the *MUnitQuest data collection*, prediction submission opens |
