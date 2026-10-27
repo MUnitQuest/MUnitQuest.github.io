@@ -29,7 +29,7 @@ plugins:
 
 # Site settings
 url: 'https://munitquest.github.io/' #unsure where this shows
-baseurl: ''
+baseurl: '/MUnitQuest.github.io'
 title: 'MUnitQuest'
 description: 'Competition on motor unit identification'
 permalink: pretty
