@@ -425,6 +425,13 @@ def render_leaderboard(payload: dict) -> str:
   font-weight: 700;
   box-shadow: inset 0 -3px #365f91;
 }}
+.leaderboard-tab,
+.leaderboard-tab:hover,
+.leaderboard-tab:focus,
+.leaderboard-tab.active,
+.leaderboard-tab[aria-selected="true"] {{
+  color: #000 !important;
+}}
 .leaderboard-panel[hidden] {{
   display: none;
 }}
