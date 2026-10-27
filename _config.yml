@@ -28,7 +28,7 @@ plugins:
 - jekyll-remote-theme
 
 # Site settings
-url: 'https://munitquest.github.io/' #unsure where this shows
+url: 'https://paulbrandenburg.github.io' #unsure where this shows
 baseurl: '/MUnitQuest.github.io'
 title: 'MUnitQuest'
 description: 'Competition on motor unit identification'
