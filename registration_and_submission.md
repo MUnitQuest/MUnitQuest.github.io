@@ -127,7 +127,7 @@ Here is a minimal example for the log-file:
 }
 ```
 
-The runtime is the total wall-clock execution time for your algorithm (in seconds, reported as a number). The CodeURL is required even if your repository is private — it is used to verify algorithm identity, not to access the code.
+The runtime is the total wall-clock execution time for your algorithm (in seconds, reported as a number). The CodeURL is required even if your repository is private — it is used to verify algorithm identity, not to access the code. However, to be eligible for awards, the link must be valid and include your algorithm's code. 
 
 
  
