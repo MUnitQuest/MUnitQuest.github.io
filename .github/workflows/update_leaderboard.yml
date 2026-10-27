@@ -20,7 +20,7 @@ jobs:
 
     env:
       CODABENCH_LEADERBOARD_URL: ${{ vars.CODABENCH_LEADERBOARD_URL }}
-      CODABENCH_API_TOKEN: ${{ vars.CODABENCH_API_TOKEN }}
+      CODABENCH_API_TOKEN: ${{ secrets.CODABENCH_API_TOKEN }}
 
     steps:
       - name: Check out repository
