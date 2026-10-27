@@ -274,9 +274,13 @@ def render_table(entries: list[dict]) -> str:
     rows = []
 
     for item in entries:
+        rank = item["rank"]
+        medals = {1: "🥇", 2: "🥈", 3: "🥉"}
+        rank_display = f"{medals[rank]} {rank}" if rank in medals else str(rank)
+        
         rows.append(
             "<tr>"
-            f"<td>{item['rank']}</td>"
+            f"<td>{rank_display}</td>"
             f"<td>{escape(item['participant'])}</td>"
             f"<td>{escape(format_decimal(item['score']))}</td>"
             f"<td>{escape(format_decimal(item['f1']))}</td>"
