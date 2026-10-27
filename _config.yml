@@ -44,6 +44,8 @@ paginate_path: blog/page:num
 navigation_header:
 - title: Home
   url: /
+- title: Leaderboards
+  url: /leaderboards/
 - title: Data Challenge
   url: /data-challenge/
 - title: Algorithm Challenge

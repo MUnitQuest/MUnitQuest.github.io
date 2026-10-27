@@ -414,7 +414,7 @@ def render_leaderboard(payload: dict) -> str:
   border-bottom: 0;
   border-radius: 6px 6px 0 0;
   background: #f3f5f7;
-  color: inherit;
+  color: #000;
   cursor: pointer;
   font: inherit;
 }}

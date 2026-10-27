@@ -83,8 +83,3 @@ There might be small modifications in the scoring system for the showdown phase.
 ### Awards
 
 All teams receive recognition on a permanent leaderboard (per task). The **top 5 teams per task** (Isometric and Dynamic) will be invited to share their solutions in a *special issue* of the [Journal of Electromyography and Kinesiology](https://www.sciencedirect.com/journal/journal-of-electromyography-and-kinesiology). All winning teams will also be invited to share their work in a collaborative benchmarking paper in the same special issue!
-
-### Leaderboards
-
-{% include leaderboard.html %}
-
