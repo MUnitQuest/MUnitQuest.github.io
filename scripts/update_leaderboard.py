@@ -421,6 +421,7 @@ def render_leaderboard(payload: dict) -> str:
 .leaderboard-tab.active,
 .leaderboard-tab[aria-selected="true"] {{
   background: #fff;
+  color: #000 !important;
   font-weight: 700;
   box-shadow: inset 0 -3px #365f91;
 }}
