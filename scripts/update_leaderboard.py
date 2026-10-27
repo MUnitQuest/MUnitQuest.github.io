@@ -276,7 +276,7 @@ def render_table(entries: list[dict]) -> str:
     for item in entries:
         rank = item["rank"]
         medals = {1: "🥇", 2: "🥈", 3: "🥉"}
-        rank_display = f"{medals[rank]} {rank}" if rank in medals else str(rank)
+        rank_display = f"{rank} {medals[rank]}" if rank in medals else str(rank)
         
         rows.append(
             "<tr>"
