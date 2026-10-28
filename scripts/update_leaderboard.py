@@ -98,14 +98,19 @@ def parse_score(value: object) -> Decimal | None:
     return score
 
 
-def participant_name(submission_id: str) -> str:
+def participant_name(submission_id: str, queue_name: str="munitquest") -> str:
     """Convert a Codabench submission key to its participant key.
 
-    Assumption: Codabench appends a hyphen and numeric submission ID,
-    e.g. 'ghazi2026-930824'.
+    Assumption: participant are represented in the following ways
+    - ghazi2026-930824-930822_munitquest
+    - ghazi2026-930824
+
+    These are the cases we try to cover
 
     Adjust this function if the endpoint uses a different naming scheme.
     """
+    if queue_name in submission_id:
+        return re.sub(rf"-\d+-\d+_{queue_name}$", "", submission_id)
     return re.sub(r"-\d+$", "", submission_id)
 
 
@@ -342,16 +347,16 @@ def render_leaderboard(payload: dict) -> str:
     tab_buttons = []
 
     for index, phase in enumerate(PHASES.values()):
-        active = " active" if index == 0 else ""
-        hidden = "" if index == 0 else " hidden"
+        active = " active" if index == 1 else ""
+        hidden = "" if index == 1 else " hidden"
         panel_id = f"leaderboard-phase-{index}"
 
         tab_buttons.append(
             f'<button type="button" class="leaderboard-tab{active}" '
             f'role="tab" id="leaderboard-tab-{index}" '
             f'aria-controls="{panel_id}" '
-            f'aria-selected="{str(index == 0).lower()}" '
-            f'tabindex="{0 if index == 0 else -1}" '
+            f'aria-selected="{str(index == 1).lower()}" '
+            f'tabindex="{0 if index == 1 else -1}" '
             f'data-tab-index="{index}">{escape(phase)}</button>'
         )
 
@@ -373,7 +378,7 @@ def render_leaderboard(payload: dict) -> str:
             f'<div class="leaderboard-panel{hidden}" '
             f'role="tabpanel" id="{panel_id}" '
             f'aria-labelledby="leaderboard-tab-{index}" '
-            f'{"hidden" if index != 0 else ""}>'
+            f'{"hidden" if index != 1 else ""}>'
             f"<h3>{escape(phase)}</h3>"
             f"{''.join(task_sections)}"
             f"</div>"
