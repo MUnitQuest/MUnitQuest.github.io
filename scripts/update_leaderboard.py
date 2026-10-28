@@ -98,14 +98,19 @@ def parse_score(value: object) -> Decimal | None:
     return score
 
 
-def participant_name(submission_id: str) -> str:
+def participant_name(submission_id: str, queue_name: str="munitquest") -> str:
     """Convert a Codabench submission key to its participant key.
 
-    Assumption: Codabench appends a hyphen and numeric submission ID,
-    e.g. 'ghazi2026-930824'.
+    Assumption: participant are represented in the following ways
+    - ghazi2026-930824-930822_munitquest
+    - ghazi2026-930824
+
+    These are the cases we try to cover
 
     Adjust this function if the endpoint uses a different naming scheme.
     """
+    if queue_name in submission_id:
+        return re.sub(rf"-\d+-\d+_{queue_name}$", "", submission_id)
     return re.sub(r"-\d+$", "", submission_id)
 
 
