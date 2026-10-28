@@ -11,4 +11,3 @@ Corrected mirror on codabench-leaderboards for the Algorithm Challenge
 {% include leaderboard.html %}
 
 
-### Data Challenge
