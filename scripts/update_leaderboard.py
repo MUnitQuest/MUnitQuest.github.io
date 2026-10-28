@@ -402,12 +402,14 @@ def render_leaderboard(payload: dict) -> str:
   <p class="leaderboard-source">
     Results are aggregated by participant. The best score per task
     is shown; F1-Score breaks ties when available.
-    <a href="https://www.codabench.org/">Codabench</a>
+    <a href="https://www.codabench.org/competitions/15749/#/results-tab">Leaderboards in Codabench</a>
   </p>
 </div>
 
 <style>
 .corrected-leaderboard {{
+  width: 100%;
+  max-width: none;
   margin: 1.5rem 0;
 }}
 .leaderboard-tabs {{
@@ -444,21 +446,30 @@ def render_leaderboard(payload: dict) -> str:
 .leaderboard-panel[hidden] {{
   display: none;
 }}
+.leaderboard-panel {{
+  width: 100%;
+}}
 .leaderboard-task {{
+  width: 100%;
   margin: 1.5rem 0;
 }}
 .leaderboard-table-wrapper {{
-  max-width: 100%;
+  width: 100%;
+  max-width: none;
   overflow-x: auto;
 }}
+
 .corrected-leaderboard-table {{
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  table-layout: fixed;
+  font-size: 1.5rem;
+  line-height: 1.5;
 }}
 .corrected-leaderboard-table th,
 .corrected-leaderboard-table td {{
-  padding: 0.65rem 0.8rem;
+  padding: 0.8rem 1rem;
   border-bottom: 1px solid #ddd;
   text-align: left;
 }}
