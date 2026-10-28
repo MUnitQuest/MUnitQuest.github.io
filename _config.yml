@@ -28,8 +28,8 @@ plugins:
 - jekyll-remote-theme
 
 # Site settings
-url: 'https://paulbrandenburg.github.io' #unsure where this shows
-baseurl: '/MUnitQuest.github.io'
+url: 'https://munitquest.github.io/' #unsure where this shows
+baseurl: ''
 title: 'MUnitQuest'
 description: 'Competition on motor unit identification'
 permalink: pretty
