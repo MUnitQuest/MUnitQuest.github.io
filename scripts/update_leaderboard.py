@@ -95,7 +95,7 @@ def parse_score(value: object) -> Decimal | None:
     if not score.is_finite():
         return None
 
-    return score
+    return round(score, 4)
 
 
 def participant_name(submission_id: str, queue_name: str="munitquest") -> str:
