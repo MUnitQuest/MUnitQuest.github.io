@@ -1,0 +1,45 @@
+
+name: Update corrected leaderboard
+
+on:
+  schedule:
+    - cron: "15 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-corrected-leaderboard
+  cancel-in-progress: false
+
+jobs:
+  update-leaderboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    env:
+      CODABENCH_LEADERBOARD_URL: ${{ vars.CODABENCH_LEADERBOARD_URL }}
+      CODABENCH_API_TOKEN: ${{ secrets.CODABENCH_API_TOKEN }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate corrected leaderboard
+        run: python scripts/update_leaderboard.py
+
+      - name: Commit updated leaderboard
+        run: |
+          if git diff --quiet -- _includes/leaderboard.html; then
+            echo "Leaderboard unchanged."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add _includes/leaderboard.html
+          git commit -m "Update corrected Codabench leaderboard"
+          git push
