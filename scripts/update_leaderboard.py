@@ -347,16 +347,16 @@ def render_leaderboard(payload: dict) -> str:
     tab_buttons = []
 
     for index, phase in enumerate(PHASES.values()):
-        active = " active" if index == 0 else ""
-        hidden = "" if index == 0 else " hidden"
+        active = " active" if index == 1 else ""
+        hidden = "" if index == 1 else " hidden"
         panel_id = f"leaderboard-phase-{index}"
 
         tab_buttons.append(
             f'<button type="button" class="leaderboard-tab{active}" '
             f'role="tab" id="leaderboard-tab-{index}" '
             f'aria-controls="{panel_id}" '
-            f'aria-selected="{str(index == 0).lower()}" '
-            f'tabindex="{0 if index == 0 else -1}" '
+            f'aria-selected="{str(index == 1).lower()}" '
+            f'tabindex="{0 if index == 1 else -1}" '
             f'data-tab-index="{index}">{escape(phase)}</button>'
         )
 
@@ -378,7 +378,7 @@ def render_leaderboard(payload: dict) -> str:
             f'<div class="leaderboard-panel{hidden}" '
             f'role="tabpanel" id="{panel_id}" '
             f'aria-labelledby="leaderboard-tab-{index}" '
-            f'{"hidden" if index != 0 else ""}>'
+            f'{"hidden" if index != 1 else ""}>'
             f"<h3>{escape(phase)}</h3>"
             f"{''.join(task_sections)}"
             f"</div>"
