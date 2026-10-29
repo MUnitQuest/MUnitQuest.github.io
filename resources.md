@@ -58,7 +58,15 @@ The competition data is availible on [DaRUS](https://darus.uni-stuttgart.de/data
 
 Jupyter notebooks to help algorithm developers get started with the MUnitQuest test data and submission pipeline.
 
+**Familiarization phase**
+
 [Go to the tutorial notebook for the Isometric Challenge →](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/algorithm_challenge_tutorials/01_familiarisation_isometric.ipynb)
 
 [Go to the tutorial notebook for the Dynamic Challenge →](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/algorithm_challenge_tutorials/02_familiarisation_dynamic.ipynb)
+
+**Showdown phase**
+
+[Go to the showdown notebook for the Isometric Challenge →](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/algorithm_challenge_tutorials/03_showdown_isometric.ipynb)
+
+[Go to the showdown notebook for the Dynamic Challenge →](https://github.com/MUnitQuest/MUnitQuest_tutorials/blob/main/algorithm_challenge_tutorials/04_showdown_dynamic.ipynb)
 
