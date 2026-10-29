@@ -80,7 +80,22 @@ If your Step 4 submission is successful, a link will be provided to upload the c
 
 #### Algorithm submission
 
-This is a prediction submission competition. During both the **Familiarization Phase** and the **Showdown Phase**, you will be asked to upload, for each recording, a tabular file (`*desc-decomposed_events.tsv`) containing your predicted motor unit spikes (BIDS-events file) together with a log file (`*desc-decomposed_log.json`) describing essential process metadata (further details to be announced). Submissions apply to both tasks (**Isometric** and **Dynamic**) independently. To be eligible for awards, you need to share your code openly (e.g., on GitHub) upon the completion of the competition.
+This is a prediction submission competition. During both the **Familiarization Phase** and the **Showdown Phase**, you will be asked to upload, for each recording, a tabular file (`*desc-decomposed_events.tsv`) containing your predicted motor unit spikes (BIDS-events file) together with a log file (`*desc-decomposed_log.json`) describing essential process metadata. Use the recording and challenge labels of the provided data, i.e., `recording-<rec_label>_challenge-<challenge_label>_desc-decomposed_events.tsv` and `recording-<rec_label>_challenge-<challenge_label>_desc-decomposed_log.json` (e.g., `recording-001_challenge-isometric_desc-decomposed_events.tsv`). Submissions apply to both tasks (**Isometric** and **Dynamic**) independently. To be eligible for awards, you need to share your code openly (e.g., on GitHub) upon the completion of the competition.
+
+Only spikes between a recording's `scoring_start` and `scoring_end` events are scored; spikes outside these regions are disregarded (see [Leaderboard scoring](/algorithm-challenge/#leaderboard-scoring)).
+
+**Submission format.** Codabench requires a `.zip` archive. Submit one archive per task (Isometric: 100 recordings, Dynamic: 50 recordings), each containing the events file and the log file for every recording. The files must be at the root of the archive, not in a subfolder. If your results are in a folder, `zip -j my_submission.zip results/*` creates a flat archive. Check your files with `validate_submission()` (part of the [walkthrough notebooks](https://github.com/MUnitQuest/MUnitQuest_tutorials/tree/main/algorithm_challenge_tutorials)) before uploading.
+
+```
+exampleSubmission.zip
+├── recording-001_challenge-isometric_desc-decomposed_events.tsv
+├── recording-001_challenge-isometric_desc-decomposed_log.json
+├── ...
+├── recording-100_challenge-isometric_desc-decomposed_events.tsv
+└── recording-100_challenge-isometric_desc-decomposed_log.json
+```
+
+For the Dynamic task, replace `isometric` by `dynamic` (recordings `001` to `050`).
 
 
 #### How to report motor unit spike trains
@@ -114,20 +129,24 @@ Here is a minimal example for the log-file:
         "Name": "MUnitQuest Tutorials",
         "Description": "Minimal Example",
         "CodeURL": "https://munitquest.github.io/",
-        "License": "MIT",
+        "License": "MIT"
     }],
     "Execution": {
-        "Runtime": 42,   
+        "Runtime": 42
     },
     "RuntimeEnvironment": {
-        "CPU": "CPU Info",
-        "GPU": "GPU Info",
-        "RAM": "RAM in GB"
+        "CPU": {
+            "model": "AMD EPYC 7763 64-Core Processor",
+            "n_cores": 16,
+            "system": "Linux"
+        },
+        "GPU": "NVIDIA A100-SXM4-40GB",
+        "RAM": 64
     }
 }
 ```
 
-The runtime is the total wall-clock execution time for your algorithm (in seconds, reported as a number). The CodeURL is required even if your repository is private — it is used to verify algorithm identity, not to access the code. However, to be eligible for awards, the link must be valid and include your algorithm's code. 
+The runtime is the total wall-clock execution time for your algorithm (in seconds, reported as a number). The `RuntimeEnvironment` describes the hardware you used: the CPU (e.g., model and number of cores), the GPU (if applicable, otherwise `"none"`) and the RAM in GB. The values above are only an example. The CodeURL is required even if your repository is private — it is used to verify algorithm identity, not to access the code. However, to be eligible for awards, the link must be valid and include your algorithm's code. 
 
 
  
