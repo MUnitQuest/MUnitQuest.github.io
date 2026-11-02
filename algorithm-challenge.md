@@ -72,13 +72,13 @@ The scoring system implementation is publicly available on [GitHub](https://gith
 | --------- | ------------ | ---------- | ----------- | 
 | 1.0       | 0.95 ≤ SIL         | 37.1   ≤  PNR    | 0.05 ≤ CoD-ISI < 0.197            | 
 | 0.75      | 0.925 ≤ SIL < 0.95 | 33.9 ≤ PNR 37.1  | 0.197 ≤ CoD-ISI < 0.372           | 
-| 0.5       | 0.9 ≤ SIL < 0.925  | 30 ≤ PNR < 33.9  | 0.372 ≤ CoD-ISI < 0.73            | 
-| 0.0       | SIL < 0.9          | PNR < 30         | CoD-ISI < 0.05 or CoD-ISI > 0.73  | 
+| 0.5       | 0.85 ≤ SIL < 0.925  | 28.0 ≤ PNR < 33.9  | 0.372 ≤ CoD-ISI < 0.73            | 
+| 0.0       | SIL < 0.85          | PNR < 28.0         | CoD-ISI < 0.05 or CoD-ISI > 0.73  | 
 
 
 #### Showdown phase
 
-There might be small modifications in the scoring system for the showdown phase. 
+During the showdown phase, we will use the scoring implementation described and linked to above. Upon the end of the showdown phase, we may modify the confidence score assignment to unmatched sources (see table above) by using empirical distribution of SIL, PNR and CoD-ISI scores from accepted sources across all submissions. 
 
 ### Awards
 
