@@ -50,9 +50,13 @@ The [online BIDS validator](https://bids-standard.github.io/bids-validator/) all
 
 The competition data is availible on [DaRUS](https://darus.uni-stuttgart.de/dataverse/munitquest-algorithm-challenge) guarnteeing data sharing under the FAIR (Findable, Accesible, Interoperable and Reusable) principles.
 
-[Go to the Isometric Familiarization Data Collection →](https://darus.uni-stuttgart.de/dataset.xhtml?persistentId=doi:10.18419/DARUS-6143)
+[Go to the Isometric Showdown Data Collection →](https://doi.org/10.18419/DARUS-6663)
 
-[Go to the Dynamic Familiarization Data Collection →](https://darus.uni-stuttgart.de/dataset.xhtml?persistentId=doi:10.18419/DARUS-6144) 
+[Go to the Dynamic Showdown Data Collection →](https://doi.org/10.18419/DARUS-6664) 
+
+[Go to the Isometric Familiarization Data Collection →](https://doi.org/10.18419/DARUS-6143)
+
+[Go to the Dynamic Familiarization Data Collection →](https://doi.org/10.18419/DARUS-6144) 
 
 #### Tutorials
 

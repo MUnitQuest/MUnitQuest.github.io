@@ -34,7 +34,7 @@ Running in parallel with the Data Challenge, algorithm developers are provided w
 
 #### Showdown Phase
 
-The main algorithm competition, conducted using the *MUnitQuest data collection* established during the Data Challenge (labels hidden from competitors). Note that the organizers may make minor alterations to the test data (e.g., injected noise, signal cropping) to limit the advantage teams gain from also participating in the Data Challenge.
+The main algorithm competition conducted using a community-based collection of experimental and simulated HDsEMG datasets for the [**Isometric Task**](https://doi.org/10.18419/DARUS-6663) and the [**Dynamic Task**](https://doi.org/10.18419/DARUS-6664). 
 
 - Submission of predicted motor unit spike trains for each recording
 - To be eligible for awards, competitors need to share their code openly (e.g., using GitHub); submissions based on proprietary code are not eligible for awards
@@ -44,25 +44,30 @@ See the [Submission and Registration](/registration_and_submission/) page for de
 
 ### Leaderboard scoring
 
-#### Familiarization phase
+The data collection for the **Isometric Task** ([Familiarization collection](https://doi.org/10.18419/DARUS-6143) and [Showdown collection](https://doi.org/10.18419/DARUS-6663)) is a mixture of simulated HDsEMG recordings with univocal ground-truth labels and experimental data with expert-curated — yet incomplete — labels. 
 
-The [**Isometric Familiarization Data Collection**](https://doi.org/10.18419/DARUS-6143) is a mixture of simulated data with univocal ground-truth labels and experimental data with expert-curated — yet incomplete — labels (100 recordings in total). 
-
-The [**Dynamic Familiarization Data Collection**](https://doi.org/10.18419/DARUS-6144) is based on 100 simulated HDsEMG recordings with univocal ground truth.
+The data collection for the **Dynamic Task** ([Familiarization collection](https://doi.org/10.18419/DARUS-6144) and [Showdown collection](https://doi.org/10.18419/DARUS-6664)) is a mixture of simulated HDsEMG recordings with univocal ground-truth labels and perturbed isometric data with expert-curated — yet incomplete — labels.
 
 For the scoring, we perform the following steps:
 
 - **(1) Remove duplicate spike trains:** A duplicate motor unit is detected if two spike trains share at minimum 30 percent of common spikes. In the case of duplicates, we will keep the first unit and reject all other units.
-- **(2) Match predicted and ground truth spike trains:** Compute for all pairs of predicted and ground truth spike trains the F1-score and match labels by solving a linear sum assignment problem. We require a minimum F1-score of 50 percent.
-- **(3) Label-based score:** The label-based score of each recording is the sum of all accepted units weighted by their respective F1-score. 
+- **(2) Match predicted and ground truth spike trains:** Compute for all pairs of predicted and ground truth spike trains the F1-score and match labels by solving a linear sum assignment problem. Matches require a minimum F1-score of 30 percent.
+- **(3) Label-based score:** The label-based score of each recording is the weighted sum of all accepted units. For all units with an F1 score above 50 percent, the weight is the F1 score. Otherwise, the weights are zero.
 
-For all isometric recordings with incomplete labels, we additionally perform the following steps for obtaining model-based confidence scores for unmatched sources:
+For all recordings with incomplete labels in the **isometric task**, we additionally perform the following steps for obtaining model-based confidence scores for unmatched sources:
 
-- **(4) Supervised Fitting of a CBSS Model:** We use a convolutive blind source separation model (extension factor: 12) and learn the unmixing weights given the predicted spike labels. As there are multiple delayed copies of the same spike train, we will consider all delays within a window of plus/minus 0.1 seconds and use the unmixing weights that yield the highest silhouette-like score. 
-- **(5) Additional metrics:** To further evaluate the plausibility of the predicted sources, we calculate the pulse-to-noise ratio and the coefficient of dispersion (median absolute deviation divided by the median) of the interspike intervals. 
-- **(6) Bad source rejection:** All sources with less than 10 spikes or a silhouette-like score below 0.9 are rejected.
-- **(7) Map quality metrics to confidence scores:** To map the quality metrics (silhouette score, pulse-to-noise-ratio, and the coefficient of dispersion of the interspike intervals) to a normalized confidence score between zero and one, we use a data-driven mapping given in the following table. 
-- **(8) Model-based score:** To get the model-based score, we compute for each predicted motor unit the mean value of the three metric-based confidence scores and sum these values. 
+- **(4a) Supervised Fitting of a CBSS Model:** We use a convolutive blind source separation model (extension factor: 12) and learn the unmixing weights given the predicted spike labels. As there are multiple delayed copies of the same spike train, we will consider all delays within a window of plus/minus 0.01 seconds and use the unmixing weights that yield the highest silhouette-like score. 
+- **(5a) Additional metrics:** To further evaluate the plausibility of the predicted sources, we calculate the pulse-to-noise ratio and the coefficient of dispersion (median absolute deviation divided by the median) of the interspike intervals. 
+- **(6a) Bad source rejection:** All sources with fewer than 10 spikes or a silhouette-like score below 0.9 are rejected.
+- **(7a) Map quality metrics to confidence scores:** To map the quality metrics (silhouette score, pulse-to-noise ratio, and the coefficient of dispersion of the interspike intervals) to a normalized confidence score between zero and one, we use a data-driven mapping given in the following table. 
+- **(8a) Model-based score:** To get the model-based score, we compute for each predicted motor unit the mean value of the three metric-based confidence scores and sum these values. 
+
+For perturbed isometric data with incomplete labels in the **dynamic task**, we additionally perform the following steps for obtaining model-based confidence scores for unmatched sources:
+
+- **(4b) Supervised Fitting of a CBSS Model:** We make use of the unperturbed isometric data and do supervised learning of a convolutive blind source separation model (extension factor: 12) given the predicted spike labels.
+- **(5b) Model-based reference spikes:** We estimate, for each unmatched source, reference spike times based on the trained CBSS model and the corresponding isometric data. 
+- **(6b) Model-based score:** We compute for each unmatched source the F1 score between the predicted spikes and the model-based reference spikes. 
+
  
 The **recording score** is the label-based score plus (if the labels are incomplete) the model-based score. Finally, the **submission score** is the average of the **recording scores** for the respective task (missing prediction files yield a **recording score** of zero).
 
