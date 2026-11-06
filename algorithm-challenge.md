@@ -58,13 +58,13 @@ For all recordings with incomplete labels, we additionally perform the following
 
 - **(4) Supervised Fitting of a CBSS Model:** We use a convolutive blind source separation model (extension factor: 12) and learn the unmixing weights given the predicted spike labels. As there are multiple delayed copies of the same spike train, we will consider all delays within a window of plus/minus 0.01 seconds and use the unmixing weights that yield the highest silhouette-like score. Note: For perturbed isometric data in the **dynamic task**, we make use of the unperturbed isometric data. 
 - **(5) Additional metrics:** To further evaluate the plausibility of the predicted sources, we calculate the pulse-to-noise ratio and the coefficient of dispersion (median absolute deviation divided by the median) of the interspike intervals. 
-- **(6) Bad source rejection:** All sources with fewer than 10 spikes or a silhouette-like score below 0.9 are rejected.
+- **(6) Bad source rejection:** All sources with fewer than 25 spikes or a silhouette-like score below 0.85 are rejected.
 - **(7) Map quality metrics to confidence scores:** To map the quality metrics (silhouette score, pulse-to-noise ratio, and the coefficient of dispersion of the interspike intervals) to a normalized confidence score between zero and one, we use a data-driven mapping given in the following table. 
 - **(8) Model-based score:** To get the model-based score, we compute for each predicted motor unit the mean value of the three metric-based confidence scores and sum these values. 
 
-For perturbed isometric data with incomplete labels in the **dynamic task**, we perform one additional step:
+For perturbed isometric data with incomplete labels in the **dynamic task**, we perform one additional step to detect missing spikes due to insufficient tracking of the underlying non-stationarity:
 
-- **(9) Weighting:** We compute for each unmatched source the F1-Beta-Score between the predicted spikes and the model-based reference spikes obtained from the fitted CBSS model. This pseudo F1-Beta-Score is used as a multiplicative weighting factor in the model-based score. 
+- **(9) Weighting:** We compute for each unmatched source a pseudo-Recall between the predicted spikes and the model-based spikes obtained from the fitted CBSS model. This pseudo-Recall score is used as a multiplicative weighting factor in the model-based score (per unit). 
 
  
 The **recording score** is the label-based score plus (if the labels are incomplete) the model-based score. Finally, the **submission score** is the average of the **recording scores** for the respective task (missing prediction files yield a **recording score** of zero).
@@ -81,7 +81,7 @@ The scoring system implementation is publicly available on [GitHub](https://gith
 
 #### Showdown phase
 
-During the showdown phase, we will use the scoring implementation described and linked to above. Upon the end of the showdown phase, we may modify the confidence score assignment to unmatched sources (see table above) by using empirical distribution of SIL, PNR and CoD-ISI scores from accepted sources across all submissions. 
+During the showdown phase, we will use the scoring implementation described and linked above. At the end of the showdown phase, we may modify the confidence score assignment to unmatched sources (see table above) by using the empirical distribution of SIL, PNR, and CoD-ISI scores from accepted sources across all submissions, as well as update the label set of the experimental data by manually curating unmatched units identified by the participants. 
 
 ### Awards
 
