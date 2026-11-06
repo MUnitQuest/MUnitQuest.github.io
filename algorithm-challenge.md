@@ -62,9 +62,9 @@ For all recordings with incomplete labels, we additionally perform the following
 - **(7) Map quality metrics to confidence scores:** To map the quality metrics (silhouette score, pulse-to-noise ratio, and the coefficient of dispersion of the interspike intervals) to a normalized confidence score between zero and one, we use a data-driven mapping given in the following table. 
 - **(8) Model-based score:** To get the model-based score, we compute for each predicted motor unit the mean value of the three metric-based confidence scores and sum these values. 
 
-For perturbed isometric data with incomplete labels in the **dynamic task**, we perform one additional step:
+For perturbed isometric data with incomplete labels in the **dynamic task**, we perform one additional step to detect missing spikes due to insufficient tracking of the underlying non-stationarity:
 
-- **(9) Weighting:** We compute for each unmatched source a pseudo-Recall between the predicted spikes and the model-based reference spikes obtained from the fitted CBSS model. This pseudo-Recall score is used as a multiplicative weighting factor in the model-based score (per unit). 
+- **(9) Weighting:** We compute for each unmatched source a pseudo-Recall between the predicted spikes and the model-based spikes obtained from the fitted CBSS model. This pseudo-Recall score is used as a multiplicative weighting factor in the model-based score (per unit). 
 
  
 The **recording score** is the label-based score plus (if the labels are incomplete) the model-based score. Finally, the **submission score** is the average of the **recording scores** for the respective task (missing prediction files yield a **recording score** of zero).
